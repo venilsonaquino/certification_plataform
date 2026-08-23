@@ -15,9 +15,16 @@ import { ProgressPage } from './pages/ProgressPage'
 import { QuizPage } from './pages/QuizPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ReviewPage } from './pages/ReviewPage'
+import { ReviewQuizPage } from './pages/ReviewQuizPage'
+import { LessonPage } from './pages/LessonPage'
+import { LessonQuizPage } from './pages/LessonQuizPage'
 import { StoryModePage } from './pages/StoryModePage'
-import { TodayStudyPage } from './pages/TodayStudyPage'
+import { StudyPage } from './pages/StudyPage'
+import { StudyTodayPage } from './pages/StudyTodayPage'
+import { TopicQuizPage } from './pages/TopicQuizPage'
 import { LoginPage } from './pages/LoginPage'
+import { FlashcardPage } from './pages/FlashcardPage'
+import { DailyFlashcardReviewPage } from './pages/DailyFlashcardReviewPage'
 
 function App() {
   return (
@@ -37,12 +44,19 @@ function App() {
           <Route element={<AppLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="study" element={<TodayStudyPage />} />
+            <Route path="study-today" element={<StudyTodayPage />} />
+            <Route path="study" element={<StudyPage />} />
+            <Route path="study/:lessonSlug/quiz" element={<LessonQuizPage />} />
+            <Route path="study/:lessonSlug/flashcards" element={<FlashcardPage />} />
+            <Route path="study/:lessonSlug" element={<LessonPage />} />
+            <Route path="topics/:topicId/quiz" element={<TopicQuizPage />} />
             <Route path="map" element={<MapPage />} />
             <Route path="labs" element={<LabsPage />} />
             <Route path="story" element={<StoryModePage />} />
             <Route path="quiz" element={<QuizPage />} />
             <Route path="review" element={<ReviewPage />} />
+            <Route path="review/quiz" element={<ReviewQuizPage />} />
+            <Route path="review/flashcards" element={<DailyFlashcardReviewPage />} />
             <Route path="exams" element={<MockExamsPage />} />
             <Route path="progress" element={<ProgressPage />} />
           </Route>

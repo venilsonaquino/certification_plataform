@@ -1,3 +1,5 @@
+import type { Certification } from './certification'
+
 export interface Domain {
   readonly id: string
   readonly certificationId: string
@@ -40,4 +42,9 @@ export interface TopicWithLessons extends Topic {
 
 export interface DomainWithTopics extends Domain {
   readonly topics: readonly TopicWithLessons[]
+}
+
+export interface CertificationStudyPath {
+  readonly certification: Certification
+  readonly domains: readonly DomainWithTopics[]
 }

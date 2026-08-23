@@ -1,74 +1,186 @@
-import { BookOpen, CalendarCheck2, ChartNoAxesColumnIncreasing, TimerReset } from 'lucide-react'
+import {
+  ArrowRight,
+  BookOpen,
+  CalendarCheck2,
+  ChartNoAxesColumnIncreasing,
+  Clock3,
+  History,
+  Layers3,
+} from 'lucide-react'
+import { Link } from 'react-router-dom'
 
+import { CertificationDataState } from '../components/certifications/CertificationDataState'
 import { DashboardCard } from '../components/dashboard/DashboardCard'
 import { useCertification } from '../hooks/useCertification'
+import { useCertificationProgress } from '../hooks/useCertificationProgress'
+import { useFlashcardReviewOverview } from '../hooks/useFlashcardReviewOverview'
 import { formatCertificationCode } from '../lib/certificationVisuals'
+import { formatEstimatedMinutes, formatLastActivityDate } from '../lib/progressUtils'
+import { certificationRoute, flashcardReviewRoute, lessonRoute } from '../lib/routes'
 
 export function DashboardPage() {
   const { currentCertification } = useCertification()
+  const { summary, loading, error, retry } = useCertificationProgress()
+  const flashcardReview = useFlashcardReviewOverview(currentCertification.id)
+  const certificationCode = formatCertificationCode(currentCertification.code)
+  const nextLesson = summary.nextLesson
+  const lastActivity = summary.lastActivity
+  const studyTodayRoute = certificationRoute(currentCertification.code, 'study-today')
 
   return (
     <div>
-      <div className="max-w-2xl">
-        <p className="text-sm font-semibold text-blue-600">
-          {formatCertificationCode(currentCertification.code)}
-        </p>
+      <header className="max-w-2xl">
+        <p className="text-sm font-semibold text-blue-600">{certificationCode}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
           Dashboard
         </h1>
         <p className="mt-3 text-base leading-7 text-slate-500">
-          Sua jornada em {currentCertification.name} começa aqui.
+          Acompanhe sua jornada em {currentCertification.name}.
         </p>
-      </div>
+      </header>
 
-      <section aria-label="Resumo de estudos" className="mt-8 grid gap-5 md:grid-cols-2 lg:mt-10 lg:gap-6">
-        <DashboardCard
-          title="Progresso geral"
-          value="0% concluído"
-          description={`Visão inicial da sua jornada ${formatCertificationCode(currentCertification.code)}.`}
-          icon={ChartNoAxesColumnIncreasing}
-          tone="blue"
-          footer={
-            <div>
-              <div
-                role="progressbar"
-                aria-label="Progresso geral"
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={0}
-                className="h-2 overflow-hidden rounded-full bg-slate-100"
-              >
-                <div className="h-full w-0 rounded-full bg-gradient-to-r from-blue-600 to-sky-400" />
+      {loading && (
+        <div className="mt-8 lg:mt-10">
+          <CertificationDataState title="Carregando seu progresso..." loading />
+        </div>
+      )}
+      {!loading && error && (
+        <div className="mt-8 lg:mt-10">
+          <CertificationDataState
+            title="Não foi possível carregar o Dashboard."
+            description={error}
+            onRetry={retry}
+          />
+        </div>
+      )}
+
+      {!loading && !error && (
+        <>
+          {summary.isCompleted && (
+            <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:p-7 lg:mt-10">
+              <p className="text-sm font-bold uppercase tracking-[0.14em] text-emerald-700">
+                100% concluído
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-emerald-950">Parabéns!</h2>
+              <p className="mt-2 text-sm leading-6 text-emerald-800 sm:text-base">
+                Você concluiu todo o conteúdo da {certificationCode}.
+              </p>
+            </section>
+          )}
+
+          {!summary.isCompleted && (
+            <section className="mt-8 overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-700 to-sky-600 p-6 text-white shadow-lg shadow-blue-200/50 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-7 lg:mt-10">
+              <div className="flex items-start gap-4">
+                <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/20">
+                  <CalendarCheck2 aria-hidden="true" className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-blue-100">Estudo do Dia</p>
+                  <h2 className="mt-1 text-xl font-bold">
+                    Uma sequência de aulas para cerca de 30 minutos
+                  </h2>
+                  <p className="mt-2 text-sm leading-6 text-blue-100">
+                    Recomendada a partir do seu progresso atual na {certificationCode}.
+                  </p>
+                </div>
               </div>
-              <p className="mt-2 text-xs font-medium text-slate-400">Exemplo estático</p>
-            </div>
-          }
-        />
-        <DashboardCard
-          title="Estudo de hoje"
-          value="Conceitos de nuvem"
-          description={`Um ponto de partida para os estudos de ${formatCertificationCode(currentCertification.code)}.`}
-          icon={BookOpen}
-          tone="cyan"
-          footer={<p className="text-xs font-medium text-slate-400">Conteúdo de exemplo</p>}
-        />
-        <DashboardCard
-          title="Sequência de estudos"
-          value="0 dias"
-          description="Sua sequência será exibida neste espaço."
-          icon={CalendarCheck2}
-          tone="violet"
-          footer={<p className="text-xs font-medium text-slate-400">Pronto para começar</p>}
-        />
-        <DashboardCard
-          title="Último simulado"
-          value="Ainda não realizado"
-          description="O resultado mais recente aparecerá aqui."
-          icon={TimerReset}
-          tone="amber"
-          footer={<p className="text-xs font-medium text-slate-400">Nenhum resultado</p>}
-        />
-      </section>
+              <Link
+                to={studyTodayRoute}
+                className="mt-5 inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-bold text-blue-700 transition hover:bg-blue-50 sm:mt-0"
+              >
+                {lastActivity ? 'Continuar estudo de hoje' : 'Começar estudo de hoje'}
+                <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              </Link>
+            </section>
+          )}
+
+          <section
+            aria-label="Resumo de estudos"
+            className="mt-8 grid gap-5 md:grid-cols-2 lg:mt-10 lg:gap-6"
+          >
+            <DashboardCard
+              title="Progresso geral"
+              value={`${summary.percentage}%`}
+              description={`${summary.completedCount} de ${summary.totalCount} aulas concluídas · ${summary.remainingCount} restantes`}
+              icon={ChartNoAxesColumnIncreasing}
+              tone="blue"
+              footer={
+                <div>
+                  <div
+                    role="progressbar"
+                    aria-label="Progresso geral"
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-valuenow={summary.percentage}
+                    className="h-2 overflow-hidden rounded-full bg-slate-100"
+                  >
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-blue-600 to-sky-400 transition-[width]"
+                      style={{ width: `${summary.percentage}%` }}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs font-semibold text-slate-400">{certificationCode}</p>
+                </div>
+              }
+            />
+
+            <DashboardCard
+              title="Próxima aula"
+              value={nextLesson?.lesson.title ?? 'Conteúdo concluído'}
+              description={
+                nextLesson
+                  ? `${nextLesson.topic.title} · ${nextLesson.lesson.estimatedMinutes ?? 0} min`
+                  : `Você finalizou todas as aulas publicadas da ${certificationCode}.`
+              }
+              icon={BookOpen}
+              tone="cyan"
+              footer={
+                nextLesson ? (
+                  <Link
+                    to={lessonRoute(currentCertification.code, nextLesson.lesson.slug)}
+                    className="inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                  >
+                    Continuar estudando
+                  </Link>
+                ) : undefined
+              }
+            />
+
+            <DashboardCard
+              title="Última atividade"
+              value={lastActivity?.lesson.title ?? 'Nenhuma atividade'}
+              description={
+                lastActivity?.progress.lastAccessedAt
+                  ? `${formatLastActivityDate(lastActivity.progress.lastAccessedAt)} · ${lastActivity.topic.title}`
+                  : 'Comece a primeira aula para registrar sua atividade.'
+              }
+              icon={History}
+              tone="violet"
+            />
+
+            <DashboardCard
+              title="Tempo estudado estimado"
+              value={formatEstimatedMinutes(summary.completedMinutes)}
+              description="Soma da duração estimada das aulas concluídas; não representa tempo real de sessão."
+              icon={Clock3}
+              tone="amber"
+            />
+
+            <DashboardCard
+              title="Revisão de Flashcards"
+              value={flashcardReview.loading ? 'Calculando...' : `${flashcardReview.overview?.queueCount ?? 0} pendentes`}
+              description={flashcardReview.error
+                ? 'Não foi possível carregar sua fila de revisão.'
+                : 'Cards vencidos e novos da certificação atual, priorizados para hoje.'}
+              icon={Layers3}
+              tone="violet"
+              footer={flashcardReview.overview && flashcardReview.overview.queueCount > 0 ? (
+                <Link to={flashcardReviewRoute(currentCertification.code)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-violet-700 px-5 text-sm font-semibold text-white hover:bg-violet-800">Revisar agora<ArrowRight className="h-4 w-4" /></Link>
+              ) : undefined}
+            />
+          </section>
+        </>
+      )}
     </div>
   )
 }

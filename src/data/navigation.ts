@@ -1,6 +1,7 @@
 import {
   BookOpen,
   BrainCircuit,
+  CalendarCheck2,
   FlaskConical,
   Gauge,
   Map,
@@ -14,7 +15,8 @@ import type { NavigationItem } from '../types/navigation'
 
 export const navigationItems: NavigationItem[] = [
   { label: 'Dashboard', segment: 'dashboard', icon: Gauge },
-  { label: 'Estudo do Dia', segment: 'study', icon: BookOpen },
+  { label: 'Estudo do Dia', segment: 'study-today', icon: CalendarCheck2 },
+  { label: 'Trilha de estudos', segment: 'study', icon: BookOpen },
   { label: 'Mapa', segment: 'map', icon: Map },
   { label: 'Laboratórios', segment: 'labs', icon: FlaskConical },
   { label: 'Story Mode', segment: 'story', icon: Route },

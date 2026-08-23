@@ -20,7 +20,7 @@ export function NavigationLinks({ onNavigate }: NavigationLinksProps) {
           <NavLink
             key={path}
             to={path}
-            end
+            end={segment !== 'study'}
             onClick={onNavigate}
             className={({ isActive }) =>
               [

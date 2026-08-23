@@ -1,6 +1,12 @@
 import { supabase } from '../lib/supabase'
 import type { Certification } from '../types/certification'
-import type { Domain, DomainWithTopics, Lesson, Topic } from '../types/content'
+import type {
+  CertificationStudyPath,
+  Domain,
+  DomainWithTopics,
+  Lesson,
+  Topic,
+} from '../types/content'
 import type {
   CertificationDatabaseRow,
   DomainDatabaseRow,
@@ -190,4 +196,19 @@ export async function getCertificationContent(
         lessons: lessons.filter((lesson) => lesson.topicId === topic.id),
       })),
   }))
+}
+
+export async function getCertificationStudyPath(
+  code: string,
+): Promise<CertificationStudyPath | null> {
+  const certification = await getCertificationByCode(code)
+
+  if (!certification) {
+    return null
+  }
+
+  return {
+    certification,
+    domains: await getCertificationContent(certification.id),
+  }
 }

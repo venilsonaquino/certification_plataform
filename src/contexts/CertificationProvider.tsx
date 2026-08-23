@@ -2,6 +2,7 @@ import { type ReactNode, useMemo } from 'react'
 
 import type { Certification } from '../types/certification'
 import { CertificationContext, type CertificationContextValue } from './CertificationContext'
+import { CertificationProgressProvider } from './CertificationProgressProvider'
 
 interface CertificationProviderProps {
   certification: Certification
@@ -17,5 +18,11 @@ export function CertificationProvider({ certification, children }: Certification
     [certification],
   )
 
-  return <CertificationContext.Provider value={value}>{children}</CertificationContext.Provider>
+  return (
+    <CertificationContext.Provider value={value}>
+      <CertificationProgressProvider certificationId={certification.id}>
+        {children}
+      </CertificationProgressProvider>
+    </CertificationContext.Provider>
+  )
 }

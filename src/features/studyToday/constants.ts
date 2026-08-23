@@ -1,0 +1,3 @@
+export const DEFAULT_DAILY_STUDY_MINUTES = 30
+
+export const MAX_DAILY_STUDY_LESSONS = 4
