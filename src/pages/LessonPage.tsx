@@ -6,7 +6,7 @@ import { CertificationDataState } from '../components/certifications/Certificati
 import { LessonQuizCard } from '../components/quiz/LessonQuizCard'
 import { LessonFlashcardCard } from '../components/flashcards/LessonFlashcardCard'
 import { Breadcrumbs } from '../components/study/Breadcrumbs'
-import { LessonContent } from '../components/study/LessonContent'
+import { LessonContentRenderer } from '../components/study/LessonContentRenderer'
 import { LessonCompletion } from '../components/study/LessonCompletion'
 import { LessonNavigation } from '../components/study/LessonNavigation'
 import { ProgressStatus } from '../components/study/ProgressStatus'
@@ -129,21 +129,6 @@ export function LessonPage() {
   const lessonProgress = progressByLessonId.get(lesson.id)
   const lessonStatus = lessonProgress?.status ?? 'in_progress'
 
-  if (!lesson.content?.trim()) {
-    return (
-      <div>
-        <CertificationDataState
-          title="Conteúdo da aula indisponível."
-          description="A aula existe, mas ainda não possui conteúdo publicado."
-        />
-        <Link to={returnTo} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
-          <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-          {returnLabel}
-        </Link>
-      </div>
-    )
-  }
-
   return (
     <article className="mx-auto max-w-4xl">
       <Breadcrumbs
@@ -179,7 +164,7 @@ export function LessonPage() {
         </div>
       </header>
 
-      <LessonContent content={lesson.content} />
+      <LessonContentRenderer lessonId={lesson.id} legacyContent={lesson.content} />
       <LessonCompletion
         certificationCode={currentCertification.code}
         status={lessonStatus}

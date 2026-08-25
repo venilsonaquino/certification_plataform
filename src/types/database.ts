@@ -2,6 +2,18 @@ import type { LessonProgressStatus } from './progress'
 import type { QuestionDifficulty, QuestionType } from './question'
 import type { QuizAttemptStatus, QuizType } from './quiz'
 import type { FlashcardReviewRating } from './flashcard'
+import type {
+  LessonContentBlockConfig,
+  LessonContentBlockType,
+} from './lessonContentBlock'
+
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 type CertificationRow = {
   id: string
@@ -46,6 +58,33 @@ type LessonRow = {
   short_description: string | null
   content: string | null
   estimated_minutes: number | null
+  display_order: number
+  is_published: boolean
+  created_at: string
+  updated_at: string
+}
+
+type LessonContentBlockRow = {
+  id: string
+  lesson_id: string
+  type: LessonContentBlockType
+  title: string | null
+  content: string | null
+  config: LessonContentBlockConfig | null
+  visual_experience_id: string | null
+  display_order: number
+  is_published: boolean
+  created_at: string
+  updated_at: string
+}
+
+type VisualExperienceRow = {
+  id: string
+  lesson_id: string
+  type: string
+  title: string
+  description: string
+  config: Json
   display_order: number
   is_published: boolean
   created_at: string
@@ -352,6 +391,60 @@ export interface Database {
           },
         ]
       >
+      lesson_content_blocks: TableDefinition<
+        LessonContentBlockRow,
+        Pick<LessonContentBlockRow, 'lesson_id' | 'type'> & {
+          id?: string
+          title?: string | null
+          content?: string | null
+          config?: LessonContentBlockConfig | null
+          visual_experience_id?: string | null
+          display_order?: number
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        },
+        Partial<LessonContentBlockRow>,
+        [
+          {
+            foreignKeyName: 'lesson_content_blocks_lesson_id_fkey'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'lesson_content_blocks_visual_experience_lesson_fkey'
+            columns: ['visual_experience_id', 'lesson_id']
+            isOneToOne: false
+            referencedRelation: 'visual_experiences'
+            referencedColumns: ['id', 'lesson_id']
+          },
+        ]
+      >
+      visual_experiences: TableDefinition<
+        VisualExperienceRow,
+        Pick<
+          VisualExperienceRow,
+          'lesson_id' | 'type' | 'title' | 'description' | 'config'
+        > & {
+          id?: string
+          display_order?: number
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        },
+        Partial<VisualExperienceRow>,
+        [
+          {
+            foreignKeyName: 'visual_experiences_lesson_id_fkey'
+            columns: ['lesson_id']
+            isOneToOne: false
+            referencedRelation: 'lessons'
+            referencedColumns: ['id']
+          },
+        ]
+      >
       flashcards: TableDefinition<
         FlashcardRow,
         Pick<FlashcardRow, 'lesson_id' | 'front_text' | 'back_text'> & {
@@ -618,6 +711,8 @@ export type CertificationDatabaseRow = CertificationRow
 export type DomainDatabaseRow = DomainRow
 export type TopicDatabaseRow = TopicRow
 export type LessonDatabaseRow = LessonRow
+export type LessonContentBlockDatabaseRow = LessonContentBlockRow
+export type VisualExperienceDatabaseRow = VisualExperienceRow
 export type FlashcardDatabaseRow = FlashcardRow
 export type FlashcardReviewDatabaseRow = FlashcardReviewRow
 export type UserFlashcardProgressDatabaseRow = UserFlashcardProgressRow

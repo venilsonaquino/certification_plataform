@@ -1,6 +1,6 @@
 # Certification Academy
 
-Frontend de uma futura plataforma visual e interativa de estudos para múltiplas certificações. Nesta etapa, o AZ-900 é a única certificação disponível e o acesso às áreas internas é protegido pelo Supabase Auth.
+Plataforma visual e interativa de estudos para certificações. O AZ-900 é a primeira certificação disponível, com conteúdo, prática e acompanhamento persistidos no Supabase; o acesso às áreas internas é protegido pelo Supabase Auth.
 
 ## Stack
 
@@ -10,6 +10,8 @@ Frontend de uma futura plataforma visual e interativa de estudos para múltiplas
 - React Router
 - Tailwind CSS
 - Supabase Auth e PostgreSQL
+- Zod para validação dos contratos vindos do banco
+- Vitest e Testing Library
 
 ## Executar localmente
 
@@ -34,6 +36,7 @@ Use apenas a chave pública/publishable (ou a chave `anon` legada) no frontend. 
 
 ```bash
 pnpm dev        # servidor de desenvolvimento
+pnpm test:run   # suíte de testes em execução única
 pnpm typecheck  # verificação de tipos
 pnpm lint       # análise estática
 pnpm build      # build de produção
@@ -43,7 +46,19 @@ pnpm supabase   # CLI versionada do Supabase
 
 ## Escopo atual
 
-Esta etapa contém cadastro e login por email/senha, rotas protegidas e conteúdo de certificações armazenado no Supabase. O modelo segue `Certification → Domain → Topic → Lesson`. Não há IA, progresso, lógica funcional de quiz ou backend próprio.
+O modelo de conteúdo segue `Certification → Domain → Topic → Lesson`. A plataforma já inclui:
+
+- cadastro, login e rotas protegidas;
+- progresso por aula e a área **Estudar hoje**;
+- quizzes por aula e tópico, pontuação e revisão de erros;
+- flashcards com histórico e repetição espaçada;
+- experiências visuais interativas vinculadas às aulas;
+- blocos ordenados de conteúdo por aula, com renderers para texto, imagens, vídeos, laboratórios e experiências visuais;
+- fallback para o conteúdo legado de uma aula que ainda não foi convertida em blocos.
+
+Os blocos especiais são opcionais: uma aula pode usar somente os tipos necessários ao seu objetivo pedagógico. O texto principal permanece em campos textuais pesquisáveis, enquanto `config` guarda apenas dados estruturados próprios de cada tipo. Os contratos são validados no cliente e continuam serializáveis para integrações futuras.
+
+IA, Story Mode, Regions e simuladores avançados ainda não fazem parte do escopo implementado.
 
 ## Migrations do banco
 
@@ -58,7 +73,7 @@ pnpm db:push
 
 O `project-ref` é o trecho anterior a `.supabase.co` em `VITE_SUPABASE_URL`. O comando `db:push` registra a migration em `supabase_migrations.schema_migrations` e não reaplica migrations já executadas.
 
-Após o push, verifique no **Table Editor** as tabelas `certifications`, `domains`, `topics` e `lessons`. No **Authentication > Policies**, confirme que cada tabela possui somente a policy de `SELECT` para o papel `authenticated`.
+Após o push, verifique no **Table Editor** as tabelas de currículo (`certifications`, `domains`, `topics` e `lessons`) e as fundações de estudo (`user_lesson_progress`, `questions`, `quiz_attempts`, `flashcards`, `flashcard_reviews`, `visual_experiences` e `lesson_content_blocks`). As migrations incluem constraints, índices e políticas RLS; preserve a ordem e nunca renomeie uma migration já aplicada.
 
 ## Configuração do Supabase
 
@@ -84,7 +99,10 @@ Depois de alterar as variáveis de ambiente, reinicie o servidor Vite.
 - O catálogo vem da tabela `public.certifications`; não há catálogo mockado paralelo.
 - O contrato `Certification` está em `src/types/certification.ts`.
 - Os contratos de conteúdo estão em `src/types/content.ts`.
+- O contrato discriminado dos blocos está em `src/types/lessonContentBlock.ts`.
 - As queries estão centralizadas em `src/services/certificationService.ts`.
+- A leitura e validação dos blocos passa por `src/services/lessonContentBlockService.ts` e `src/lib/lessonContentBlockValidation.ts`.
+- `LessonContentRenderer` escolhe entre os blocos publicados e o fallback legado; `LessonContentBlockRenderer` despacha cada tipo para seu renderer especializado.
 - A URL é a fonte da certificação ativa.
 - O contexto resolve e valida a certificação pelo campo `code` no Supabase.
 - As páginas internas seguem `/certifications/:certificationCode/:section`.
