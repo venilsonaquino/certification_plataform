@@ -14,8 +14,8 @@ begin
   into total_count
   from public.visual_experiences;
 
-  if total_count <> 4 then
-    raise exception 'Expected exactly 4 visual experiences after the responsibility seed, found %', total_count;
+  if total_count <> 6 then
+    raise exception 'Expected exactly 6 visual experiences after the Domain 1 enrichment, found %', total_count;
   end if;
 
   select count(*)
@@ -162,7 +162,7 @@ begin
   if coalesce(jsonb_typeof(comparison_config -> 'columns'), '') <> 'array'
     or coalesce(jsonb_typeof(comparison_config -> 'rows'), '') <> 'array'
     or jsonb_array_length(comparison_config -> 'columns') <> 3
-    or jsonb_array_length(comparison_config -> 'rows') <> 5 then
+    or jsonb_array_length(comparison_config -> 'rows') <> 4 then
     raise exception 'Comparison seed does not have the expected columns and rows';
   end if;
 
@@ -480,8 +480,8 @@ set local role authenticated;
 
 do $$
 begin
-  if (select count(*) from public.visual_experiences) <> 4 then
-    raise exception 'Authenticated users should see exactly the 4 published visual experiences';
+  if (select count(*) from public.visual_experiences) <> 6 then
+    raise exception 'Authenticated users should see exactly the 6 published visual experiences';
   end if;
 
   if exists (

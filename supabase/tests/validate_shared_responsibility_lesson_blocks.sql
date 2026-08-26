@@ -32,14 +32,6 @@ begin
   if exists (
     select 1
     from public.lesson_content_blocks
-    where lesson_id <> target_lesson_id
-  ) then
-    raise exception 'A Lesson other than Shared Responsibility was converted in 8.3.4';
-  end if;
-
-  if exists (
-    select 1
-    from public.lesson_content_blocks
     where lesson_id = target_lesson_id
       and not is_published
   ) then

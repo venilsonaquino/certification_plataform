@@ -12,7 +12,7 @@ insert into public.questions (
   question_type, difficulty, explanation, is_published, display_order
 )
 select
-  format('62000000-0000-4000-8000-%s', lpad(series::text, 12, '0'))::uuid,
+  format('6e000000-0000-4000-8000-%s', lpad(series::text, 12, '0'))::uuid,
   domain.certification_id, domain.id, topic.id, lesson.id,
   format('Temporary review question %s', series), 'single_choice', 'medium',
   'Temporary transactional review explanation.', true, 100 + series
@@ -25,14 +25,14 @@ insert into public.question_options (
   id, question_id, option_text, is_correct, explanation, display_order
 )
 select format('%s000000-0000-4000-8000-%s', prefix, lpad(series::text, 12, '0'))::uuid,
-  format('62000000-0000-4000-8000-%s', lpad(series::text, 12, '0'))::uuid,
-  case when prefix = '72' then 'Correct option' else 'Wrong option' end,
-  prefix = '72', 'Temporary option.', case when prefix = '72' then 1 else 2 end
-from generate_series(1, 13) series cross join (values ('72'), ('73')) prefixes(prefix);
+  format('6e000000-0000-4000-8000-%s', lpad(series::text, 12, '0'))::uuid,
+  case when prefix = '7e' then 'Correct option' else 'Wrong option' end,
+  prefix = '7e', 'Temporary option.', case when prefix = '7e' then 1 else 2 end
+from generate_series(1, 13) series cross join (values ('7e'), ('7f')) prefixes(prefix);
 
 create temporary table review_test_correct (question_id uuid primary key, option_id uuid not null) on commit drop;
 insert into review_test_correct
-select id, format('72000000-0000-4000-8000-%s', lpad(right(id::text, 12), 12, '0'))::uuid
+select id, format('7e000000-0000-4000-8000-%s', lpad(right(id::text, 12), 12, '0'))::uuid
 from public.questions where question_text like 'Temporary review question %';
 grant select on review_test_correct to authenticated;
 
@@ -43,32 +43,32 @@ values
   ('64000000-0000-4000-8000-000000000003', '54000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-000000000900', 'lesson', (select id from public.lessons where slug='availability-zones'), 2, 'completed', now() - interval '1 day');
 
 insert into public.quiz_attempt_questions (attempt_id, question_id, display_order)
-select '64000000-0000-4000-8000-000000000001'::uuid, format('62000000-0000-4000-8000-%s', lpad(series::text,12,'0'))::uuid, series from generate_series(1,10) series
+select '64000000-0000-4000-8000-000000000001'::uuid, format('6e000000-0000-4000-8000-%s', lpad(series::text,12,'0'))::uuid, series from generate_series(1,10) series
 union all select '64000000-0000-4000-8000-000000000002'::uuid, question_id, display_order from (values
-  ('62000000-0000-4000-8000-000000000001'::uuid,1),
-  ('62000000-0000-4000-8000-000000000011'::uuid,2),
-  ('62000000-0000-4000-8000-000000000012'::uuid,3)
+  ('6e000000-0000-4000-8000-000000000001'::uuid,1),
+  ('6e000000-0000-4000-8000-000000000011'::uuid,2),
+  ('6e000000-0000-4000-8000-000000000012'::uuid,3)
 ) second_attempt(question_id,display_order)
 union all select '64000000-0000-4000-8000-000000000003'::uuid, question_id, display_order from (values
-  ('62000000-0000-4000-8000-000000000001'::uuid,1), ('62000000-0000-4000-8000-000000000013'::uuid,2)
+  ('6e000000-0000-4000-8000-000000000001'::uuid,1), ('6e000000-0000-4000-8000-000000000013'::uuid,2)
 ) selected(question_id,display_order);
 
 insert into public.quiz_answers (attempt_id, question_id, selected_option_id, is_correct, answered_at)
-select '64000000-0000-4000-8000-000000000001'::uuid, format('62000000-0000-4000-8000-%s', lpad(series::text,12,'0'))::uuid,
-  format('73000000-0000-4000-8000-%s', lpad(series::text,12,'0'))::uuid, false, now() - interval '3 days' + series * interval '1 minute'
+select '64000000-0000-4000-8000-000000000001'::uuid, format('6e000000-0000-4000-8000-%s', lpad(series::text,12,'0'))::uuid,
+  format('7f000000-0000-4000-8000-%s', lpad(series::text,12,'0'))::uuid, false, now() - interval '3 days' + series * interval '1 minute'
 from generate_series(1,10) series
 union all
 select '64000000-0000-4000-8000-000000000002'::uuid, question_id, option_id, false, now() - interval '2 days' + display_order * interval '1 minute'
 from (values
-  ('62000000-0000-4000-8000-000000000001'::uuid,'73000000-0000-4000-8000-000000000001'::uuid,1),
-  ('62000000-0000-4000-8000-000000000011'::uuid,'73000000-0000-4000-8000-000000000011'::uuid,2),
-  ('62000000-0000-4000-8000-000000000012'::uuid,'73000000-0000-4000-8000-000000000012'::uuid,3)
+  ('6e000000-0000-4000-8000-000000000001'::uuid,'7f000000-0000-4000-8000-000000000001'::uuid,1),
+  ('6e000000-0000-4000-8000-000000000011'::uuid,'7f000000-0000-4000-8000-000000000011'::uuid,2),
+  ('6e000000-0000-4000-8000-000000000012'::uuid,'7f000000-0000-4000-8000-000000000012'::uuid,3)
 ) second_answers(question_id,option_id,display_order)
 union all
 select '64000000-0000-4000-8000-000000000003'::uuid, question_id, option_id, true, now() - interval '1 day' + display_order * interval '1 minute'
 from (values
-  ('62000000-0000-4000-8000-000000000001'::uuid,'72000000-0000-4000-8000-000000000001'::uuid,1),
-  ('62000000-0000-4000-8000-000000000013'::uuid,'72000000-0000-4000-8000-000000000013'::uuid,2)
+  ('6e000000-0000-4000-8000-000000000001'::uuid,'7e000000-0000-4000-8000-000000000001'::uuid,1),
+  ('6e000000-0000-4000-8000-000000000013'::uuid,'7e000000-0000-4000-8000-000000000013'::uuid,2)
 ) selected(question_id,option_id,display_order);
 
 do $$ begin
@@ -90,9 +90,9 @@ declare v_attempt public.quiz_attempts; v_same public.quiz_attempts; v_stats rec
 begin
   if (select count(*) from public.get_user_question_stats('10000000-0000-4000-8000-000000000900')) <> 12 then
     raise exception 'Stats must contain exactly the 12 questions with errors.'; end if;
-  if exists (select 1 from public.get_user_question_stats('10000000-0000-4000-8000-000000000900') where question_id='62000000-0000-4000-8000-000000000013') then
+  if exists (select 1 from public.get_user_question_stats('10000000-0000-4000-8000-000000000900') where question_id='6e000000-0000-4000-8000-000000000013') then
     raise exception 'A question answered only correctly appeared in Meus Erros.'; end if;
-  select * into strict v_stats from public.get_user_question_stats('10000000-0000-4000-8000-000000000900') where question_id='62000000-0000-4000-8000-000000000001';
+  select * into strict v_stats from public.get_user_question_stats('10000000-0000-4000-8000-000000000900') where question_id='6e000000-0000-4000-8000-000000000001';
   if v_stats.total_attempts<>3 or v_stats.correct_count<>1 or v_stats.incorrect_count<>2
     or round(v_stats.accuracy_percentage)<>33 or round(v_stats.error_percentage)<>67 or not v_stats.last_result then
     raise exception 'Error/error/correct aggregation is invalid.'; end if;
@@ -122,14 +122,14 @@ begin
   for v_question in select aq.question_id, correct.option_id from public.quiz_attempt_questions aq join review_test_correct correct using(question_id) where aq.attempt_id=v_attempt.id order by aq.display_order loop
     perform * from public.submit_quiz_answer(v_attempt.id,v_question.question_id,v_question.option_id); end loop;
 
-  select * into strict v_attempt from public.start_review_quiz('10000000-0000-4000-8000-000000000900','62000000-0000-4000-8000-000000000001');
-  if v_attempt.total_questions<>1 or (select count(*) from public.quiz_attempt_questions where attempt_id=v_attempt.id and question_id='62000000-0000-4000-8000-000000000001')<>1 then raise exception 'Individual review is invalid.'; end if;
-  perform * from public.submit_quiz_answer(v_attempt.id,'62000000-0000-4000-8000-000000000001','72000000-0000-4000-8000-000000000001');
-  select * into strict v_stats from public.get_user_question_stats('10000000-0000-4000-8000-000000000900') where question_id='62000000-0000-4000-8000-000000000001';
+  select * into strict v_attempt from public.start_review_quiz('10000000-0000-4000-8000-000000000900','6e000000-0000-4000-8000-000000000001');
+  if v_attempt.total_questions<>1 or (select count(*) from public.quiz_attempt_questions where attempt_id=v_attempt.id and question_id='6e000000-0000-4000-8000-000000000001')<>1 then raise exception 'Individual review is invalid.'; end if;
+  perform * from public.submit_quiz_answer(v_attempt.id,'6e000000-0000-4000-8000-000000000001','7e000000-0000-4000-8000-000000000001');
+  select * into strict v_stats from public.get_user_question_stats('10000000-0000-4000-8000-000000000900') where question_id='6e000000-0000-4000-8000-000000000001';
   if v_stats.incorrect_count<>2 or v_stats.correct_count<2 then raise exception 'Stats did not update after review while preserving error history.'; end if;
 
-  begin perform * from public.start_review_quiz('10000000-0000-4000-8000-000000000900','62000000-0000-4000-8000-000000000013'); raise exception 'Correct-only question started an individual review.'; exception when no_data_found then null; end;
-  begin perform * from public.start_review_quiz('10000000-0000-4000-8000-000000000104','62000000-0000-4000-8000-000000000001'); raise exception 'Question from another certification started.'; exception when no_data_found then null; end;
+  begin perform * from public.start_review_quiz('10000000-0000-4000-8000-000000000900','6e000000-0000-4000-8000-000000000013'); raise exception 'Correct-only question started an individual review.'; exception when no_data_found then null; end;
+  begin perform * from public.start_review_quiz('10000000-0000-4000-8000-000000000104','6e000000-0000-4000-8000-000000000001'); raise exception 'Question from another certification started.'; exception when no_data_found then null; end;
   perform set_config('review.user_a_attempt',v_attempt.id::text,true);
 end $$;
 
