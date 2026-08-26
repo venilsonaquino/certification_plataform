@@ -22,3 +22,6 @@ Thumbs.db
 *.tsbuildinfo
 pnpm-debug.log*
 npm-debug.log*
+
+# Supabase CLI local state
+supabase/.temp/

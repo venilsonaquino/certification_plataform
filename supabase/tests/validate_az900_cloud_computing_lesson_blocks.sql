@@ -52,8 +52,8 @@ begin
         'explanation', 'example', 'example', 'example', 'exam_trap', 'exam_tip', 'summary'
       ]::text[], 10),
       ('consumption-based-model', array[
-        'explanation', 'important', 'example', 'dotnet_example', 'exam_tip', 'summary'
-      ]::text[], 8),
+        'explanation', 'important', 'exam_trap', 'example', 'dotnet_example', 'exam_tip', 'summary'
+      ]::text[], 10),
       ('capex-vs-opex', array[
         'explanation', 'visual_experience', 'example', 'important', 'exam_tip', 'exam_trap', 'summary'
       ]::text[], 10),
@@ -94,8 +94,8 @@ begin
     from public.lesson_content_blocks
     where lesson_id = any(target_lesson_ids)
       and is_published
-  ) <> 39 then
-    raise exception 'The six enriched lessons must have exactly 39 published blocks';
+  ) <> 40 then
+    raise exception 'The six enriched lessons must have exactly 40 published blocks';
   end if;
 
   if exists (
@@ -233,8 +233,8 @@ begin
     where certification.code = 'az-900'
       and domain.title = 'Describe cloud concepts'
       and block.is_published
-  ) <> 128 then
-    raise exception 'Domain 1 must expose 128 published blocks after 8.4.4';
+  ) <> 129 then
+    raise exception 'Domain 1 must expose 129 published blocks after 8.4.7';
   end if;
 
   if (
@@ -294,7 +294,7 @@ begin
     join public.certifications certification on certification.id = domain.certification_id
     where certification.code = 'az-900'
       and domain.title = 'Describe cloud concepts'
-  ) <> 128 then
+  ) <> 129 then
     raise exception 'Authenticated users cannot read every published Domain 1 block';
   end if;
 end;
@@ -305,9 +305,9 @@ reset role;
 select json_build_object(
   'domain', 'Describe cloud concepts',
   'enriched_lessons', 6,
-  'new_blocks', 39,
+  'new_blocks', 40,
   'total_block_lessons', 18,
-  'total_published_blocks', 128,
+  'total_published_blocks', 129,
   'comparison_visuals', 2,
   'shared_responsibility_preserved', true,
   'legacy_content_preserved', true,

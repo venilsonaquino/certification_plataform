@@ -27,7 +27,7 @@ begin
     (select count(*) from public.questions question join target_lessons lesson on lesson.id = question.lesson_id)
   into lesson_count, block_count, visual_count, flashcard_count, question_count;
 
-  if lesson_count <> 18 or block_count <> 128 or visual_count <> 4
+  if lesson_count <> 18 or block_count <> 129 or visual_count <> 4
     or flashcard_count <> 84 or question_count <> 153 then
     raise exception 'Unexpected Domain 1 inventory: lessons %, blocks %, visuals %, flashcards %, questions %',
       lesson_count, block_count, visual_count, flashcard_count, question_count;
@@ -256,6 +256,15 @@ begin
     where flashcard.id is null
   ) or exists (
     select 1
+    from public.quiz_attempts attempt
+    left join public.certifications certification on certification.id = attempt.certification_id
+    left join public.lessons lesson on lesson.id = attempt.lesson_id
+    left join public.topics topic on topic.id = attempt.topic_id
+    where certification.id is null
+      or (attempt.lesson_id is not null and lesson.id is null)
+      or (attempt.topic_id is not null and topic.id is null)
+  ) or exists (
+    select 1
     from public.quiz_attempt_questions item
     left join public.quiz_attempts attempt on attempt.id = item.attempt_id
     left join public.questions question on question.id = item.question_id
@@ -277,9 +286,11 @@ begin
     join pg_namespace namespace on namespace.oid = relation.relnamespace
     where namespace.nspname = 'public'
       and relation.relname in (
-        'lesson_content_blocks', 'visual_experiences', 'user_lesson_progress',
-        'flashcard_reviews', 'user_flashcard_progress', 'quiz_attempts',
-        'quiz_attempt_questions', 'quiz_answers'
+        'certifications', 'domains', 'topics', 'lessons', 'questions',
+        'question_options', 'flashcards', 'lesson_content_blocks',
+        'visual_experiences', 'user_lesson_progress', 'flashcard_reviews',
+        'user_flashcard_progress', 'quiz_attempts', 'quiz_attempt_questions',
+        'quiz_answers'
       )
       and not relation.relrowsecurity
   ) then
@@ -291,6 +302,46 @@ begin
     or not has_table_privilege('authenticated', 'public.lesson_content_blocks', 'SELECT')
     or not has_table_privilege('authenticated', 'public.visual_experiences', 'SELECT') then
     raise exception 'Content-block or visual-experience grants are inconsistent with authenticated-only study';
+  end if;
+
+  if not has_table_privilege('authenticated', 'public.certifications', 'SELECT')
+    or not has_table_privilege('authenticated', 'public.domains', 'SELECT')
+    or not has_table_privilege('authenticated', 'public.topics', 'SELECT')
+    or not has_table_privilege('authenticated', 'public.lessons', 'SELECT')
+    or not has_table_privilege('authenticated', 'public.flashcards', 'SELECT') then
+    raise exception 'Authenticated users cannot read all required published curriculum tables';
+  end if;
+
+  if has_table_privilege('authenticated', 'public.questions', 'SELECT')
+    or has_table_privilege('authenticated', 'public.question_options', 'SELECT') then
+    raise exception 'Quiz questions or answer keys are exposed by direct table grants';
+  end if;
+
+  if has_table_privilege('authenticated', 'public.certifications', 'INSERT')
+    or has_table_privilege('authenticated', 'public.certifications', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.certifications', 'DELETE')
+    or has_table_privilege('authenticated', 'public.domains', 'INSERT')
+    or has_table_privilege('authenticated', 'public.domains', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.domains', 'DELETE')
+    or has_table_privilege('authenticated', 'public.topics', 'INSERT')
+    or has_table_privilege('authenticated', 'public.topics', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.topics', 'DELETE')
+    or has_table_privilege('authenticated', 'public.lessons', 'INSERT')
+    or has_table_privilege('authenticated', 'public.lessons', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.lessons', 'DELETE')
+    or has_table_privilege('authenticated', 'public.questions', 'INSERT')
+    or has_table_privilege('authenticated', 'public.questions', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.questions', 'DELETE')
+    or has_table_privilege('authenticated', 'public.flashcards', 'INSERT')
+    or has_table_privilege('authenticated', 'public.flashcards', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.flashcards', 'DELETE')
+    or has_table_privilege('authenticated', 'public.lesson_content_blocks', 'INSERT')
+    or has_table_privilege('authenticated', 'public.lesson_content_blocks', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.lesson_content_blocks', 'DELETE')
+    or has_table_privilege('authenticated', 'public.visual_experiences', 'INSERT')
+    or has_table_privilege('authenticated', 'public.visual_experiences', 'UPDATE')
+    or has_table_privilege('authenticated', 'public.visual_experiences', 'DELETE') then
+    raise exception 'Authenticated users can edit curriculum tables directly';
   end if;
 
   if not exists (select 1 from pg_proc where pronamespace = 'public'::regnamespace and proname = 'start_lesson_progress')

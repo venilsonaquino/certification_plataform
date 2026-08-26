@@ -2,7 +2,7 @@
 
 ## Domain 1 — Describe cloud concepts
 
-Auditoria realizada em 25 de agosto de 2026 e atualizada em 26 de agosto de 2026 após a validação final da Etapa 8.4.6, sobre o Domain **Describe cloud concepts (25–30%)**.
+Auditoria realizada em 25 de agosto de 2026 e atualizada em 26 de agosto de 2026 após a Etapa 8.4.7, sobre o Domain **Describe cloud concepts (25–30%)**.
 
 Referências curriculares primárias:
 
@@ -23,7 +23,7 @@ O guia oficial vigente organiza este Domain em três grupos: cloud computing, be
 | --- | ---: |
 | Topics | 3 |
 | Lessons publicadas | 18 |
-| Lesson Content Blocks publicados | 128 |
+| Lesson Content Blocks publicados | 129 |
 | Flashcards publicados | 84 |
 | Questions publicadas | 153 |
 
@@ -35,7 +35,7 @@ Todas as 18 Lessons do Domain usam Content Blocks. O conteúdo em `lessons.conte
 | 2 | Cloud Computing / `shared-responsibility-model` | 8 | 7 | 11 |
 | 3 | Cloud Computing / `public-private-hybrid-cloud` | 6 | 7 | 10 |
 | 4 | Cloud Computing / `choosing-a-cloud-model` | 7 | 4 | 10 |
-| 5 | Cloud Computing / `consumption-based-model` | 6 | 4 | 10 |
+| 5 | Cloud Computing / `consumption-based-model` | 7 | 4 | 10 |
 | 6 | Cloud Computing / `capex-vs-opex` | 7 | 4 | 10 |
 | 7 | Cloud Computing / `serverless-computing` | 7 | 4 | 10 |
 | 8 | Benefits of Cloud Services / `high-availability` | 7 | 4 | 10 |
@@ -58,9 +58,9 @@ Todas as 18 Lessons do Domain usam Content Blocks. O conteúdo em `lessons.conte
 | Shared Responsibility Model | `shared-responsibility-model` | Covered | Aula de referência com 8 blocks, visual On-Premises/IaaS/PaaS/SaaS, 7 flashcards e 11 questions. Diferencia responsabilidades sem afirmar que elas desaparecem em SaaS. |
 | Public / Private / Hybrid Cloud | `public-private-hybrid-cloud` | Covered | Seis blocks e uma comparação responsiva definem operação, dedicação, localização e integração sem reduzir Private Cloud a servidor local; 7 flashcards e 10 questions reforçam o objetivo. |
 | Casos de uso dos modelos de cloud | `choosing-a-cloud-model`; `public-private-hybrid-cloud` | Covered | A Lesson de escolha agora é centrada em cenários de escala pública, controle dedicado e integração com legado, incluindo armadilha de prova; possui 10 questions específicas. |
-| Consumption-Based Model | `consumption-based-model` | Covered | Seis blocks explicam pagamento pelo consumo, redução de capacidade ociosa, capacidade ajustável e relação entre custo e uso; 4 flashcards e 10 questions. |
+| Consumption-Based Model | `consumption-based-model` | Covered | Sete blocks explicam pagamento pelo consumo, pay-as-you-go, redução de capacidade ociosa, capacidade ajustável e relação entre custo e uso; 4 flashcards e 10 questions. |
 | CapEx vs OpEx | `capex-vs-opex` | Covered | Sete blocks e uma comparação responsiva distinguem investimento antecipado e despesa recorrente, com a nuance de que classificação contábil depende do contrato e da organização; 4 flashcards e 10 questions. |
-| Cloud pricing models — formulação oficial atual | `consumption-based-model`; `capex-vs-opex`; `predictability` | Partial | O conteúdo cobre consumo e CapEx/OpEx, mas não apresenta uma comparação explícita e coesa entre formas de precificação/compromisso. |
+| Cloud pricing models — formulação oficial atual | `consumption-based-model`; `capex-vs-opex`; `predictability` | Covered | Sete blocks comparam explicitamente pay-as-you-go e compromisso planejado por flexibilidade e previsibilidade; os traps separam pricing model de CapEx/OpEx. Dois Flashcards e uma Question de cenário reforçam a comparação. |
 | Serverless Computing | `serverless-computing` | Covered | Sete blocks explicam que os servidores existem, mas são abstraídos e administrados pelo provider; cobrem execução por eventos, escala automática e Azure Functions apenas como exemplo, com 4 flashcards e 10 questions. |
 | High Availability | `high-availability` | Covered | Sete blocks, 4 flashcards e 10 questions cobrem redução de downtime, redundância, continuidade e SLA, sem antecipar Availability Zones. |
 | Scalability | `scalability` | Covered | Sete blocks distinguem scale up/down de scale out/in, com VM maior versus mais instâncias e exemplo .NET; 4 flashcards e 10 questions reforçam aplicação e limites. |
@@ -80,7 +80,8 @@ Todas as 18 Lessons do Domain usam Content Blocks. O conteúdo em `lessons.conte
 - Objetivos solicitados **Covered:** 19.
 - Objetivos solicitados **Partial:** nenhum.
 - Objetivos solicitados **Missing:** nenhum.
-- Objetivo adicional da formulação oficial atual **Partial:** comparação ampla de cloud pricing models.
+- Objetivo adicional da formulação oficial atual **Covered:** comparação de cloud pricing models.
+- Total consolidado: **20 Covered, 0 Partial e 0 Missing**.
 
 ## Problemas e riscos detectados
 
@@ -90,10 +91,7 @@ Não há Lesson ausente para os objetivos solicitados. Os 19 objetivos estão ma
 
 ### Lessons superficiais
 
-Não restam Lessons exclusivamente legadas no Domain 1. Todas possuem Content Blocks e mantêm o conteúdo anterior como fallback. Prioridades de cobertura que ainda permanecem:
-
-1. comparação mais ampla de cloud pricing models, além de CapEx/OpEx;
-2. revisão gradual dos cenários longos importados, sem reduzir a cobertura útil.
+Não restam Lessons exclusivamente legadas nem lacunas curriculares no Domain 1. Todas possuem Content Blocks e mantêm o conteúdo anterior como fallback. Permanece apenas a oportunidade editorial de revisar gradualmente os cenários longos importados, sem reduzir a cobertura útil.
 
 ### Duplicação
 
@@ -120,7 +118,7 @@ Não foi encontrada afirmação claramente incorreta nos conteúdos auditados. P
 
 Todos os objetivos solicitados possuem flashcards associados direta ou comparativamente. Não existe Lesson sem flashcard neste Domain.
 
-Não há lacuna essencial de memória ativa. Os 84 cards cobrem os objetivos solicitados; 29 foram encurtados ou corrigidos sem alterar seus UUIDs. A comparação ampla de cloud pricing models permanece como oportunidade curricular adicional.
+Não há lacuna essencial de memória ativa. Os 84 cards cobrem todos os objetivos do Domain; dois cards existentes foram ajustados na 8.4.7, nos mesmos UUIDs, para reforçar pay-as-you-go versus compromisso e pricing model versus CapEx/OpEx.
 
 ## Lacunas em Questions
 
@@ -160,7 +158,7 @@ Não é recomendada mudança de `display_order` nesta etapa. Ao enriquecer as Le
 ## Integridade e arquitetura
 
 - Nenhum UUID foi alterado.
-- Foram corrigidos 29 flashcards e três questions existentes no mesmo UUID; 34 distratores foram substituídos por alternativas plausíveis e 20 questions originais foram adicionadas.
+- Foram corrigidos 31 flashcards e quatro questions existentes no mesmo UUID; 34 distratores foram substituídos por alternativas plausíveis e 20 questions originais foram adicionadas.
 - Progresso, histórico de quiz, histórico de flashcards e links permanecem preservados.
 - A FK por `lesson_id` permite auditar cobertura com precisão, mas também evidencia que questions comparativas podem cobrir um objetivo sem estar associadas à Lesson individual correspondente. Relatórios futuros devem considerar objetivo + Lesson, não apenas contagem por Lesson.
 - A coexistência de `lessons.content` e `lesson_content_blocks` funciona como planejado: a auditoria pós-8.4.5 encontrou as 18 Lessons convertidas e todo o conteúdo legado preservado como fallback.
@@ -174,10 +172,11 @@ Consultas reproduzíveis usadas nesta auditoria:
 - `supabase/tests/validate_az900_cloud_service_types_lesson_blocks.sql`
 - `supabase/tests/validate_az900_domain1_practice_content.sql`
 - `supabase/tests/validate_az900_domain1_final.sql`
+- `supabase/tests/validate_az900_cloud_pricing_models.sql`
 
-## Validação final — Etapa 8.4.6
+## Validação consolidada — após a Etapa 8.4.7
 
-O Domain 1 foi validado no Supabase de produção com 18 Lessons publicadas, 128 Content Blocks publicados, 84 Flashcards e 153 Questions. As estimativas variam entre 8 e 12 minutos, totalizando 182 minutos. Nenhuma estimativa precisou ser alterada.
+O Domain 1 foi validado no Supabase de produção com 18 Lessons publicadas, 129 Content Blocks publicados, 84 Flashcards e 153 Questions. As estimativas variam entre 10 e 12 minutos, totalizando 184 minutos. `consumption-based-model` passou de 8 para 10 minutos após receber a comparação de pricing.
 
 As quatro Visual Experiences usadas neste Domain estão publicadas e ligadas à mesma Lesson do respectivo block:
 
@@ -189,7 +188,7 @@ As quatro Visual Experiences usadas neste Domain estão publicadas e ligadas à 
 O validador final confirmou:
 
 - `display_order` contínuo em todas as Lessons;
-- todos os 128 blocks publicados e com `config` válido;
+- todos os 129 blocks publicados e com `config` válido;
 - exatamente um `summary` final por Lesson, com 3–6 itens;
 - `exam_tip` nas 18 Lessons e 15 `exam_trap` nos conceitos que exigem diferenciação;
 - fallback não vazio em `lessons.content` nas 18 Lessons;
@@ -207,4 +206,24 @@ Regressão concluída:
 - `typecheck`, `lint` e `build` passaram;
 - Supabase remoto está atualizado (`db push --dry-run` sem migrations pendentes).
 
-O material solicitado pelo projeto pode ser estudado de ponta a ponta. Permanece `Partial`, por honestidade curricular, apenas a formulação oficial adicional **compare cloud pricing models**, que pede uma comparação mais ampla do que Consumption-Based Model e CapEx/OpEx. Não foi criado conteúdo novo na 8.4.6.
+O Domain 1 pode ser estudado de ponta a ponta e todos os seus objetivos estão `Covered`. A Etapa 8.4.7 acrescentou somente uma comparação curta em `consumption-based-model`, ajustou conteúdo complementar nas Lessons existentes e reforçou a prática sem criar nova Lesson, novo sistema de custos ou conteúdo do Domain 2.
+
+## Checkpoint — Etapa 8.4.8
+
+**Domain 1: CLOSED**
+
+| Indicador final | Resultado |
+| --- | ---: |
+| Objetivos Covered | 20 |
+| Objetivos Partial | 0 |
+| Objetivos Missing | 0 |
+| Lessons publicadas | 18 |
+| Content Blocks publicados | 129 |
+| Visual Experiences utilizadas pelo Domain | 4 |
+| Flashcards publicados | 84 |
+| Questions publicadas | 153 |
+| Tempo estimado | 184 minutos |
+
+O checkpoint confirmou ausência de referências órfãs em progresso, tentativas e respostas de Quiz, revisões de Flashcards e spaced repetition. RLS está habilitado nas tabelas curriculares e de usuário; conteúdo publicado é legível por usuários autenticados, questões e gabaritos permanecem protegidos pelo fluxo de Quiz, e escrita curricular direta é negada.
+
+O estado local `supabase/.temp/` foi removido do tracking e adicionado ao `.gitignore`, sem apagar os arquivos locais. A varredura do índice não encontrou `.env`, chaves, tokens, senhas ou connection strings privadas; `.env.example` contém somente nomes de variáveis com valores vazios. As migrations estão ordenadas, sem versões duplicadas, sem arquivos temporários e sem alterações em migrations antigas. O Supabase remoto não possui migration pendente.

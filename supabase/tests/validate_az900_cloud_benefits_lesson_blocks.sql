@@ -269,8 +269,8 @@ begin
     where certification.code = 'az-900'
       and domain.title = 'Describe cloud concepts'
       and block.is_published
-  ) <> 128 then
-    raise exception 'Domain 1 must expose 128 published blocks after 8.4.4';
+  ) <> 129 then
+    raise exception 'Domain 1 must expose 129 published blocks after 8.4.7';
   end if;
 
   if (
@@ -330,7 +330,7 @@ begin
     join public.certifications certification on certification.id = domain.certification_id
     where certification.code = 'az-900'
       and domain.title = 'Describe cloud concepts'
-  ) <> 128 then
+  ) <> 129 then
     raise exception 'Authenticated users cannot read every published Domain 1 block';
   end if;
 end;
@@ -343,7 +343,7 @@ select json_build_object(
   'enriched_lessons', 7,
   'new_blocks', 51,
   'domain_block_lessons', 18,
-  'domain_published_blocks', 128,
+  'domain_published_blocks', 129,
   'service_types_legacy_content_preserved', true,
   'flashcards_preserved', 84,
   'questions_available', 153
