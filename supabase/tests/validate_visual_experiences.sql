@@ -238,8 +238,8 @@ begin
 
   if coalesce(jsonb_typeof(architecture_config -> 'nodes'), '') <> 'array'
     or coalesce(jsonb_typeof(architecture_config -> 'edges'), '') <> 'array'
-    or jsonb_array_length(architecture_config -> 'nodes') <> 4
-    or jsonb_array_length(architecture_config -> 'edges') <> 3 then
+    or jsonb_array_length(architecture_config -> 'nodes') <> 7
+    or jsonb_array_length(architecture_config -> 'edges') <> 6 then
     raise exception 'Architecture seed does not have the expected nodes and edges';
   end if;
 

@@ -83,6 +83,19 @@ describe('ComparisonVisual', () => {
 })
 
 describe('ArchitectureVisual', () => {
+  it('mantém o diagrama navegável em telas estreitas sem expandir a página', () => {
+    const experience = architectureExperience()
+    render(<VisualExperienceRenderer experience={experience} />)
+
+    const scrollRegion = screen.getByRole('region', {
+      name: `Diagrama de arquitetura: ${experience.title}`,
+    })
+    const canvas = scrollRegion.firstElementChild
+
+    expect(scrollRegion).toHaveClass('overflow-x-auto', 'overscroll-x-contain')
+    expect(canvas).toHaveClass('min-w-[42rem]')
+  })
+
   it('oferece representação textual das relações e oculta o SVG decorativo', () => {
     const experience = architectureExperience()
     const { container } = render(<VisualExperienceRenderer experience={experience} />)
