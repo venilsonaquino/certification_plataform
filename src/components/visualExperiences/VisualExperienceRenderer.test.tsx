@@ -96,6 +96,40 @@ describe('ArchitectureVisual', () => {
     expect(canvas).toHaveClass('min-w-[42rem]')
   })
 
+  it('adapta uma hierarquia vertical simples à largura mobile', () => {
+    const hierarchy = architectureExperience({
+      title: 'Hierarquia de recursos Azure',
+      config: {
+        nodes: [
+          { id: 'root', label: 'Tenant / Root', kind: 'group', x: 50, y: 12 },
+          { id: 'management', label: 'Management Group', kind: 'group', x: 50, y: 31 },
+          { id: 'subscription', label: 'Subscription', kind: 'group', x: 50, y: 50 },
+          { id: 'resource-group', label: 'Resource Group', kind: 'group', x: 50, y: 69 },
+          { id: 'resource', label: 'Resource', kind: 'resource', x: 50, y: 88 },
+        ],
+        edges: [
+          { id: 'root-management', source: 'root', target: 'management' },
+          { id: 'management-subscription', source: 'management', target: 'subscription' },
+          { id: 'subscription-resource-group', source: 'subscription', target: 'resource-group' },
+          { id: 'resource-group-resource', source: 'resource-group', target: 'resource' },
+        ],
+      },
+    })
+
+    render(<VisualExperienceRenderer experience={hierarchy} />)
+
+    const scrollRegion = screen.getByRole('region', {
+      name: `Diagrama de arquitetura: ${hierarchy.title}`,
+    })
+    const canvas = scrollRegion.firstElementChild
+
+    expect(canvas).toHaveClass('min-w-[14rem]')
+    expect(canvas).not.toHaveClass('min-w-[42rem]')
+    expect(canvas).toHaveStyle({ height: '600px' })
+    expect(screen.getByRole('button', { name: /Tenant \/ Root, Grupo/ })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Resource, Recurso/ })).toBeInTheDocument()
+  })
+
   it('oferece representação textual das relações e oculta o SVG decorativo', () => {
     const experience = architectureExperience()
     const { container } = render(<VisualExperienceRenderer experience={experience} />)

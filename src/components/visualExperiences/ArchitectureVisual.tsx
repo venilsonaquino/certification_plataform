@@ -91,7 +91,10 @@ export function ArchitectureVisual({ experience }: ArchitectureVisualProps) {
   const nodeById = new Map<string, PositionedNode>(nodes.map((node) => [node.id, node]))
   const selectedNode = selectedNodeId ? nodeById.get(selectedNodeId) ?? null : null
   const rowCount = Math.max(1, Math.ceil(nodes.length / 3))
-  const canvasHeight = Math.max(360, rowCount * 150)
+  const verticalLevelCount = new Set(nodes.map((node) => Math.round(node.y))).size
+  const isSingleColumnLayout =
+    nodes.length > 1 && new Set(nodes.map((node) => Math.round(node.x))).size === 1
+  const canvasHeight = Math.max(360, rowCount * 150, verticalLevelCount * 120)
 
   useEffect(() => {
     const container = scrollContainerRef.current
@@ -136,7 +139,7 @@ export function ArchitectureVisual({ experience }: ArchitectureVisualProps) {
         className="overflow-x-auto overscroll-x-contain p-4 sm:p-6"
       >
         <div
-          className="relative mx-auto min-w-[42rem] overflow-hidden rounded-xl border border-slate-200 bg-slate-50"
+          className={`relative mx-auto overflow-hidden rounded-xl border border-slate-200 bg-slate-50 ${isSingleColumnLayout ? 'min-w-[14rem]' : 'min-w-[42rem]'}`}
           style={{ height: `${canvasHeight}px` }}
         >
           <svg

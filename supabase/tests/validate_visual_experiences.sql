@@ -14,8 +14,8 @@ begin
   into total_count
   from public.visual_experiences;
 
-  if total_count <> 6 then
-    raise exception 'Expected exactly 6 visual experiences after the Domain 1 enrichment, found %', total_count;
+  if total_count <> 7 then
+    raise exception 'Expected exactly 7 visual experiences after the Resource Hierarchy enrichment, found %', total_count;
   end if;
 
   select count(*)
@@ -36,9 +36,12 @@ begin
       or (visual.id = '76000000-0000-4000-8000-000000000003'
         and lesson.slug = 'entra-id-and-domain-services'
         and visual.type = 'flow')
+      or (visual.id = '76000000-0000-4000-8000-000000000007'
+        and lesson.slug = 'azure-resource-hierarchy'
+        and visual.type = 'architecture')
     );
 
-  if target_count <> 3 then
+  if target_count <> 4 then
     raise exception 'One or more visual experience seeds target the wrong certification, lesson or type';
   end if;
 
@@ -480,8 +483,8 @@ set local role authenticated;
 
 do $$
 begin
-  if (select count(*) from public.visual_experiences) <> 6 then
-    raise exception 'Authenticated users should see exactly the 6 published visual experiences';
+  if (select count(*) from public.visual_experiences) <> 7 then
+    raise exception 'Authenticated users should see exactly the 7 published visual experiences';
   end if;
 
   if exists (

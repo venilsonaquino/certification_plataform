@@ -254,13 +254,13 @@ Esta seção não cobre Compute, Containers, Functions, Networking, Storage, Ide
 | Item | Quantidade |
 | --- | ---: |
 | Lessons publicadas | 7 |
-| Lesson Content Blocks publicados | 32 |
-| Visual Experiences publicadas | 1 |
+| Lesson Content Blocks publicados | 55 |
+| Visual Experiences publicadas | 2 |
 | Flashcards publicados | 37 |
 | Questions publicadas | 42 |
 | Tempo estimado total | 70 minutos |
 
-Após a Etapa 8.5.4, `azure-datacenters`, `azure-regions`, `availability-zones` e `region-pairs-and-sovereign-regions` usam Content Blocks estruturados e preservam `lessons.content` como fallback. As outras três Lessons continuam somente com o conteúdo legado.
+Após a Etapa 8.5.5, as sete Lessons usam Content Blocks estruturados e preservam `lessons.content` como fallback.
 
 | # | Lesson / slug real | Min. | Blocks | Visual | Flashcards | Questions (E/M/H) | Status | Avaliação |
 | ---: | --- | ---: | ---: | --- | ---: | ---: | --- | --- |
@@ -268,9 +268,9 @@ Após a Etapa 8.5.4, `azure-datacenters`, `azure-regions`, `availability-zones` 
 | 2 | Azure Regions / `azure-regions` | 10 | 7 | Nenhum | 7 | 6 (2/3/1) | Ready | Sete blocks cobrem geography, datacenters conectados, implantação e fatores de escolha, com cenário ASP.NET Core, exam trap, exam tip e summary. |
 | 3 | Availability Zones / `availability-zones` | 10 | 9 | Architecture | 7 | 5 (1/3/1) | Ready | Nove blocks cobrem definição, isolamento, suporte variável, zonal versus zone-redundant, exemplo .NET, exam tip/trap e summary. O visual foi corrigido e reutilizado. |
 | 4 | Region Pairs and Sovereign Regions / `region-pairs-and-sovereign-regions` | 10 | 9 | Nenhum | 4 | 5 (2/2/1) | Ready | Nove blocks separam os conceitos, cobrem paired/nonpaired regions, limites de automação, sovereign clouds, data residency, dois exam traps, exam tip e summary. |
-| 5 | Resources and Resource Groups / `resources-and-resource-groups` | 10 | 0 | Nenhum | 7 | 6 (3/2/1) | Needs enrichment | Cobre recurso, agrupamento e pertencimento, mas não possui estrutura de Lesson enriquecida; um flashcard mistura herança de tags e policies de forma incorreta. |
-| 6 | Subscriptions and Management Groups / `subscriptions-and-management-groups` | 10 | 0 | Nenhum | 4 | 5 (2/2/1) | Needs enrichment | Apresenta os dois escopos e um cenário, porém simplifica assinatura como faturamento isolado e não desenvolve limites/organização. |
-| 7 | Azure Resource Hierarchy / `azure-resource-hierarchy` | 10 | 0 | Nenhum | 4 | 5 (2/2/1) | Needs enrichment | A sequência conceitual existe, mas prática e cards antecipam Azure Policy/RBAC e trazem regras frágeis sobre sobrescrita de políticas. |
+| 5 | Resources and Resource Groups / `resources-and-resource-groups` | 10 | 7 | Nenhum | 7 | 6 (3/2/1) | Ready | Sete blocks cobrem Resource, Resource Group, pertencimento, Regions diferentes, ciclo de vida, tags sem herança automática, exam tip/trap e summary. |
+| 6 | Subscriptions and Management Groups / `subscriptions-and-management-groups` | 10 | 8 | Nenhum | 4 | 5 (2/2/1) | Ready | Oito blocks separam Subscription e Management Group, cobrem acesso, quotas/limites, organização, billing sem invoice obrigatória, governança conceitual, exam tip/trap e summary. |
+| 7 | Azure Resource Hierarchy / `azure-resource-hierarchy` | 10 | 8 | Architecture | 4 | 5 (2/2/1) | Ready | Oito blocks apresentam a ordem dos escopos, exemplo, limites de Policy/RBAC, exam tip/trap, summary e uma visualização vertical acessível da hierarquia. |
 
 Não há Lesson ausente e não é recomendada a criação de novos slugs. Os sete registros existentes acomodam todos os objetivos oficiais e devem ser preservados.
 
@@ -283,32 +283,33 @@ Não há Lesson ausente e não é recomendada a criação de novos slugs. Os set
 | Region Pairs | `region-pairs-and-sovereign-regions` | 4 blocks dedicados + exam tip + summary compartilhados | Not necessary | 3 dos 4 | 3 dos 5 | Covered | Define a associação feita pela Microsoft entre algumas Regions, distingue paired/nonpaired e condiciona geo-replication, geo-redundancy e disaster recovery ao serviço, à configuração e à arquitetura. |
 | Sovereign Regions | `region-pairs-and-sovereign-regions` | 3 blocks dedicados + exam tip + summary compartilhados | Not necessary | 1 dos 4 | 2 dos 5 | Covered | Explica sovereign cloud, requisitos específicos, isolamento/operação e disponibilidade variável, além de separar soberania de data residency. |
 | Availability Zones | `availability-zones` | 9 blocks estruturados | Reuse | 7 | 5 | Covered | Define Zone como agrupamento lógico de um ou mais datacenters, explica isolamento e suporte, diferencia zonal/zone-redundant e reutiliza o visual corrigido no mesmo UUID. |
-| Azure Resources | `resources-and-resource-groups` | Legado curto | Not necessary | 1 dos 7 | 1 dos 6 | Partial | Definição utilizável, mas pouco reforço direto e sem estrutura pedagógica enriquecida. |
-| Resource Groups | `resources-and-resource-groups` | Legado curto | Not necessary | 6 dos 7 | 5 dos 6 | Partial | Boa base prática; precisa corrigir herança de tags e separar organização, ciclo de vida e escopo de gerenciamento. |
-| Subscriptions | `subscriptions-and-management-groups` | Legado curto | Not necessary | 2 dos 4 | 2 dos 5 | Partial | Cobre boundary de cobrança/acesso, mas usa formulações absolutas sobre faturamento independente. |
-| Management Groups | `subscriptions-and-management-groups` | Legado curto | Not necessary | 2 dos 4 | 3 dos 5 | Partial | Cobre agrupamento de subscriptions e aplicação centralizada, ainda sem explicação estruturada. |
-| Hierarchy entre Resource Groups, Subscriptions e Management Groups | `azure-resource-hierarchy`; `subscriptions-and-management-groups`; `resources-and-resource-groups` | Legado curto | Missing | 4 | 5 | Partial | A ordem Management Groups → Subscriptions → Resource Groups → Resources existe; falta um visual único da hierarquia e a prática precisa evitar aprofundamento prematuro em Policy/RBAC. |
+| Azure Resources | `resources-and-resource-groups` | 7 blocks estruturados | Not necessary | 1 dos 7 | 1 dos 6 | Covered | Define Resource como entidade gerenciável, fornece exemplos e diferencia o item individual do container lógico. |
+| Resource Groups | `resources-and-resource-groups` | 7 blocks estruturados | Not necessary | 6 dos 7 | 5 dos 6 | Covered | Explica organização, pertencimento, ciclo de vida, Regions diferentes e ausência de herança automática de tags, com prática corrigida. |
+| Subscriptions | `subscriptions-and-management-groups` | 8 blocks estruturados | Not necessary | 2 dos 4 | 2 dos 5 | Covered | Cobre Resources, acesso, quotas/limites, organização e relação de billing sem tratar Subscription como invoice independente. |
+| Management Groups | `subscriptions-and-management-groups` | 8 blocks estruturados | Not necessary | 2 dos 4 | 3 dos 5 | Covered | Define o escopo acima das Subscriptions, organização e governança centralizada sem aprofundar implementação de Policy/RBAC. |
+| Hierarchy entre Resource Groups, Subscriptions e Management Groups | `azure-resource-hierarchy`; `subscriptions-and-management-groups`; `resources-and-resource-groups` | 23 blocks complementares | Reuse | 4 | 5 | Covered | A ordem Management Groups → Subscriptions → Resource Groups → Resources está explícita; a visualização mostra Tenant/Root como contexto e a prática evita regras universais de sobrescrita. |
 
 ### Resultado de cobertura
 
-- **Covered:** 5 objetivos.
-- **Partial:** 5 objetivos.
+- **Covered:** 10 objetivos.
+- **Partial:** 0 objetivos.
 - **Missing:** 0 objetivos.
-- **Lessons Ready:** 4.
-- **Lessons Needs enrichment:** 3.
+- **Lessons Ready:** 7.
+- **Lessons Needs enrichment:** 0.
 - **Lessons Missing:** 0.
 
-Azure Datacenters, Azure Regions, Availability Zones, Region Pairs e Sovereign Regions estão `Covered`. Os cinco objetivos de Resource Hierarchy permanecem `Partial` e não foram alterados pela Etapa 8.5.4.
+Todos os dez objetivos auditados de Core Architectural Components estão `Covered`. A Etapa 8.5.5 fechou Azure Resources, Resource Groups, Subscriptions, Management Groups e Resource Hierarchy sem avançar para Compute, Networking, Storage ou Identity.
 
 ### Visual Experiences
 
-Existe uma única experiência no Topic:
+Existem duas experiências no Topic:
 
 | ID | Lesson | Tipo | Status de publicação | Classificação | Decisão futura |
 | --- | --- | --- | --- | --- | --- |
 | `76000000-0000-4000-8000-000000000002` | `availability-zones` | `architecture` | Publicada | Reuse | Atualizada na 8.5.3 no mesmo UUID: Region → três Zones → “1+ Datacenters”, com independência de energia, refrigeração e networking. |
+| `76000000-0000-4000-8000-000000000007` | `azure-resource-hierarchy` | `architecture` | Publicada | Reuse | Criada na 8.5.5 como hierarquia vertical Tenant/Root → Management Groups → Subscriptions → Resource Groups → Resources, com detalhes acessíveis por node. |
 
-A configuração atual é renderizável, responsiva e acessível e representa uma Region contendo três Zones, cada uma ligada a um agrupamento de um ou mais datacenters. Para Datacenters/Regions e Region Pairs/Sovereign Regions, uma nova interação não é necessária. Para Resource Hierarchy, uma visualização simples de hierarquia é materialmente útil e está `Missing`; deve haver apenas uma, ligada à Lesson `azure-resource-hierarchy`.
+As duas configurações são renderizáveis, responsivas e acessíveis. A experiência de Availability Zones representa uma Region contendo três Zones, cada uma ligada a um agrupamento de um ou mais datacenters. A nova experiência de Resource Hierarchy usa uma única coluna em mobile e mantém uma representação textual para leitores de tela. Nenhuma nova interação é necessária para as outras Lessons do Topic.
 
 ### Auditoria de Flashcards
 
@@ -318,11 +319,11 @@ A configuração atual é renderizável, responsiva e acessível e representa um
 | `azure-regions` | 7 | Quatro cards ajustados nos mesmos UUIDs; a repetição sobre latência foi substituída por geography e os fatores de escolha agora incluem resiliência. |
 | `availability-zones` | 7 | Os sete cards foram corrigidos nos mesmos UUIDs. Agora cobrem definição 1+ datacenters, isolamento, Region versus Zone, suporte variável e zonal versus zone-redundant, sem antecipar Availability Sets. |
 | `region-pairs-and-sovereign-regions` | 4 | Os quatro UUIDs foram preservados e os cards agora testam definição do pair, paired versus nonpaired, finalidade possível sem automação e Sovereign Region versus data residency. |
-| `resources-and-resource-groups` | 7 | Boa quantidade; o card 7 afirma que tags aplicadas ao Resource Group afetam todos os recursos, mas tags não são herdadas automaticamente sem Policy. |
-| `subscriptions-and-management-groups` | 4 | Cobertura mínima; o card 4 sugere que toda subscription tem faturamento próprio, embora várias possam compartilhar a mesma relação/conta de cobrança. |
-| `azure-resource-hierarchy` | 4 | Cards 2 e 4 são conceitualmente frágeis: políticas e permissões não obedecem a uma regra geral de “sobrescrita pelo nível mais específico”; também antecipam Policy/RBAC. |
+| `resources-and-resource-groups` | 7 | O card de tags foi corrigido no mesmo UUID; a cobertura inclui Resource, Resource Group, pertencimento, ciclo de vida, Regions e tags sem herança automática. |
+| `subscriptions-and-management-groups` | 4 | Dois cards foram corrigidos nos mesmos UUIDs para representar Subscription como escopo e retirar a exigência de faturamento independente. |
+| `azure-resource-hierarchy` | 4 | Dois cards foram corrigidos nos mesmos UUIDs; agora ensinam amplitude de escopo sem regra universal de sobrescrita de Policy ou RBAC. |
 
-Não há duplicata exata de frente entre os 37 Flashcards. A Etapa 8.5.4 corrigiu os quatro cards da Lesson no mesmo UUID, sem criar, remover ou reassociar registros.
+Não há duplicata exata de frente entre os 37 Flashcards. A Etapa 8.5.5 corrigiu cinco cards nos mesmos UUIDs, sem criar, remover ou reassociar registros.
 
 ### Auditoria de Questions
 
@@ -332,19 +333,16 @@ Não há duplicata exata de frente entre os 37 Flashcards. A Etapa 8.5.4 corrigi
 | `azure-regions` | 6 | 2 | 3 | 1 | Boa distribuição por conceito e cenário; uma question foi ajustada para incluir preço aplicável e opções de resiliência entre os fatores de escolha. |
 | `availability-zones` | 5 | 1 | 3 | 1 | As cinco questions foram ajustadas nos mesmos UUIDs e cobrem cenário, definição, zonal versus zone-redundant, suporte variável e responsabilidade, sem depender de VMs. |
 | `region-pairs-and-sovereign-regions` | 5 | 2 | 2 | 1 | As cinco questions foram corrigidas nos mesmos UUIDs e cobrem definição, nonpaired regions, Sovereign Region versus data residency e ausência de replicação/failover automático. |
-| `resources-and-resource-groups` | 6 | 3 | 2 | 1 | Cobre definição, cenário e ciclo de vida; as duas questões de definição têm leve redundância com a questão introdutória. |
-| `subscriptions-and-management-groups` | 5 | 2 | 2 | 1 | Distribuição adequada; algumas explicações aprofundam policies, quotas e access antes das Lessons correspondentes. |
-| `azure-resource-hierarchy` | 5 | 2 | 2 | 1 | A questão 2 testa RBAC explicitamente e está fora do recorte; questões 4 e 5 aprofundam Azure Policy e exceções, tornando o objetivo Fundamentals ambíguo. |
-| **Total** | **42** | **15** | **19** | **8** | Quantidade suficiente, mas a associação e a precisão precisam ser corrigidas antes do fechamento do Topic. |
+| `resources-and-resource-groups` | 6 | 3 | 2 | 1 | Três questions foram corrigidas nos mesmos UUIDs para testar Regions diferentes, tags sem herança automática e pertencimento a um único Resource Group por vez. |
+| `subscriptions-and-management-groups` | 5 | 2 | 2 | 1 | Três questions foram corrigidas nos mesmos UUIDs para testar Subscription, billing compartilhado e Management Group sem aprofundamento operacional. |
+| `azure-resource-hierarchy` | 5 | 2 | 2 | 1 | Quatro questions foram reorientadas nos mesmos UUIDs para ordem, containers, escopos progressivos e cenário de organização, retirando Policy/RBAC detalhados. |
+| **Total** | **42** | **15** | **19** | **8** | Quantidade e distribuição suficientes; a prática das sete Lessons está coerente com o recorte de Fundamentals. |
 
-Não resta duplicata exata normalizada entre as 42 Questions do Topic. A duplicata sobre Region Pairs foi eliminada na Etapa 8.5.2 ao reescrever, no mesmo UUID, a Question que estava incorretamente associada a `azure-datacenters`; a Etapa 8.5.4 preservou todos os cinco UUIDs da Lesson. Nenhuma Question foi apagada, criada ou reassociada.
+Não resta duplicata exata normalizada entre as 42 Questions do Topic. A duplicata sobre Region Pairs foi eliminada na Etapa 8.5.2 ao reescrever, no mesmo UUID, a Question que estava incorretamente associada a `azure-datacenters`. As Etapas 8.5.4 e 8.5.5 preservaram todos os UUIDs de Questions, opções e Lessons; nenhuma Question foi apagada, criada ou reassociada.
 
 ### Inconsistências e riscos
 
-- Tags em Resource Groups não são herdadas automaticamente pelos recursos. A herança requer uma definição de Azure Policy apropriada.
-- “Política mais específica prevalece” e “permissões são sobrescritas” não são regras gerais válidas para Azure Policy/RBAC.
-- Questões de RBAC e detalhes de Azure Policy pertencem a etapas posteriores e devem ser substituídas ou reorientadas na 8.5.6.
-- `lessons.content` foi preservado como fallback nas sete Lessons. Nas três Lessons ainda legadas, continua sendo o único conteúdo até a Etapa 8.5.5.
+As inconsistências curriculares encontradas na auditoria foram corrigidas. `lessons.content` permanece preservado como fallback nas sete Lessons. Azure Policy e Azure RBAC aparecem somente como exemplos de mecanismos aplicáveis em diferentes escopos; suas regras específicas continuam fora desta etapa.
 
 ### Plano exato para 8.5.2–8.5.6
 
@@ -353,8 +351,8 @@ Não resta duplicata exata normalizada entre as 42 Questions do Topic. A duplica
 | 8.5.2 — Datacenters + Regions | `azure-datacenters`; `azure-regions` | Concluída: definições, relação geography/region/datacenter, rede de baixa latência, fatores de escolha e prática corrigida. | Nenhuma criada, conforme planejado. |
 | 8.5.3 — Availability Zones | `availability-zones` | Concluída: definição 1+ datacenters, isolamento, suporte variável, responsabilidade e zonal versus zone-redundant. | Visual reutilizado e atualizado no mesmo UUID `76000000-0000-4000-8000-000000000002`; nenhuma nova experiência criada. |
 | 8.5.4 — Region Pairs + Sovereign Regions | `region-pairs-and-sovereign-regions` | Concluída: os conceitos foram separados, nonpaired regions foram cobertas e promessas automáticas de replicação, failover ou continuidade foram removidas. | Nenhuma criada, conforme planejado. |
-| 8.5.5 — Resource Hierarchy | `resources-and-resource-groups`; `subscriptions-and-management-groups`; `azure-resource-hierarchy` | Recurso, ciclo de vida de Resource Group, boundaries de Subscription, Management Groups e hierarquia/escopo sem aprofundar Policy ou RBAC. | Criar uma única visualização simples de hierarquia em `azure-resource-hierarchy`; nenhuma nas duas Lessons auxiliares. |
-| 8.5.6 — Practice + fechamento | As sete Lessons do Topic | Corrigir/reassociar prática preservando IDs, remover duplicação, substituir itens fora do escopo, validar Lesson/Topic Quiz e atualizar esta matriz. | Nenhuma nova; validar a de Zones e a hierarquia criada na 8.5.5. |
+| 8.5.5 — Resource Hierarchy | `resources-and-resource-groups`; `subscriptions-and-management-groups`; `azure-resource-hierarchy` | Concluída: Resource, ciclo de vida e tags de Resource Group, escopos de Subscription, Management Groups e hierarquia foram enriquecidos sem aprofundar Policy/RBAC. | Uma única visualização vertical criada em `azure-resource-hierarchy`; nenhuma nas duas Lessons auxiliares. |
+| 8.5.6 — Practice + fechamento | As sete Lessons do Topic | Concluída: auditoria final confirmou associação, precisão, distribuição e ausência de duplicatas exatas; nenhuma correção adicional ou reassociação foi necessária. | Nenhuma nova; as experiências de Availability Zones e Resource Hierarchy foram mantidas. |
 
 ### Preservação histórica
 
@@ -377,3 +375,23 @@ O validador `supabase/tests/validate_az900_datacenters_regions.sql` confirmou bl
 A Visual Experience `76000000-0000-4000-8000-000000000002` manteve seu UUID e passou a representar uma Azure Region com três Zones e um agrupamento “1+ Datacenters” sob cada uma. As descrições comunicam independência de energia, refrigeração e networking. Nenhuma nova Visual Experience foi criada.
 
 Os sete Flashcards, as cinco Questions e suas 20 alternativas foram corrigidos in-place. O conteúdo agora cobre definição, isolamento, suporte variável, Region versus Zone e zonal versus zone-redundant, sem Availability Sets ou aprofundamento de Compute. O validador `supabase/tests/validate_az900_availability_zones.sql` confirmou integridade curricular, RLS de leitura, ausência de duplicações e preservação histórica.
+
+### Atualização — Etapa 8.5.5
+
+`resources-and-resource-groups`, `subscriptions-and-management-groups` e `azure-resource-hierarchy` foram enriquecidas com 23 Content Blocks publicados, respectivamente 7, 8 e 8. As três mantêm estimativa de 10 minutos e preservam `lessons.content` como fallback.
+
+Foi criada uma única Visual Experience `architecture`, vinculada a `azure-resource-hierarchy`, representando Tenant/Root → Management Groups → Subscriptions → Resource Groups → Resources. O renderer adapta hierarquias de uma coluna a 320 px sem overflow horizontal, mantém nodes interativos, região focável e representação textual para leitores de tela.
+
+Cinco Flashcards e dez Questions foram corrigidos in-place, preservando UUIDs e histórico. Tags não são apresentadas como automaticamente herdadas, Subscriptions não são tratadas como invoices independentes e a prática de hierarquia não ensina regras universais de sobrescrita de Policy/RBAC.
+
+### Atualização — Etapa 8.5.6
+
+A auditoria final revalidou as sete Lessons do Topic. Todas estão publicadas, possuem `lessons.content` preservado como fallback, estimativa de 10 minutos e Content Blocks publicados com ordem contínua, summary e reforço de prova. O inventário final permanece em 7 Lessons, 55 Content Blocks, 37 Flashcards, 42 Questions, 2 Visual Experiences e 70 minutos.
+
+Nenhuma Question ou Flashcard precisou ser alterado, criado, apagado ou reassociado nesta etapa. A revisão confirmou que Availability Zone não é tratada como um único Datacenter; Region Pair não implica pareamento universal, replicação ou failover automático; tags não são apresentadas como herdadas automaticamente; Subscription não é definida como invoice obrigatoriamente independente; e Resource Hierarchy não ensina regras universais de sobrescrita de Azure Policy ou RBAC.
+
+A distribuição final de Questions é 15 easy, 19 medium e 8 hard. Cada Lesson possui entre 5 e 10 Questions, permitindo seleção útil por Lesson e pelo Topic sem impor uma quantidade artificialmente uniforme. As duas Visual Experiences do Topic permanecem vinculadas aos mesmos UUIDs: Availability Zones (`76000000-0000-4000-8000-000000000002`) e Resource Hierarchy (`76000000-0000-4000-8000-000000000007`).
+
+Resultado curricular final: 10 objetivos `Covered`, 0 `Partial` e 0 `Missing`.
+
+**Core Architectural Components: CLOSED**
