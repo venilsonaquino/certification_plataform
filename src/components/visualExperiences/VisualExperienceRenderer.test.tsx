@@ -153,14 +153,15 @@ describe('ArchitectureVisual', () => {
     expect(within(details as HTMLElement).getByText('Nenhum componente selecionado.'))
       .toBeInTheDocument()
 
-    await user.click(apiButton)
+    apiButton.focus()
+    await user.keyboard('{Enter}')
 
     expect(apiButton).toHaveAttribute('aria-expanded', 'true')
     expect(within(details as HTMLElement).getByRole('heading', { name: 'API' })).toBeInTheDocument()
     expect(within(details as HTMLElement).getByText('Recebe e processa o tráfego.'))
       .toBeInTheDocument()
 
-    await user.click(apiButton)
+    await user.keyboard(' ')
 
     expect(apiButton).toHaveAttribute('aria-expanded', 'false')
     expect(within(details as HTMLElement).getByText('Nenhum componente selecionado.'))

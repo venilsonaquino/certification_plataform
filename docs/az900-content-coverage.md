@@ -395,3 +395,256 @@ A distribuição final de Questions é 15 easy, 19 medium e 8 hard. Cada Lesson 
 Resultado curricular final: 10 objetivos `Covered`, 0 `Partial` e 0 `Missing`.
 
 **Core Architectural Components: CLOSED**
+
+## Domain 2 — Azure Compute Services
+
+Auditoria realizada em 27 de agosto de 2026 para o Topic **Compute Services** do Domain **Describe Azure architecture and services (35–40%)**. O recorte segue o [guia oficial do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900), com skills measured a partir de 20 de julho de 2026, e o módulo [Describe Azure compute services](https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/).
+
+Esta etapa audita somente Compute. VNet, Subnet, Peering, Azure DNS, VPN Gateway, ExpressRoute, endpoints, Storage, Entra ID e RBAC não contam como cobertura. AI, Machine Learning e IoT/Edge aparecem no módulo de treinamento atual, mas não no objetivo de Compute dos skills measured adotados pelo projeto e, portanto, não foram adicionados ao escopo.
+
+### Inventário das Lessons
+
+O Topic possui 9 Lessons publicadas, 73 Content Blocks, 2 Visual Experiences, 34 Flashcards, 51 Questions e 96 minutos estimados. Todas preservam conteúdo legado em `lessons.content`; as nove Lessons concluídas nas etapas 8.6.2–8.6.5 estão `Ready`. O fechamento corrigiu o inventário histórico: as Questions `60000000-0000-4000-8000-000000000007` (VM) e `60000000-0000-4000-8000-000000000008` (App Service) já pertenciam ao Topic e foram preservadas, embora as contagens intermediárias as tivessem omitido.
+
+| # | Lesson / slug real | Min. | Blocks | Visual | Flashcards | Questions (E/M/H) | Publicada | Status | Avaliação |
+| ---: | --- | ---: | ---: | --- | ---: | ---: | --- | --- | --- |
+| 1 | Comparing Compute Options / `comparing-compute-options` | 10 | 9 | Nenhum | 4 | 5 (2/2/1) | Sim | Ready | Matriz textual compara controle do SO, guest OS, portabilidade, eventos, gestão e startup; três cenários e exemplos .NET equilibram VM, container e Function. |
+| 2 | Azure Virtual Machines / `azure-virtual-machines` | 12 | 7 | Nenhum | 4 | 6 (2/3/1) | Sim | Ready | Blocks cobrem IaaS, Shared Responsibility, casos de uso, exemplo .NET, custo/lifecycle, exam tip, exam trap e summary; a Question histórica adicional testa responsabilidade geral do guest OS. |
+| 3 | VM Scale Sets and Availability Sets / `vm-scale-sets-and-availability-sets` | 12 | 9 | Architecture | 4 | 5 (2/2/1) | Sim | Ready | Separa escala, autoscale configurado, fault/update domains e Availability Zones; remove absolutos e inclui comparação visual. |
+| 4 | Azure Virtual Desktop / `azure-virtual-desktop` | 10 | 7 | Nenhum | 3 | 5 (2/2/1) | Sim | Ready | Cobre desktop completo, RemoteApp, tipos de sessão, acesso por dispositivos, cenário corporativo e AVD versus VM/RDP. |
+| 5 | Resources Required for Virtual Machines / `virtual-machine-resources` | 10 | 8 | Architecture | 3 | 5 (2/2/1) | Sim | Ready | Estrutura e visual relacionam VM size, OS/data disks, NIC, VNet/subnet, IP configuration e Public IP opcional; prática e lifecycle foram corrigidos. |
+| 6 | Azure App Service / `azure-app-service` | 10 | 8 | Nenhum | 4 | 5 (2/2/1) | Sim | Ready | PaaS para web/APIs, responsabilidades, escala condicionada, App Service versus VM, cenário ASP.NET Core e prática Fundamentals estão explícitos. |
+| 7 | Azure Functions / `azure-functions` | 10 | 8 | Nenhum | 3 | 10 (3/5/2) | Sim | Ready | Serverless, infraestrutura abstraída, triggers, eventos, escala/cobrança condicionadas e prática Fundamentals substituem Premium, cold start e configuração avançada. |
+| 8 | Containers on Azure / `containers-on-azure` | 10 | 8 | Nenhum | 4 | 5 (2/2/1) | Sim | Ready | Define aplicação + dependências, kernel compartilhado, portabilidade, startup típico e ACI versus AKS apenas em nível conceitual. |
+| 9 | Choosing Application Hosting / `choosing-application-hosting` | 12 | 9 | Nenhum | 5 | 5 (2/2/1) | Sim | Ready | Matriz, três cenários, exam tip/trap e prática própria comparam Web Apps, containers e VMs por controle, portabilidade e operação. |
+
+Não há Lesson ausente e não é recomendada a criação de novos slugs. Os nove registros existentes acomodam todos os objetivos oficiais e seus UUIDs devem ser preservados.
+
+### Coverage Matrix
+
+| Objective | Lesson(s) | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | ---: | ---: | --- | --- |
+| Compare VMs / Containers / Functions | `comparing-compute-options`; `containers-on-azure`; `azure-functions`; `azure-virtual-machines` | 9 blocks comparativos + apoio | Not necessary | 11 relevantes | 20 distribuídas, com 5 próprias equilibradas | Covered | Matriz estruturada, cenários e exemplos .NET comparam controle, guest OS, portabilidade, eventos, gestão e startup sem absolutos. |
+| Azure Virtual Machines | `azure-virtual-machines` | 7 blocks + fallback | Not necessary | 4 | 5 | Covered | Definição IaaS, responsabilidades, casos de uso, controle versus PaaS, exam tip/trap, summary e prática coerente estão explícitos. |
+| Virtual Machine Scale Sets | `vm-scale-sets-and-availability-sets` | 9 blocks + fallback | Architecture compartilhada | 4 | 5 | Covered | Gerenciamento e escala de múltiplas instâncias, autoscale condicionado à configuração, cenários, exam tip/trap e prática estão explícitos. |
+| Availability Sets | `vm-scale-sets-and-availability-sets` | 9 blocks + fallback | Architecture compartilhada | 4 | 5 | Covered | Fault domains, update domains, limites de disponibilidade e comparação com Scale Sets e Availability Zones possuem conteúdo e prática coerentes. |
+| Azure Virtual Desktop | `azure-virtual-desktop` | 7 blocks + fallback | Not necessary | 3 | 5 | Covered | Desktop/app virtualization, desktop completo, RemoteApp, sessões, dispositivos, cenário empresarial e AVD versus VM/RDP estão cobertos. |
+| Resources required for VMs | `virtual-machine-resources`; `azure-virtual-machines` | 8 blocks + fallback | Architecture | 3 | 5 próprias + apoio em VM | Covered | Compute, storage e networking são relacionados explicitamente; Public IP é opcional, o visual é navegável e a prática cobre cada componente sem aprofundar Networking/Storage. |
+| Azure Web Apps | `azure-app-service`; `choosing-application-hosting` | 8 blocks + apoio | Not necessary | 4 | 5 próprias + cenários comparativos | Covered | Conceito PaaS, responsabilidades, escala condicionada, App Service versus VM, exemplo ASP.NET Core, exam trap, summary e prática 2/2/1 estão explícitos. |
+| Containers | `containers-on-azure`; `comparing-compute-options` | 8 blocks + apoio | Not necessary | 8 relevantes | 5 próprias + cenários comparativos | Covered | Conceito, kernel compartilhado, portabilidade, ACI/AKS Fundamentals, exam trap, summary e prática 2/2/1 estão explícitos. |
+| Azure Functions | `azure-functions`; `comparing-compute-options` | 8 blocks + apoio | Not necessary | 5 relevantes | 10 próprias + cenários comparativos | Covered | Serverless, event-driven, triggers, infraestrutura abstraída e condicionantes de plano/configuração têm prática sem aprofundamento de hosting. |
+| Application hosting options | `choosing-application-hosting`; `azure-app-service`; `containers-on-azure`; `azure-virtual-machines` | 9 blocks comparativos + apoio | Not necessary | 5 próprias + apoio | 5 próprias + prática das opções | Covered | Matriz estruturada, cenários Web Apps/container/VM, critérios de controle, portabilidade e operação, exam tip/trap, summary e prática própria fecham o objetivo. |
+
+### Resultado de cobertura
+
+- **Covered:** 10 objetivos.
+- **Partial:** 0 objetivos.
+- **Missing:** 0 objetivos.
+- **Lessons Ready:** 9.
+- **Lessons Needs enrichment:** 0.
+- **Lessons Missing:** 0.
+
+### Auditoria de Flashcards
+
+| Lesson | Flashcards | Avaliação |
+| --- | ---: | --- |
+| `comparing-compute-options` | 4 | Corrigidos in-place para controle do SO, Function orientada a eventos com plano condicionado, kernel compartilhado e portabilidade. |
+| `azure-virtual-machines` | 4 | Três cards foram corrigidos in-place: definição/responsabilidade, desalocação versus custos associados e VM versus serviço gerenciado. O card de patches já estava correto. |
+| `vm-scale-sets-and-availability-sets` | 4 | Os quatro cards foram corrigidos in-place: finalidade do Scale Set, diferença para Availability Set, fault domains e update domains sem garantias absolutas. |
+| `azure-virtual-desktop` | 3 | Os três cards foram corrigidos in-place para definição, cenário centralizado e sessões individuais ou compartilhadas, preservando os UUIDs. |
+| `virtual-machine-resources` | 3 | Os três cards foram corrigidos in-place para compute/storage/networking, OS disk versus data disk e exclusão condicionada à configuração; o card de NSG deixou de antecipar Networking. |
+| `azure-app-service` | 4 | Os quatro cards foram corrigidos in-place para definição PaaS, responsabilidades, App Service versus VM e cenário web/API; runtimes e deployment slots deixaram de ser exigidos. |
+| `azure-functions` | 3 | Corrigidos in-place: definição, trigger e escala/cobrança agora evitam absolutos e permanecem em Fundamentals. |
+| `containers-on-azure` | 4 | Corrigidos in-place para container versus VM, ACI, AKS e escolha conceitual entre execução simples e orquestração. |
+| `choosing-application-hosting` | 5 | Cinco cards novos cobrem Web Apps, containers, VMs, critérios de escolha e ausência de regra universal para aplicações web. |
+
+Não foi encontrada duplicata exata de frente. Há sobreposição semântica intencional entre os cards de comparação e os cards específicos de VM, container e Functions; ela deve ser reduzida apenas onde não contribuir para recuperação ativa.
+
+### Auditoria de Questions
+
+| Lesson | Total | Easy | Medium | Hard | Avaliação |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `comparing-compute-options` | 5 | 2 | 2 | 1 | As cinco Questions e vinte opções foram reescritas in-place; VM, container e Function aparecem como respostas corretas em conceitos e cenários plausíveis. |
+| `azure-virtual-machines` | 6 | 2 | 3 | 1 | A Question histórica de responsabilidade geral foi preservada; o cenário hard foi reescrito in-place para testar desalocação de compute versus custos associados. A questão de patches possui recuperação específica e não é duplicata exata. |
+| `vm-scale-sets-and-availability-sets` | 5 | 2 | 2 | 1 | As cinco Questions e vinte options foram corrigidas in-place para retirar absolutos e testar escala, configuração, fault/update domains e Zones. |
+| `azure-virtual-desktop` | 5 | 2 | 2 | 1 | Questões originais cobrem definição, RemoteApp, cenário empresarial, tipos de sessão e AVD versus VM/RDP. |
+| `virtual-machine-resources` | 5 | 2 | 2 | 1 | Questões originais cobrem VM size, OS disk, data disk, NIC, VNet/subnet, IP privado e Public IP opcional. |
+| `azure-app-service` | 5 | 2 | 2 | 1 | A Question histórica foi preservada e corrigida in-place; quatro Questions novas cobrem PaaS, responsabilidades e cenários App Service versus VM. |
+| `azure-functions` | 10 | 3 | 5 | 2 | As dez Questions e quarenta opções foram preservadas e reescritas em Fundamentals: serverless, triggers, eventos, escala condicionada e escolha de compute. |
+| `containers-on-azure` | 5 | 2 | 2 | 1 | Cinco Questions originais cobrem conceito, kernel compartilhado, ACI, AKS e portabilidade em cenário .NET. |
+| `choosing-application-hosting` | 5 | 2 | 2 | 1 | Cinco Questions próprias, principalmente por cenário, distribuem respostas corretas entre Web Apps, containers e VMs. |
+| **Total** | **51** | **19** | **22** | **10** | Todas as nove Lessons possuem pelo menos cinco Questions; o Topic Quiz seleciona uma de cada Lesson e uma segunda da primeira rodada, sem concentração em Functions ou VMs. |
+
+Não há duplicata textual exata entre as 51 Questions. As Questions históricas de VM e App Service, omitidas das contagens intermediárias, foram preservadas. O algoritmo do Topic Quiz usa rodadas por `lesson_id`: com nove Lessons publicadas e dez vagas, seleciona pelo menos uma Question de cada Lesson e no máximo duas de uma mesma Lesson. Functions e VMs não dominam a seleção.
+
+### Visual Experiences
+
+Existem duas Visual Experiences `architecture` em Compute: recursos de VM em `virtual-machine-resources` e Scale Set versus Availability Set em `vm-scale-sets-and-availability-sets`.
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| VM architecture/resources | Reuse | A arquitetura criada na 8.6.2 mostra VNet, subnet, NIC, VM size/compute, OS disk, data disks e Public IP opcional sem simular provisionamento. |
+| VM Scale Sets vs Availability Sets | Reuse | A arquitetura criada na 8.6.3 separa escala de quantidade e distribuição por fault domains, com nota de que Zones oferecem isolamento físico maior. |
+| Containers vs VMs vs Functions | Not necessary | Uma matriz textual estruturada em Content Block `important` foi usada porque a engine não possui tipo `comparison`; nenhuma interação é necessária. |
+| Application hosting comparison | Not necessary | Uma matriz textual estruturada e três cenários em Content Blocks cobrem Web Apps/containers/VMs sem duplicar visual. |
+| Azure Virtual Desktop | Not necessary | Explicação, cenário e exam trap atendem melhor ao nível AZ-900. |
+
+### Inconsistências e conteúdo fora do recorte
+
+- VM não deve ser confundida com VM Scale Set; o cenário hard mal posicionado foi reescrito sem antecipar a 8.6.3.
+- Availability Set não é Availability Zone e não garante continuidade sozinho; a comparação agora está explícita em blocks, visual e prática.
+- Container não é uma VM pequena: os blocks, cards e Questions agora reforçam kernel compartilhado, guest OS e portabilidade; ACI/AKS ficam em Fundamentals.
+- Azure Functions é serverless orientado a eventos, não um container genérico. Premium/cold start, application settings e decomposição avançada foram retirados da prática.
+- Azure App Service/Web Apps é PaaS para aplicações web e APIs, não uma VM gerenciada pelo usuário. Cards de deployment slots e runtimes foram substituídos in-place por responsabilidades e escolha de hosting.
+- Azure Virtual Desktop entrega desktops/aplicativos virtualizados; a diferença para uma VM comum com RDP agora possui exam trap, card e Question de cenário.
+- O card de NSG em `virtual-machine-resources` foi substituído in-place por OS disk versus data disk; Networking aprofundado continua fora do recorte.
+- Menções a Storage triggers, VNet, NIC e IP são contexto válido, mas não contam como cobertura de Storage ou Networking.
+- Não há Lesson, card ou Question de AI, Machine Learning ou IoT/Edge no Topic; esses temas permanecem fora do recorte adotado.
+
+### Plano exato para 8.6.2–8.6.6
+
+| Etapa | Lessons / slugs reais | Lacunas e prática futura | Visual |
+| --- | --- | --- | --- |
+| 8.6.2 — Virtual Machines + recursos necessários — concluída | `azure-virtual-machines`; `virtual-machine-resources` | 15 blocks, seis cards corrigidos in-place, uma Question reescrita e cinco Questions novas fecharam os dois objetivos sem alterar Lessons ou slugs. | Uma arquitetura simples em `virtual-machine-resources`, criada e vinculada. |
+| 8.6.3 — VM Scale Sets + Availability Sets + Azure Virtual Desktop — concluída | `vm-scale-sets-and-availability-sets`; `azure-virtual-desktop` | 16 blocks, sete cards e cinco Questions corrigidos in-place, mais cinco Questions novas para AVD, fecharam os três objetivos. | Uma arquitetura VMSS/Availability Set criada; nenhum visual para AVD. |
+| 8.6.4 — Containers + Functions + comparação de Compute Types — concluída | `containers-on-azure`; `azure-functions`; `comparing-compute-options` | 25 blocks, 11 cards corrigidos, 15 Questions corrigidas e 5 novas fecharam os três objetivos com comparação estruturada e prática Fundamentals. | Nenhuma Visual Experience; matriz textual em block `important`. |
+| 8.6.5 — Application Hosting — concluída | `azure-app-service`; `choosing-application-hosting`; apoio conceitual sem reescrita de `containers-on-azure` e `azure-virtual-machines` | 17 blocks, quatro cards corrigidos, cinco cards novos, uma Question histórica corrigida e nove Questions novas fecharam Web Apps e application hosting. | Nenhuma Visual Experience; matriz textual e três cenários. |
+| 8.6.6 — Practice + fechamento — concluída | As nove Lessons do Topic | Auditoria final confirmou 73 blocks, 34 cards, 51 Questions válidas, seleção round-robin das nove Lessons, fallback, histórico, RLS, Review e spaced repetition. Nenhuma Question ou Flashcard adicional foi necessária. | Nenhuma nova; as duas experiências justificadas foram preservadas e validadas. |
+
+### Preservação histórica
+
+Na 8.6.2, os dois registros de Lesson e seus slugs permaneceram intactos, assim como os UUIDs dos sete Flashcards e das cinco Questions preexistentes. Seis cards e uma Question foram corrigidos in-place; cinco Questions receberam UUIDs novos. `lessons.content` continua disponível como fallback, protegendo progress, Quiz history e spaced repetition.
+
+Na 8.6.3, os registros e slugs das duas Lessons permaneceram intactos. Os sete Flashcards, cinco Questions e vinte Question Options preexistentes foram corrigidos in-place; somente as cinco Questions de AVD e suas options receberam UUIDs novos. Nenhum registro histórico foi excluído ou reassociado.
+
+Na 8.6.4, os três registros de Lesson, seus slugs, 11 Flashcards, 15 Questions e 60 Question Options preexistentes permaneceram intactos. Textos foram corrigidos in-place; somente as cinco Questions de Containers e suas vinte opções receberam UUIDs novos. Nenhum Visual Experience foi criado, nenhum registro histórico foi excluído e `lessons.content` continua como fallback.
+
+Na 8.6.5, os dois registros de Lesson e seus slugs permaneceram intactos. Os quatro Flashcards de App Service, a Question histórica `60000000-0000-4000-8000-000000000008` e suas quatro options foram corrigidos in-place. Somente cinco Flashcards de Choosing Hosting, quatro Questions adicionais de App Service, cinco Questions de Choosing Hosting e suas options receberam UUIDs novos. Nenhum histórico foi excluído ou reassociado.
+
+**Checkpoint da Etapa 8.6.1:** auditoria concluída; 0 Lessons enriquecidas, 0 Questions ou Flashcards criados/editados e 0 Visual Experiences criadas.
+
+**Checkpoint da Etapa 8.6.2:** `azure-virtual-machines` e `virtual-machine-resources` estão `Covered`; 15 blocks, 1 Visual Experience, 7 Flashcards preservados (6 corrigidos), 10 Questions no recorte (1 corrigida e 5 novas) e 22 minutos estimados.
+
+**Checkpoint da Etapa 8.6.3:** VM Scale Sets, Availability Sets e Azure Virtual Desktop estão `Covered`; 16 blocks, 1 Visual Experience, 7 Flashcards corrigidos in-place, 5 Questions corrigidas in-place, 5 Questions novas e 22 minutos estimados.
+
+**Checkpoint da Etapa 8.6.4:** Containers, Azure Functions e comparação VM/container/Function estão `Covered`; 25 blocks, 0 Visual Experiences, 11 Flashcards corrigidos in-place, 15 Questions corrigidas in-place, 5 Questions novas e 30 minutos estimados.
+
+**Checkpoint da Etapa 8.6.5:** Azure Web Apps e Application Hosting Options estão `Covered`; 17 blocks, 0 Visual Experiences, 4 Flashcards corrigidos, 5 Flashcards novos, 1 Question corrigida, 9 Questions novas e 22 minutos estimados.
+
+**Closure da Etapa 8.6.6 — Azure Compute Services: CLOSED.** Os 10 objetivos estão `Covered`, com 0 `Partial` e 0 `Missing`. O Topic possui 9 Lessons, 73 Content Blocks, 2 Visual Experiences, 34 Flashcards, 51 Questions (19 easy / 22 medium / 10 hard) e 96 minutos estimados. A etapa final não criou nem reescreveu conteúdo: validou cobertura, precisão, prática, round-robin do Topic Quiz, fluxo de estudo, RLS e integridade histórica.
+
+## Domain 2 — Azure Networking Services
+
+Auditoria realizada em 27 de agosto de 2026 para o Topic **Networking Services** do Domain **Describe Azure architecture and services (35–40%)**. O recorte segue o [guia oficial do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900) e o módulo [Describe Azure networking services](https://learn.microsoft.com/en-us/training/modules/describe-azure-networking-services/): virtual networking, subnets/endpoints, VPN Gateway, ExpressRoute e Azure DNS. VNet Peering permanece explícito no currículo adotado pelo projeto e no conteúdo oficial de virtual networking.
+
+NSG detalhado, UDR/route tables, Azure Firewall, Application Gateway, Load Balancer, NAT Gateway, Bastion, Private DNS Zones detalhadas, BGP, configuração de ExpressRoute e cálculos avançados de CIDR não contam como cobertura.
+
+### Inventário das Lessons
+
+O Topic `32000000-0000-4000-8000-000000000003` possui 5 Lessons publicadas, 48 Content Blocks, 3 Visual Experiences, 23 Flashcards, 30 Questions e 56 minutos estimados. Todas preservam `lessons.content` e as cinco Lessons estão `Ready`.
+
+| # | Lesson / slug real | Min. | Blocks | Visual | Flashcards | Questions (E/M/H) | Publicada | Status | Avaliação |
+| ---: | --- | ---: | ---: | --- | ---: | ---: | --- | --- | --- |
+| 1 | Virtual Networks and Subnets / `virtual-networks-and-subnets` | 12 | 10 | Architecture | 8 | 5 (2/2/1) | Sim | Ready | Blocks cobrem VNet, address space conceitual, subnets, segmentação, comunicação condicionada e diferenças para Zone/Resource Group; arquitetura e prática estão alinhadas a Fundamentals. |
+| 2 | VNet Peering / `vnet-peering` | 10 | 8 | Nenhum | 3 | 5 (2/2/1) | Sim | Ready | Cobre finalidade, backbone privado, VNets separadas, local/global, comunicação condicionada e Peering versus VPN/ExpressRoute, com cenários e prática Fundamentals. |
+| 3 | Azure DNS / `azure-dns` | 10 | 9 | Nenhum | 3 | 10 (3/5/2) | Sim | Ready | Cobre resolução nome/endereço, Azure DNS, Public versus Private DNS, serviço gerenciado, registro de domínio, exam tip/trap e prática revisada sem TTL/TXT/migração. |
+| 4 | VPN Gateway vs ExpressRoute / `vpn-gateway-vs-expressroute` | 12 | 10 | Comparison | 4 | 5 (2/2/1) | Sim | Ready | Cobre VPN Gateway, S2S/P2S, ExpressRoute via provider, caminhos público/privado, cenários e comparação condicionada, com visual acessível e prática Fundamentals. |
+| 5 | Public vs Private Endpoints / `public-vs-private-endpoints` | 12 | 11 | Comparison | 5 | 5 (2/2/1) | Sim | Ready | Cobre acesso público com controles, Private Endpoint/NIC/IP privado, Private Link, coexistência pública, contraste com Service Endpoint e cenário .NET. |
+
+Não há Lesson ausente e não se recomenda criar novos slugs. Os cinco registros existentes acomodam os oito objetivos, inclusive os pares VNet/Subnets, VPN/ExpressRoute e Public/Private Endpoints. Preservar esses registros evita quebrar progress, Quiz history, Review e spaced repetition.
+
+### Coverage Matrix
+
+| Objective | Lesson(s) | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | ---: | ---: | --- | --- |
+| Azure Virtual Network | `virtual-networks-and-subnets` | 10 blocks + fallback | Architecture | 8 compartilhados | 5 | Covered | Define rede privada lógica, isolamento, espaço de endereços, recursos e comunicação condicionada; inclui cenário, summary, exam tip/trap e arquitetura acessível. |
+| Subnets | `virtual-networks-and-subnets` | 10 blocks + fallback | Architecture | 8 compartilhados | 5 | Covered | Explica faixa contida na VNet, organização/segmentação, exemplo web/API/dados e diferenças para VNet, Zone e Resource Group sem cálculo de CIDR. |
+| VNet Peering | `vnet-peering` | 8 blocks + fallback | Not necessary | 3 | 5 | Covered | Explica comunicação privada pelo backbone, VNets separadas, local/global, regras ainda aplicáveis e distinção para VPN Gateway/ExpressRoute. |
+| Azure DNS | `azure-dns` | 9 blocks + fallback | Not necessary | 3 | 10 | Covered | Ensina DNS básico, hospedagem/resolução Azure, Public versus Private DNS, ausência de VM obrigatória e distinção de registrador; prática inteira revisada. |
+| Azure VPN Gateway | `vpn-gateway-vs-expressroute` | 10 blocks + fallback | Comparison | 4 compartilhados | 5 | Covered | Explica túneis criptografados, Internet pública como transporte híbrido, S2S/P2S, VNet-to-VNet conceitual, cenários e traps. |
+| Azure ExpressRoute | `vpn-gateway-vs-expressroute` | 10 blocks + fallback | Comparison | 4 compartilhados | 5 | Covered | Explica conexão privada via connectivity provider, ausência da Internet pública no caminho normal, previsibilidade condicionada e diferença para VPN/Peering. |
+| Public Endpoints | `public-vs-private-endpoints` | 11 blocks + fallback | Comparison | 5 compartilhados | 5 | Covered | Explica conectividade pública, nome/endereço público e controles de autenticação, firewall e rede; Public não significa acesso irrestrito. |
+| Private Endpoints | `public-vs-private-endpoints` | 11 blocks + fallback | Comparison | 5 compartilhados | 5 | Covered | Explica NIC em subnet, IP privado, Private Link, recurso/subresource, coexistência pública e contraste Fundamentals com Service Endpoint. |
+
+### Resultado de cobertura
+
+- **Covered:** 8 objetivos.
+- **Partial:** 0 objetivos.
+- **Missing:** 0 objetivos.
+- **Lessons Ready:** 5.
+- **Lessons Needs enrichment:** 0.
+- **Lessons Missing:** 0.
+
+### Auditoria de Flashcards
+
+| Lesson | Flashcards | Avaliação |
+| --- | ---: | --- |
+| `virtual-networks-and-subnets` | 8 | Os 8 UUIDs foram preservados e os textos corrigidos in-place. O conjunto agora separa VNet, subnet, relação hierárquica, finalidade, comunicação condicionada, escopo regional, address space conceitual e diferenças para Zone/Resource Group. |
+| `vnet-peering` | 3 | Os UUIDs foram preservados e os cards agora isolam finalidade, Peering versus VPN e local versus Global Peering; removida a impressão de que as VNets são fundidas. |
+| `azure-dns` | 3 | Os UUIDs foram preservados e os cards agora cobrem função básica do DNS, Public versus Private DNS e serviço gerenciado versus VM/registrador. |
+| `vpn-gateway-vs-expressroute` | 4 | Os UUIDs foram preservados e os cards agora cobrem finalidade do VPN Gateway, S2S/P2S, finalidade do ExpressRoute e escolha condicionada por caminho/requisito. |
+| `public-vs-private-endpoints` | 5 | Três UUIDs foram preservados e corrigidos; dois cards curtos foram adicionados para Private Link e Service Endpoint. O conjunto elimina absolutos sobre exposição pública e alcance. |
+
+Total: 23 Flashcards. Não há duplicata textual exata de frente nem associação a Lesson errada. Os 21 UUIDs históricos foram preservados; apenas 2 cards novos foram adicionados para conceitos que não cabiam em memória ativa curta nos cards existentes.
+
+### Auditoria de Questions
+
+| Lesson | Total | Easy | Medium | Hard | Avaliação |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `virtual-networks-and-subnets` | 5 | 2 | 2 | 1 | Prática original cobre definição, relação VNet/subnet, address space conceitual, cenário .NET e comunicação condicionada, sem cálculo de CIDR. |
+| `vnet-peering` | 5 | 2 | 2 | 1 | Prática original cobre finalidade, local/global, cenário VNet a VNet, comparação com VPN e comunicação condicionada. |
+| `azure-dns` | 10 | 3 | 5 | 2 | Os 10 UUIDs e 40 options foram preservados e reescritos; cobrem DNS, Azure DNS, Public/Private, VM não obrigatória, domínio e cenário integrado com Peering. |
+| `vpn-gateway-vs-expressroute` | 5 | 2 | 2 | 1 | Prática cobre túnel híbrido, S2S/P2S, ExpressRoute via provider, comparação explícita e cenário combinado sem regras absolutas. |
+| `public-vs-private-endpoints` | 5 | 2 | 2 | 1 | Prática cobre Public Endpoint com controles, NIC/IP privado, cenário Azure SQL, Service Endpoint e coexistência do acesso público. |
+| **Total** | **30** | **11** | **13** | **6** | As cinco Lessons possuem prática própria e o Topic Quiz pode distribuir questões por todo o Topic. |
+
+Não há duplicata textual exata nem Question associada à Lesson errada. As 10 Questions de Azure DNS foram corrigidas in-place: saíram TTL, TXT, migração de provedor, redundância e distratores absurdos; entraram Public/Private DNS, serviço gerenciado, domínio e separação entre conectividade e resolução.
+
+### Precisão conceitual e conteúdo fora do recorte
+
+- VNet e subnet estão comparadas explicitamente: VNet é a rede lógica; subnet é uma subdivisão interna; nenhuma delas é Availability Zone.
+- Peering não usa a internet pública para o tráfego entre VNets, porém não transforma VNets em uma única rede e não substitui VPN Gateway para conectividade on-premises.
+- Azure DNS hospeda zonas/registros; não compra o domínio e não exige instalar uma VM com DNS Server. A prática foi revisada para DNS básico, Azure DNS e Public/Private DNS, sem exigir TTL, TXT ou migração de provedor.
+- VPN Gateway usa túneis criptografados sobre a internet pública; ExpressRoute fornece conectividade privada por um connectivity provider. ExpressRoute não é “VPN pela internet” nem necessariamente uma linha física exclusiva para cada cliente.
+- Public Endpoint usa endereço publicamente roteável, mas pode possuir autenticação, firewall e outros controles; “público” não significa automaticamente inseguro.
+- Private Endpoint cria uma interface com IP privado na VNet para um serviço via Private Link. Criá-lo não desabilita automaticamente o acesso público do serviço, e redes conectadas podem alcançar o endereço quando DNS/routing/configuração permitem.
+- Private Endpoint não é Public Endpoint protegido por firewall, VPN nem Service Endpoint; a Lesson e a prática ensinam essas distinções em nível Fundamentals.
+- CIDR, regras de rede e routing aparecem apenas como contexto conceitual. BGP, UDR/route tables, configuração detalhada e demais tópicos de AZ-104 não são exigidos nas Lessons ou na prática.
+
+### Visual Experiences
+
+Existem 3 Visual Experiences associadas a Networking: a arquitetura de VNet/Subnets, a comparação VPN Gateway versus ExpressRoute e a comparação Public versus Private Endpoint. Peering e DNS permanecem corretamente sem visual.
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| VNet + Subnets | Reuse | Arquitetura criada com VNet `10.0.0.0/16`, três subnets `/24` e recursos web/API/dados; possui descrições textuais e deixa regras de comunicação como configuração separada. |
+| VNet Peering | Not necessary | A comparação textual com VPN Gateway e ExpressRoute é suficiente; a Lesson funciona sem depender do visual de outra Lesson. |
+| Azure DNS | Not necessary | Explicação, resolução nome/endereço, cenário e exam trap são mais úteis que interação. |
+| VPN Gateway vs ExpressRoute | Reuse | Comparison criada com caminhos conceituais, transporte, túnel VPN, implantação, custo relativo, previsibilidade e cenário; linguagem evita absolutos. |
+| Public vs Private Endpoints | Reuse | Comparison criada com caminho, endereço, VNet, Internet, exposição e uso; deixa explícito que Private Endpoint não desativa sozinho o acesso público. |
+
+### Plano exato para 8.7.2–8.7.6
+
+| Etapa | Lessons / slugs reais | Lacunas e prática futura | Visual |
+| --- | --- | --- | --- |
+| 8.7.2 — Virtual Networks + Subnets (concluída) | `virtual-networks-and-subnets` | 10 blocks criados; 8 cards corrigidos in-place; 5 Questions adicionadas em 2/2/1. VNet e Subnets estão Covered. | Sim: uma arquitetura VNet + três subnets, mobile e teclado, sem simulador de CIDR. |
+| 8.7.3 — VNet Peering + Azure DNS (concluída) | `vnet-peering`; `azure-dns` | 17 blocks criados; 6 cards corrigidos in-place; 5 Questions de Peering adicionadas; 10 Questions e 40 options DNS corrigidas in-place. Ambos os objetivos estão Covered. | Nenhum visual: comparações textuais são suficientes e foram validadas como `Not necessary`. |
+| 8.7.4 — VPN Gateway + ExpressRoute (concluída) | `vpn-gateway-vs-expressroute` | 10 blocks criados; 4 cards corrigidos in-place; 5 Questions adicionadas em 2/2/1. VPN Gateway e ExpressRoute estão Covered. | Sim: Comparison simples dos caminhos público/túnel VPN e privado/provider. |
+| 8.7.5 — Public vs Private Endpoints (concluída) | `public-vs-private-endpoints` | 11 blocks criados; 3 cards corrigidos, 2 cards adicionados e 5 Questions novas em 2/2/1. Public e Private Endpoints estão Covered. | Sim: Comparison de caminho público versus IP privado/Private Link. |
+| 8.7.6 — Practice + fechamento (concluída) | As cinco Lessons do Topic | 30 Questions validadas; Topic Quiz round-robin, Lesson Quiz, Review, spaced repetition, RLS, fallback e integridade histórica cobertos pelo validador de fechamento. | Nenhum novo; os três visuais justificados nas 8.7.2, 8.7.4 e 8.7.5 foram preservados e validados. |
+
+### Preservação histórica e checkpoint
+
+Os cinco UUIDs e slugs de Lesson foram preservados, assim como os 21 Flashcards originais. Dois Flashcards receberam UUIDs novos. As 10 Questions de DNS e suas 40 options foram revisadas in-place; 20 Questions receberam UUIDs novos nas outras quatro Lessons. Nenhum registro histórico foi apagado e `lessons.content` permanece como fallback.
+
+**Checkpoint da Etapa 8.7.1:** auditoria concluída; 5 Lessons encontradas, 0 Ready, 5 Needs enrichment, 0 Missing; 8 objetivos Partial, 0 Covered e 0 Missing; 0 Content Blocks, 0 Visual Experiences, 21 Flashcards, 10 Questions (3 easy / 5 medium / 2 hard) e 48 minutos estimados. Nenhum conteúdo curricular foi modificado.
+
+**Checkpoint da Etapa 8.7.2:** `virtual-networks-and-subnets` está `Ready`; Azure Virtual Network e Subnets estão `Covered`; 10 blocks, 1 Architecture Visual Experience, 8 Flashcards preservados e corrigidos, 5 Questions novas (2 easy / 2 medium / 1 hard) e 12 minutos estimados. O Topic possui agora 2 objetivos Covered, 6 Partial e 0 Missing. Nenhum UUID histórico foi substituído.
+
+**Checkpoint da Etapa 8.7.3:** `vnet-peering` e `azure-dns` estão `Ready`; VNet Peering e Azure DNS estão `Covered`; 17 blocks, 0 novos visuais, 6 Flashcards preservados e corrigidos, 5 Questions novas de Peering e 10 Questions/40 options DNS corrigidas in-place. O Topic possui agora 4 objetivos Covered, 4 Partial e 0 Missing, com 52 minutos estimados. Nenhum UUID histórico foi substituído.
+
+**Checkpoint da Etapa 8.7.4:** `vpn-gateway-vs-expressroute` está `Ready`; Azure VPN Gateway e Azure ExpressRoute estão `Covered`; 10 blocks, 1 Comparison Visual Experience, 4 Flashcards preservados e corrigidos e 5 Questions novas (2 easy / 2 medium / 1 hard). O Topic possui agora 6 objetivos Covered, 2 Partial e 0 Missing, com 54 minutos estimados. Nenhum UUID histórico foi substituído.
+
+**Checkpoint da Etapa 8.7.5:** `public-vs-private-endpoints` está `Ready`; Public Endpoint e Private Endpoint estão `Covered`; 11 blocks, 1 Comparison Visual Experience, 3 Flashcards corrigidos, 2 Flashcards novos e 5 Questions novas (2 easy / 2 medium / 1 hard). O Topic possui agora 8 objetivos Covered, 0 Partial e 0 Missing, com 56 minutos estimados. Todos os UUIDs históricos foram preservados.
+
+**Closure da Etapa 8.7.6 — Azure Networking Services: CLOSED.** Os 8 objetivos estão `Covered`, com 0 `Partial` e 0 `Missing`. O Topic possui 5 Lessons, 48 Content Blocks, 3 Visual Experiences, 23 Flashcards, 30 Questions (11 easy / 13 medium / 6 hard) e 56 minutos estimados. A etapa final não criou nem reescreveu conteúdo curricular: consolidou a matriz e adicionou validação de cobertura, precisão, prática, round-robin do Topic Quiz, fluxo de estudo, RLS, isolamento entre usuários e integridade histórica.

@@ -14,8 +14,8 @@ begin
   into total_count
   from public.visual_experiences;
 
-  if total_count <> 7 then
-    raise exception 'Expected exactly 7 visual experiences after the Resource Hierarchy enrichment, found %', total_count;
+  if total_count <> 12 then
+    raise exception 'Expected exactly 12 visual experiences after the endpoint enrichment, found %', total_count;
   end if;
 
   select count(*)
@@ -39,9 +39,24 @@ begin
       or (visual.id = '76000000-0000-4000-8000-000000000007'
         and lesson.slug = 'azure-resource-hierarchy'
         and visual.type = 'architecture')
+      or (visual.id = '76000000-0000-4000-8000-000000000008'
+        and lesson.slug = 'virtual-machine-resources'
+        and visual.type = 'architecture')
+      or (visual.id = '76000000-0000-4000-8000-000000000009'
+        and lesson.slug = 'vm-scale-sets-and-availability-sets'
+        and visual.type = 'architecture')
+      or (visual.id = '76000000-0000-4000-8000-000000000010'
+        and lesson.slug = 'virtual-networks-and-subnets'
+        and visual.type = 'architecture')
+      or (visual.id = '76000000-0000-4000-8000-000000000011'
+        and lesson.slug = 'vpn-gateway-vs-expressroute'
+        and visual.type = 'comparison')
+      or (visual.id = '76000000-0000-4000-8000-000000000012'
+        and lesson.slug = 'public-vs-private-endpoints'
+        and visual.type = 'comparison')
     );
 
-  if target_count <> 4 then
+  if target_count <> 9 then
     raise exception 'One or more visual experience seeds target the wrong certification, lesson or type';
   end if;
 
@@ -483,8 +498,8 @@ set local role authenticated;
 
 do $$
 begin
-  if (select count(*) from public.visual_experiences) <> 7 then
-    raise exception 'Authenticated users should see exactly the 7 published visual experiences';
+  if (select count(*) from public.visual_experiences) <> 12 then
+    raise exception 'Authenticated users should see exactly the 12 published visual experiences';
   end if;
 
   if exists (
