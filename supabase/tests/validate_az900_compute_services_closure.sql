@@ -267,6 +267,7 @@ from (values
   ('58000000-0000-4000-8000-000000000012'::uuid, 'compute-closure-c@example.invalid')
 ) seeded(id, email);
 
+grant select on target_lessons to authenticated;
 set local role authenticated;
 
 do $$
@@ -317,18 +318,18 @@ select set_config('request.jwt.claim.sub', '58000000-0000-4000-8000-000000000010
 
 do $$
 declare
-  target record;
+  lesson_target record;
   attempt public.quiz_attempts;
   started public.user_lesson_progress;
   completed public.user_lesson_progress;
   target_card_id uuid;
 begin
-  for target in select id from target_lessons order by display_order
+  for lesson_target in select id from target_lessons order by display_order
   loop
-    select * into strict attempt from public.start_lesson_quiz(target.id);
+    select * into strict attempt from public.start_lesson_quiz(lesson_target.id);
     if attempt.total_questions <> 5
       or (select count(*) from public.quiz_attempt_questions where attempt_id = attempt.id) <> 5 then
-      raise exception 'Lesson Quiz failed for %', target.id;
+      raise exception 'Lesson Quiz failed for %', lesson_target.id;
     end if;
   end loop;
 

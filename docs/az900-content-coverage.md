@@ -648,3 +648,552 @@ Os cinco UUIDs e slugs de Lesson foram preservados, assim como os 21 Flashcards 
 **Checkpoint da Etapa 8.7.5:** `public-vs-private-endpoints` está `Ready`; Public Endpoint e Private Endpoint estão `Covered`; 11 blocks, 1 Comparison Visual Experience, 3 Flashcards corrigidos, 2 Flashcards novos e 5 Questions novas (2 easy / 2 medium / 1 hard). O Topic possui agora 8 objetivos Covered, 0 Partial e 0 Missing, com 56 minutos estimados. Todos os UUIDs históricos foram preservados.
 
 **Closure da Etapa 8.7.6 — Azure Networking Services: CLOSED.** Os 8 objetivos estão `Covered`, com 0 `Partial` e 0 `Missing`. O Topic possui 5 Lessons, 48 Content Blocks, 3 Visual Experiences, 23 Flashcards, 30 Questions (11 easy / 13 medium / 6 hard) e 56 minutos estimados. A etapa final não criou nem reescreveu conteúdo curricular: consolidou a matriz e adicionou validação de cobertura, precisão, prática, round-robin do Topic Quiz, fluxo de estudo, RLS, isolamento entre usuários e integridade histórica.
+
+## Domain 2 — Azure Storage Services
+
+Auditoria realizada em 28 de agosto de 2026 para o Topic **Storage Services** do Domain **Describe Azure architecture and services (35–40%)**. O recorte segue o [guia oficial do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900), com skills measured a partir de 20 de julho de 2026, e o módulo [Describe Azure storage services](https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/).
+
+O escopo inclui comparação de serviços, tiers, redundância, storage accounts, movimentação de arquivos e migração. Data Lake pode aparecer como contexto, mas analytics; lifecycle management; SAS/access keys; RBAC; encryption detalhada; immutability; object replication; NFS/SMB avançados; firewall/private endpoints; SKUs, IOPS e throughput detalhados não contam como cobertura.
+
+### Inventário das Lessons
+
+O Topic `32000000-0000-4000-8000-000000000004` possui 8 Lessons publicadas, 76 Content Blocks, 1 Visual Experience, 40 Flashcards, 46 Questions e 88 minutos estimados. As oito Lessons concluídas nas etapas 8.8.2–8.8.5 preservam `lessons.content` como fallback e estão `Ready`; nenhuma permanece `Needs enrichment` ou ausente.
+
+| # | Lesson / slug real | Min. | Blocks | Visual | Flashcards | Questions (E/M/H) | Publicada | Status | Avaliação |
+| ---: | --- | ---: | ---: | --- | ---: | ---: | --- | --- | --- |
+| 1 | Storage Accounts and Services / `storage-accounts-and-services` | 12 | 10 | Nenhum | 5 | 5 (2/2/1) | Sim | Ready | Define account/namespace, GPv2, Blob/Files/Queue/Table, comparação dos cinco serviços, cenários, exam tip/trap e summary sem aprofundar SKUs. |
+| 2 | Blob Storage / `blob-storage` | 10 | 7 | Nenhum | 4 | 5 (2/2/1) | Sim | Ready | Ensina object storage, casos de uso, hierarquia account/container/blob, cenário .NET e diferenças para Files/Disks sem blob types ou lifecycle. |
+| 3 | Azure Files / `azure-files` | 10 | 7 | Nenhum | 3 | 10 (3/5/2) | Sim | Ready | Ensina file share gerenciado, SMB/NFS conceituais, comparação Blob/Files/Disks e cenários; as 10 Questions/40 options foram revisadas in-place. |
+| 4 | Managed Disks / `managed-disks` | 10 | 7 | Nenhum | 3 | 5 (2/2/1) | Sim | Ready | Ensina disco persistente de VM, OS/data disks e diferenças para Files/Blob Container sem SKUs, IOPS ou performance tiers. |
+| 5 | Storage Tiers / `storage-tiers` | 12 | 11 | Nenhum | 6 | 5 (2/2/1) | Sim | Ready | Cobre Hot/Cool/Cold online, Archive offline, trade-offs, reidratação, comparação, quatro cenários, Smart tier opcional, exam tip/trap e summary. |
+| 6 | LRS, ZRS, GRS and GZRS / `storage-redundancy-options` | 12 | 14 | Architecture | 8 | 6 (2/2/2) | Sim | Ready | Cobre LRS/ZRS/GRS/RA-GRS/GZRS/RA-GZRS, alcance das falhas, replicação síncrona/assíncrona, leitura secundária, failover condicionado, cenários, exam tip/trap e summary. |
+| 7 | Moving Files with AzCopy, Storage Explorer and File Sync / `moving-files-to-azure` | 12 | 10 | Nenhum | 6 | 5 (2/2/1) | Sim | Ready | Compara AzCopy CLI, Storage Explorer GUI e File Sync híbrido; inclui Azure Files central, Windows Server como cache, cenários, exam tip/trap e summary. |
+| 8 | Azure Migrate and Azure Data Box / `azure-migrate-and-data-box` | 10 | 10 | Nenhum | 5 | 5 (2/2/1) | Sim | Ready | Distingue assessment/planejamento/migração de workloads e transporte físico de dados, com comparação, cenários, exam tip/trap e summary. |
+
+Não se recomenda criar novas Lessons ou slugs. Queue Storage e Table Storage cabem na Lesson `storage-accounts-and-services`; tiers e redundância já possuem Lessons próprias; movimentação e migração estão corretamente agrupadas em pares/trios conceituais.
+
+### Coverage Matrix
+
+| Objective | Lesson(s) | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | ---: | ---: | --- | --- |
+| Compare Azure Storage Services | `storage-accounts-and-services`; apoio das Lessons específicas | 10 blocks comparativos + apoio | Not necessary | 15 distribuídos em quatro Lessons | 25 distribuídas | Covered | Tabela, cenários, cards e Questions comparam Blob, Files, Queue, Table e Managed Disks por dado, acesso e uso. |
+| Blob Storage | `blob-storage`; `storage-accounts-and-services` | 7 blocks + apoio | Not necessary | 4 | 5 | Covered | Object storage, dados não estruturados, hierarquia account/container/blob, cenário .NET, comparação, exam tip/trap e summary estão explícitos. |
+| Azure Files | `azure-files`; `storage-accounts-and-services` | 7 blocks + apoio | Not necessary | 3 | 10 | Covered | File share gerenciado, protocolos conceituais, cenários e diferenças para Blob/Disks possuem conteúdo e prática revisada. |
+| Queue Storage | `storage-accounts-and-services` | 2 blocks dedicados + comparação | Not necessary | 1 dedicado + comparação | 3 relevantes | Covered | Mensagens assíncronas simples, API→Queue→worker e distinção para Service Bus estão explícitos. |
+| Table Storage | `storage-accounts-and-services` | 2 blocks dedicados + comparação | Not necessary | 1 dedicado + comparação | 3 relevantes | Covered | NoSQL chave/atributo, cenário, distinção para SQL e prática estão explícitos sem partition key design. |
+| Managed Disks | `managed-disks`; `storage-accounts-and-services` | 7 blocks + apoio | Not necessary | 3 | 5 | Covered | Disco persistente de VM, OS/data disks e diferenças para Files/Blob têm conteúdo, cenários e prática 2/2/1. |
+| Storage Tiers | `storage-tiers` | 11 blocks + fallback | Not necessary | 6 | 5 | Covered | Hot/Cool/Cold/Archive, online/offline, custo relativo, frequência, reidratação, comparação, cenários, exam tip/trap e summary possuem prática 2/2/1. |
+| Storage Redundancy | `storage-redundancy-options` | 14 blocks + fallback | Architecture | 8 | 6 (2/2/2) | Covered | Comparação explícita de LRS/ZRS/GRS/RA-GRS/GZRS/RA-GZRS, alcance local/zonal/geográfico, secundária assíncrona, leitura apenas nas variantes RA e failover condicionado possuem conteúdo e prática. |
+| Storage Account options/types | `storage-accounts-and-services` | 10 blocks + fallback | Not necessary | 5 | 5 | Covered | Finalidade, namespace, GPv2, serviços suportados, características da conta e distinção account/container/disk estão explícitos. |
+| AzCopy | `moving-files-to-azure` | 5 blocks relevantes + fallback | Not necessary | 3 relevantes | 4 relevantes | Covered | CLI para copiar dados de/para/entre Azure Storage, blobs/files, automação, cenários e diferença para sincronização e migração estão explícitos. |
+| Azure Storage Explorer | `moving-files-to-azure` | 4 blocks relevantes + fallback | Not necessary | 1 dedicado + comparação | 3 relevantes | Covered | Aplicação gráfica para visualizar e gerenciar recursos e dados suportados de Azure Storage, sem tutorial de menus. |
+| Azure File Sync | `moving-files-to-azure`; apoio em `azure-files` | 6 blocks relevantes + fallback | Not necessary | 3 relevantes | 3 relevantes | Covered | Azure Files central, Windows Server sincronizado/cache local, cenário híbrido, cloud tiering conceitual e diferença para AzCopy possuem prática. |
+| Azure Migrate | `azure-migrate-and-data-box` | 7 blocks relevantes + fallback | Not necessary | 3 relevantes | 4 relevantes | Covered | Descoberta, assessment de readiness/custo, planejamento e migração de workloads suportados possuem comparação, cenário e prática. |
+| Azure Data Box | `azure-migrate-and-data-box` | 6 blocks relevantes + fallback | Not necessary | 3 relevantes | 4 relevantes | Covered | Dispositivo físico para grande volume quando a rede é limitada/impraticável, fluxo conceitual e diferença para Migrate possuem prática. |
+| File Movement Options | `moving-files-to-azure` | 10 blocks + fallback | Not necessary | 6 | 5 (2/2/1) | Covered | Comparação CLI/GUI/sincronização, três cenários, exam tip/trap, summary e prática diferenciam AzCopy, Storage Explorer e File Sync. |
+| Migration Options | `azure-migrate-and-data-box` | 10 blocks + fallback | Not necessary | 5 | 5 (2/2/1) | Covered | Comparação assessment/migração versus transporte físico, cenários, exam tip/trap, summary e prática diferenciam Migrate e Data Box. |
+
+Os 16 objetivos solicitados no fechamento estão `Covered`: 14 objetivos atômicos e 2 agrupamentos comparativos. Os agrupamentos consolidam os objetivos relacionados e são contabilizados separadamente apenas neste checkpoint final.
+
+### Resultado de cobertura
+
+- **Covered:** 16 objetivos (14 atômicos + 2 agrupamentos).
+- **Partial:** 0 objetivos.
+- **Missing:** 0 objetivos.
+- **Lessons Ready:** 8.
+- **Lessons Needs enrichment:** 0.
+- **Lessons Missing:** 0.
+
+### Auditoria de Flashcards
+
+| Lesson | Flashcards | Avaliação |
+| --- | ---: | --- |
+| `storage-accounts-and-services` | 5 | Corrigidos in-place para account, GPv2, Queue, Table e account versus container; removidos SKUs, Networking e a associação imprecisa de Managed Disks à conta. |
+| `blob-storage` | 4 | Corrigidos in-place para definição, hierarquia, Blob versus Files e cenário de imagens; removidos blob types e tiers, que pertencem à 8.8.3. |
+| `azure-files` | 3 | Corrigidos in-place para definição, cenário de file share e Azure Files versus Managed Disk; removida a repetição semântica. |
+| `managed-disks` | 3 | Corrigidos in-place para definição, OS/data disks e recurso gerenciado versus blob comum; removidos unmanaged disks e lista de SKUs. |
+| `storage-tiers` | 6 | Cards novos cobrem Hot, Cool, Cold versus Archive, Archive, trade-off e Archive versus backup sem preços ou regras de lifecycle. |
+| `storage-redundancy-options` | 8 | Três cards históricos corrigidos in-place e cinco novos cobrem LRS, ZRS, GRS, GZRS, variantes RA, leitura secundária e a diferença entre redundância e failover automático. |
+| `moving-files-to-azure` | 6 | Cards novos cobrem AzCopy, Storage Explorer, File Sync, CLI versus GUI, cópia versus sincronização e cenário híbrido. |
+| `azure-migrate-and-data-box` | 5 | Cards novos cobrem Migrate, Data Box, readiness, rede limitada e workload assessment versus transporte físico. |
+
+Total: 40 Flashcards. Os 15 cards do recorte 8.8.2 e os 3 cards históricos de redundância preservaram UUIDs e foram corrigidos in-place; 22 cards novos foram adicionados nas etapas 8.8.3–8.8.5. Não há duplicata exata, associação errada ou detalhe avançado nas oito Lessons.
+
+### Auditoria de Questions
+
+| Lesson | Total | Easy | Medium | Hard | Avaliação |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `storage-accounts-and-services` | 5 | 2 | 2 | 1 | Prática nova cobre account, GPv2, Queue, Table e cenário comparativo sem detalhes de SKU. |
+| `blob-storage` | 5 | 2 | 2 | 1 | Prática nova cobre object storage, imagens, hierarquia e comparação por cenário. |
+| `azure-files` | 10 | 3 | 5 | 2 | Os 10 UUIDs e 40 options foram preservados e reescritos; distratores plausíveis e cenários cobrem Files versus Blob/Disks sem backup ou File Sync. |
+| `managed-disks` | 5 | 2 | 2 | 1 | Prática nova cobre disco de VM, OS/data disks e comparação com Blob/Files. |
+| `storage-tiers` | 5 | 2 | 2 | 1 | Prática nova diferencia os quatro tiers com cenários inequívocos, online/offline, reidratação e trade-off. |
+| `storage-redundancy-options` | 6 | 2 | 2 | 2 | A Question histórica sobre GZRS foi preservada; cinco novas cobrem LRS, ZRS, RA-GRS, RA-GZRS e recuperação regional com distratores plausíveis. |
+| `moving-files-to-azure` | 5 | 2 | 2 | 1 | Prática nova diferencia CLI, GUI e sincronização híbrida com cenários e distratores plausíveis. |
+| `azure-migrate-and-data-box` | 5 | 2 | 2 | 1 | Prática nova diferencia assessment/migração de workloads e transporte físico de grande volume. |
+| **Total** | **46** | **17** | **19** | **10** | Todas as oito Lessons possuem Lesson Quiz útil; o Topic Quiz round-robin inclui as oito Lessons e limita cada uma a no máximo duas Questions por tentativa de dez. |
+
+Não há Question textual exatamente duplicada nem associação à Lesson errada. As 10 Questions e 40 options de Azure Files foram corrigidas in-place; 35 Questions e 140 options novas foram adicionadas às sete Lessons inicialmente sem prática suficiente. A Question e as quatro options históricas de redundância permanecem intactas.
+
+### Precisão conceitual e conteúdo fora do recorte
+
+- Blob Storage é object storage para dados não estruturados; Azure Files é file share gerenciado. A distinção possui comparação estruturada, cenário, cards e Questions.
+- Azure Files não é Managed Disk: Files atende compartilhamento de arquivos; Managed Disk fornece block storage persistente para VMs. Blocks, cards e Questions consolidam a diferença.
+- Queue Storage não é equivalente ao Service Bus, e Table Storage não é SQL Database. Conteúdo comparativo, cenários e prática previnem essas confusões sem aprofundar arquitetura de mensageria ou bancos relacionais.
+- Archive é tier offline e exige reidratação antes da leitura; não é backup automático. Cold permanece online. Essas distinções agora estão explícitas em blocks, cards e Questions.
+- LRS protege cópias dentro de um datacenter; ZRS usa zonas na região primária; GRS/GZRS replicam de forma assíncrona para uma secundária. RA-GRS/RA-GZRS acrescentam leitura, não escrita normal, e redundância geográfica não garante troca automática da aplicação. Essas diferenças agora estão explícitas.
+- Storage Account é o recurso comum que expõe serviços como Blob, Files, Queue e Table, não um único blob container. Managed Disks abstraem a infraestrutura subjacente e não devem ser ensinados como objetos armazenados pelo aluno dentro da mesma conta general-purpose.
+- Azure File Sync mantém uma relação híbrida com Azure Files; AzCopy realiza transferências por CLI e Storage Explorer oferece gestão gráfica. Comparação, cenários e prática agora impedem confundir cópia com sincronização contínua.
+- Azure Migrate apoia descoberta, avaliação, planejamento e migração de workloads; Data Box resolve transferência física de grande volume quando a rede não é prática. Comparação, cenários e prática agora distinguem os dois.
+- Detalhes de comandos, endpoints do File Sync, appliances, replicação, ondas de migração, capacidades exatas e logística de Data Box foram mantidos fora do conteúdo Fundamentals.
+
+### Visual Experiences
+
+Existe 1 Visual Experience associada ao Topic de Storage.
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| Storage Services Comparison | Not necessary | Uma matriz/comparison em Content Block é suficiente para Blob, Files, Queue, Table e Managed Disks; não criar interação. |
+| Storage Tiers | Not necessary | Comparison block com frequência, custo relativo e disponibilidade é suficiente. |
+| Storage Redundancy | Reuse | Uma única Architecture Visual Experience compara LRS, ZRS, GRS/RA-GRS e GZRS/RA-GZRS, separando alcance, replicação assíncrona e leitura RA sem números de durabilidade ou promessa universal de failover. |
+| File Movement | Not necessary | Comparação textual por CLI, GUI e sincronização híbrida é mais direta. |
+| Migration | Not necessary | Dois cenários contrastando avaliação/migração e transferência física são suficientes. |
+
+### Plano exato para 8.8.2–8.8.6
+
+| Etapa | Lessons / slugs reais | Lacunas e prática futura | Visual |
+| --- | --- | --- | --- |
+| 8.8.2 — Storage Accounts + Storage Services (concluída) | `storage-accounts-and-services`; `blob-storage`; `azure-files`; `managed-disks` | 31 blocks criados; comparação Blob/Files/Queue/Table/Disks; 15 cards e 10 Questions/40 options corrigidos in-place; 15 Questions/60 options adicionadas. | Nenhuma Visual Experience; comparison block foi suficiente. |
+| 8.8.3 — Storage Tiers (concluída) | `storage-tiers` | 11 blocks, 6 cards e 5 Questions/20 options criados; Hot/Cool/Cold/Archive, online/offline, reidratação e trade-offs estão Covered. Smart tier ficou como nota opcional. | Nenhuma; comparison block foi suficiente. |
+| 8.8.4 — Storage Redundancy (concluída) | `storage-redundancy-options` | 14 blocks, 3 cards corrigidos in-place, 5 cards novos e 5 Questions/20 options novas; a Question e as options históricas foram preservadas. | 1 Architecture Visual Experience criada e validada. |
+| 8.8.5 — File Movement + Migration (concluída) | `moving-files-to-azure`; `azure-migrate-and-data-box` | 20 blocks, 11 cards e 10 Questions/40 options criados; CLI/GUI/sync híbrido e workload migration/transporte offline agora possuem comparação e cenários. | Nenhuma; comparison blocks foram suficientes. |
+| 8.8.6 — Practice + fechamento (concluída) | As oito Lessons do Topic | Auditoria final de 76 blocks, 40 cards e 46 Questions; Topic Quiz round-robin, Lesson Quiz, Review, spaced repetition, progress, RLS, isolamento e integridade histórica consolidados em validator transacional. Nenhum conteúdo novo foi necessário. | Nenhum novo; o único visual de redundância foi preservado e validado. |
+
+### Preservação histórica e checkpoint
+
+Os oito registros e slugs de Lesson trabalhados nas etapas 8.8.2–8.8.5 permaneceram intactos. Os 15 Flashcards do recorte 8.8.2, os 3 Flashcards de redundância, as 10 Questions de Azure Files e suas 40 options foram corrigidos in-place; 35 Questions/140 options, 22 Flashcards e 1 Visual Experience receberam UUIDs novos. A Question e as quatro options históricas de redundância permaneceram intactas. Nenhum registro de prática foi excluído ou reassociado, `lessons.content` continua como fallback e progress, Quiz history, Review e spaced repetition permanecem preservados.
+
+**Checkpoint da Etapa 8.8.1:** auditoria concluída; 8 Lessons encontradas, 0 Ready, 8 Needs enrichment, 0 Missing; 14 objetivos Partial, 0 Covered e 0 Missing; 0 Content Blocks, 0 Visual Experiences, 18 Flashcards, 11 Questions (3 easy / 5 medium / 3 hard) e 78 minutos estimados. Nenhum conteúdo curricular ou dado de prática foi modificado.
+
+**Checkpoint da Etapa 8.8.2:** Storage Account options/types, comparação dos serviços, Blob, Azure Files, Queue, Table e Managed Disks estão `Covered`; 31 blocks, 0 Visual Experiences, 15 Flashcards corrigidos in-place, 10 Questions/40 options corrigidas in-place e 15 Questions/60 options novas. O Topic possui agora 7 objetivos Covered, 7 Partial e 0 Missing, com 26 Questions (9 easy / 11 medium / 6 hard) e 86 minutos estimados. Nenhum UUID histórico foi substituído.
+
+**Checkpoint da Etapa 8.8.3:** Storage Tiers está `Covered`; 11 blocks, 0 Visual Experiences, 6 Flashcards novos e 5 Questions/20 options novas em distribuição 2 easy / 2 medium / 1 hard. O Topic possui agora 8 objetivos Covered, 6 Partial e 0 Missing, com 42 blocks, 24 Flashcards, 31 Questions (11 easy / 13 medium / 7 hard) e 88 minutos estimados. Nenhum UUID histórico foi alterado.
+
+**Checkpoint da Etapa 8.8.4:** Storage Redundancy está `Covered`; 14 blocks, 1 Architecture Visual Experience, 3 Flashcards corrigidos in-place, 5 Flashcards novos e 5 Questions/20 options novas. A prática total da Lesson é 2 easy / 2 medium / 2 hard. O Topic possui agora 9 objetivos Covered, 5 Partial e 0 Missing, com 56 blocks, 1 visual, 29 Flashcards, 36 Questions (13 easy / 15 medium / 8 hard) e 88 minutos estimados. A Question, as quatro options, todos os registros e slugs históricos foram preservados.
+
+**Checkpoint da Etapa 8.8.5:** AzCopy, Azure Storage Explorer, Azure File Sync, Azure Migrate e Azure Data Box estão `Covered`; os agrupamentos File Movement Options e Migration Options também possuem finalidade, comparação, cenário, exam tip/trap, summary, cards e Questions. Foram criados 20 blocks, 11 Flashcards e 10 Questions/40 options em distribuição 4 easy / 4 medium / 2 hard, sem Visual Experience. O Topic possui agora 14 objetivos Covered, 0 Partial e 0 Missing, com 76 blocks, 1 visual, 40 Flashcards, 46 Questions (17 easy / 19 medium / 10 hard) e 88 minutos estimados. Todos os UUIDs e slugs históricos foram preservados.
+
+**Closure da Etapa 8.8.6 — Azure Storage Services: CLOSED.** Os 16 objetivos auditados estão `Covered` (14 atômicos + File Movement Options + Migration Options), com 0 `Partial` e 0 `Missing`. O Topic possui 8 Lessons, 76 Content Blocks, 1 Architecture Visual Experience, 40 Flashcards, 46 Questions (17 easy / 19 medium / 10 hard) e 88 minutos estimados. A etapa final não criou nem reescreveu conteúdo curricular: consolidou cobertura, precisão, escopo AZ-900, summaries, ordem, fallback, prática, Topic Quiz round-robin, Lesson Quiz, Review, spaced repetition, progress, RLS, isolamento entre usuários e integridade histórica no validador `supabase/tests/validate_az900_storage_services_closure.sql`.
+
+## Domain 2 — Azure Identity, Access and Security
+
+Auditoria realizada em 28 de agosto de 2026 para o Topic **Identity, Access and Security** do Domain **Describe Azure architecture and services (35–40%)**. O recorte segue o [guia oficial do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900) e o módulo [Describe Azure identity, access, and security](https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/).
+
+O escopo desta auditoria inclui Microsoft Entra ID, Microsoft Entra Domain Services, SSO, MFA, passwordless, identidades externas/guest, Conditional Access, Azure RBAC, Zero Trust, defesa em profundidade e Microsoft Defender for Cloud. Autenticação versus autorização é uma Lesson de apoio já existente. Detalhes operacionais de PIM, Identity Protection, access reviews, entitlement management, protocolos de federação, criação de custom roles, planos/licenciamento do Defender, Microsoft Sentinel, criptografia e Key Vault não contam como cobertura deste recorte.
+
+### Inventário das Lessons
+
+O Topic `32000000-0000-4000-8000-000000000005` possui 9 Lessons publicadas, 105 Content Blocks, 3 Visual Experiences, 49 Flashcards, 50 Questions e 100 minutos estimados. As nove Lessons estão `Ready`, publicadas e preservam `lessons.content` como fallback.
+
+| # | Lesson / slug real | Min. | Blocks | Visual | Flashcards | Questions (E/M/H) | Publicada | Status | Avaliação |
+| ---: | --- | ---: | ---: | --- | ---: | ---: | --- | --- | --- |
+| 1 | Microsoft Entra ID and Domain Services / `entra-id-and-domain-services` | 12 | 15 | Flow reutilizado | 7 | 5 (2/2/1) | Sim | Ready | Ensina cloud IAM, objetos, tenant, identity/authentication/authorization, managed domain, protocolos tradicionais, cenário legado, comparação, exam tips/traps e summary. |
+| 2 | Authentication vs Authorization / `authentication-vs-authorization` | 8 | 8 | Nenhum | 3 | 10 (3/5/2) | Sim | Ready | Consolida quem é versus o que pode fazer, login sem permissão, relação com MFA/Conditional Access/RBAC, comparação, cenário, tip/trap e summary. As 10 Questions históricas foram corrigidas in-place. |
+| 3 | Single Sign-On / `single-sign-on` | 8 | 8 | Nenhum | 4 | 5 (2/2/1) | Sim | Ready | Cobre conceito, benefícios, integração com Entra ID, cenário, reutilização de senha, SSO versus MFA, autorização, exam tip/traps e summary. |
+| 4 | Multi-Factor Authentication and Passwordless / `mfa-and-passwordless` | 12 | 13 | Nenhum | 7 | 5 (2/2/1) | Sim | Ready | Ensina categorias de fatores, fatores independentes, métodos passwordless atuais, comparação SSO/MFA/Passwordless, cenários, traps e summary. |
+| 5 | External Identities / `external-identities` | 10 | 10 | Nenhum | 5 | 5 (2/2/1) | Sim | Ready | Cobre colaboração B2B, home/resource tenant, guest/external user, identidade de origem, acesso limitado, cenários, exam tip/traps e summary. |
+| 6 | Conditional Access / `conditional-access` | 12 | 11 | Nenhum | 5 | 5 (2/2/1) | Sim | Ready | Ensina sinais, if-then, decisões, MFA como controle possível, comparação Authentication/Conditional Access/RBAC, cenários, exam tip/traps e summary. |
+| 7 | Azure Role-Based Access Control (RBAC) / `azure-rbac` | 12 | 14 | Architecture | 6 | 5 (2/2/1) | Sim | Ready | Cobre autorização, security principals, role definitions, quatro scopes, herança, role assignment, menor scope, comparação, visual, prática e summary. |
+| 8 | Zero Trust and Defense in Depth / `zero-trust-and-defense-in-depth` | 14 | 15 | Architecture | 7 | 5 (2/2/1) | Sim | Ready | Ensina Zero Trust como estratégia, seus três princípios, confiança não implícita, conexão com controles já estudados, Defense in Depth, sete camadas, comparação, visual, cenários, traps e summary. |
+| 9 | Microsoft Defender for Cloud / `defender-for-cloud` | 12 | 11 | Nenhum | 5 | 5 (2/2/1) | Sim | Ready | Cobre security posture, recomendações, secure score, workload protection, responsabilidade e distinções de Defender Antivirus e Microsoft Sentinel em nível Fundamentals. |
+
+Não se recomenda criar novas Lessons ou slugs. Os nove registros existentes cobrem a decomposição pedagógica necessária e devem ser enriquecidos in-place para preservar histórico.
+
+### Coverage Matrix
+
+| Objective | Lesson(s) | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | ---: | ---: | --- | --- |
+| Microsoft Entra ID | `entra-id-and-domain-services` | 15 blocks compartilhados + fallback | Flow reutilizado | 6 relevantes | 4 relevantes | Covered | Cloud IAM, users/groups/applications/devices, tenant, tenant versus subscription, identity/authentication/authorization, cenário moderno, traps e summary estão explícitos e praticados. |
+| Microsoft Entra Domain Services | `entra-id-and-domain-services` | 15 blocks compartilhados + fallback | Flow contextual de Entra ID | 4 relevantes | 3 relevantes | Covered | Managed domain, domain join, Group Policy, LDAP, Kerberos/NTLM, domain controllers gerenciados, cenário legado e comparação com Entra ID possuem conteúdo e prática. |
+| Single Sign-On (SSO) | `single-sign-on` | 8 blocks + fallback | Not necessary | 4 | 5 (2/2/1) | Covered | Conceito, benefícios, integração centralizada, cenários e traps distinguem SSO de senha reutilizada, MFA e ausência de autenticação. |
+| Multi-Factor Authentication (MFA) | `mfa-and-passwordless`; apoio em `authentication-vs-authorization` | 13 blocks compartilhados + fallback | Not necessary | 4 relevantes | 4 relevantes | Covered | Dois ou mais fatores independentes, know/have/are, duas senhas, MFA versus SSO e distinção contextual de Conditional Access possuem prática. |
+| Passwordless authentication | `mfa-and-passwordless` | 13 blocks compartilhados + fallback | Not necessary | 4 relevantes | 3 relevantes | Covered | Conceito correto, passkeys/FIDO2, Windows Hello for Business, Authenticator passwordless, verificação de identidade e comparação com SSO/MFA estão explícitos. |
+| External identities / guest access | `external-identities` | 10 blocks + fallback | Not necessary | 5 | 5 (2/2/1) | Covered | Colaboração B2B, home/resource tenant, guest/external user, identidade de origem, acesso limitado e cenário Contoso/Fabrikam possuem prática. |
+| Conditional Access | `conditional-access` | 11 blocks + fallback | Not necessary | 5 | 5 (2/2/1) | Covered | Sinais, if-then, allow/block/controle adicional, MFA como possível controle e comparação com MFA/RBAC possuem cenários e prática. |
+| Azure RBAC | `azure-rbac`; apoio em `authentication-vs-authorization` | 14 blocks + fallback | Architecture | 6 | 5 (2/2/1) | Covered | Authorization, security principal, role definition, scope, role assignment, hierarchy, herança, menor scope e comparação possuem prática e visual. |
+| Zero Trust | `zero-trust-and-defense-in-depth` | 15 blocks compartilhados + fallback | Not necessary | 6 relevantes | 4 relevantes | Covered | Estratégia, verify explicitly, least privilege, assume breach, ausência de confiança implícita, controles complementares e traps possuem conteúdo e prática. |
+| Defense in Depth | `zero-trust-and-defense-in-depth` | 15 blocks compartilhados + fallback | Architecture | 3 relevantes | 3 relevantes | Covered | Múltiplas camadas, finalidade, sete camadas conceituais, falha de um controle, comparação com Zero Trust e visual possuem cenários e prática. |
+| Microsoft Defender for Cloud | `defender-for-cloud` | 11 blocks + fallback | Not necessary | 5 | 5 (2/2/1) | Covered | Security posture, recomendações, secure score, workload protection, limites, responsabilidade e distinções de antivírus/Sentinel estão explícitos e praticados. |
+
+### Resultado de cobertura
+
+- **Covered:** 11 objetivos.
+- **Partial:** 0 objetivos.
+- **Missing:** 0 objetivos.
+- **Lessons Ready:** 9.
+- **Lessons Needs enrichment:** 0.
+- **Lessons Missing:** 0.
+
+### Auditoria de Flashcards
+
+| Lesson | Flashcards | Avaliação |
+| --- | ---: | --- |
+| `entra-id-and-domain-services` | 7 | Três UUIDs históricos corrigidos in-place e quatro cards novos cobrem finalidade do Entra ID, Entra versus Domain Services, cenário legado, tenant, tenant versus subscription, identity/authentication/authorization e gerenciamento dos domain controllers. |
+| `authentication-vs-authorization` | 3 | Cards novos cobrem authentication, authorization e a armadilha “autenticado não significa autorizado”. |
+| `single-sign-on` | 4 | Cards novos cobrem finalidade, senha reutilizada, autenticação preservada e SSO versus MFA. |
+| `mfa-and-passwordless` | 7 | Cards novos cobrem MFA, categorias, duas senhas, passwordless, métodos atuais, verificação de identidade e combinação dos três conceitos. |
+| `external-identities` | 5 | Cards novos cobrem B2B, home tenant, resource tenant, limites de guest e externo versus interno. |
+| `conditional-access` | 5 | Cards novos cobrem definição, if-then, Conditional Access versus MFA, sinais e diferença para RBAC. |
+| `azure-rbac` | 6 | Três UUIDs históricos corrigidos in-place e três cards novos cobrem finalidade, role assignment, herança, principals, scope hierarchy e comparação dos controles. |
+| `zero-trust-and-defense-in-depth` | 7 | Cards novos cobrem estratégia, três princípios, verify explicitly, least privilege, assume breach, Defense in Depth e comparação. |
+| `defender-for-cloud` | 5 | Cards novos cobrem postura, recomendações, secure score, workload protection e distinção de antivírus. |
+
+Total: 49 Flashcards. A 8.9.6 adicionou somente 3 cards para a lacuna de memória ativa da Lesson de apoio. Não há duplicata exata nem Lesson sem Flashcards.
+
+### Auditoria de Questions
+
+| Lesson | Total | Easy | Medium | Hard | Avaliação |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `entra-id-and-domain-services` | 5 | 2 | 2 | 1 | Prática nova cobre cloud IAM, tenant versus subscription, cenário SaaS moderno, workload legado e coexistência Entra ID/Domain Services. |
+| `authentication-vs-authorization` | 10 | 3 | 5 | 2 | Dez UUIDs históricos preservados e conteúdo corrigido in-place para definições, fluxo, login sem permissão, MFA, autorização, least privilege, Conditional Access versus RBAC e cenários combinados. |
+| `single-sign-on` | 5 | 2 | 2 | 1 | Prática nova cobre conceito, senha reutilizada, cenário integrado, SSO versus MFA e SSO sem acesso irrestrito. |
+| `mfa-and-passwordless` | 5 | 2 | 2 | 1 | Prática nova cobre fatores, passkey, duas senhas, cenário passwordless e combinação SSO/MFA/Passwordless. |
+| `external-identities` | 5 | 2 | 2 | 1 | Prática nova cobre B2B, resource tenant, cenário Contoso/Fabrikam, guest e home/resource tenant. |
+| `conditional-access` | 5 | 2 | 2 | 1 | Prática nova cobre definição, if-then, MFA condicional, bloqueio por sinais e comparação Authentication/Conditional Access/RBAC. |
+| `azure-rbac` | 5 | 2 | 2 | 1 | A Question histórica Reader/Resource Group foi preservada; quatro novas cobrem finalidade, elementos da assignment, managed identity e menor scope. |
+| `zero-trust-and-defense-in-depth` | 5 | 2 | 2 | 1 | Prática nova cobre os três princípios, confiança não implícita, least privilege, camadas e uso conjunto das estratégias. |
+| `defender-for-cloud` | 5 | 2 | 2 | 1 | Prática nova cobre dois focos, recomendações, postura, workload protection e classificação de cenários. |
+| **Total** | **50** | **19** | **21** | **10** | As nove Lessons possuem Questions e participam do Topic Quiz round-robin. |
+
+Não há Question textual exatamente duplicada nem associação quebrada. A 8.9.6 removeu a repetição semântica excessiva e os distratores frágeis das 10 Questions históricas de autenticação/autorização, mantendo seus UUIDs, difficulty e associações. Nenhuma Question exige configuração ou administração avançada fora do escopo AZ-900.
+
+### Precisão conceitual e riscos de conteúdo
+
+- Microsoft Entra ID não deve ser ensinado como Active Directory Domain Services hospedado. Microsoft Entra Domain Services fornece recursos de domínio gerenciados para necessidades compatíveis/legadas, sem o cliente administrar controladores de domínio.
+- SSO reduz prompts de autenticação entre aplicações confiáveis, mas não elimina autorização, Conditional Access ou necessidade de proteger a sessão.
+- MFA combina fatores de categorias diferentes; duas senhas não constituem MFA. Passwordless remove a senha do fluxo, mas não é sinônimo automático de MFA ou de segurança absoluta.
+- External Identities não significa acesso irrestrito: convidados continuam sujeitos a autenticação, autorização, políticas, menor privilégio e revisão.
+- Conditional Access toma decisões a partir de sinais e controles; não substitui autenticação, RBAC ou todas as demais camadas de segurança.
+- Azure RBAC é autorização sobre recursos Azure por identidade, função e escopo. Não autentica usuários e não é sinônimo de Conditional Access.
+- Zero Trust é uma estratégia guiada por princípios; Defense in Depth organiza controles em camadas. Nenhum dos dois garante ausência de incidentes.
+- Defender for Cloud melhora postura e proteção de workloads, mas não torna o ambiente automaticamente seguro nem substitui operação e responsabilidade do cliente.
+- O fallback atual não contém erro factual crítico. As lacunas são principalmente profundidade, estrutura pedagógica, prática e comparação; portanto nenhuma correção curricular foi aplicada nesta auditoria.
+
+### Visual Experiences
+
+Existem 3 Visual Experiences associadas ao Topic, publicadas e com configurações válidas: o flow de Entra ID e duas arquiteturas para Azure RBAC e Defense in Depth.
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| Fluxo de autenticação com Microsoft Entra ID | Reuse | O flow `Usuário → Entrar → Microsoft Entra ID → Token → Aplicação` foi preservado e contextualiza identidade/autenticação. |
+| SSO, MFA, Passwordless e External Identities | Not necessary | Comparações e cenários em Content Blocks são mais úteis que interações separadas. |
+| Conditional Access | Not necessary | O fluxo `Signal → Policy → Decision` e cenários if-then foram implementados em Content Blocks; um segundo visual não acrescentaria valor proporcional. |
+| Azure RBAC | Reuse | Uma Architecture Visual Experience mostra `Security Principal + Role Definition + Scope → Role Assignment → Azure Resources`, com nodes acessíveis e layout horizontal responsivo. |
+| Zero Trust | Not necessary | Os três princípios cabem em explanation/comparison; uma experiência separada duplicaria a Lesson combinada. |
+| Defense in Depth | Reuse | Uma Architecture Visual Experience apresenta sete camadas selecionáveis, de Physical a Data, com descrições curtas, navegação acessível e layout responsivo. |
+| Microsoft Defender for Cloud | Not necessary | Conteúdo estruturado, comparação postura/proteção e cenários são suficientes em Fundamentals. |
+
+### Plano exato para 8.9.2–8.9.6
+
+| Etapa | Lessons / slugs reais | Lacunas e prática futura | Visual |
+| --- | --- | --- | --- |
+| 8.9.2 — Microsoft Entra ID + Domain Services (concluída) | `entra-id-and-domain-services` | 15 blocks; 3 cards corrigidos in-place, 4 cards novos e 5 Questions/20 options novas em 2/2/1. Microsoft Entra ID e Domain Services estão Covered. | Flow existente reutilizado e ligado à Lesson; nenhuma Visual Experience criada. |
+| 8.9.3 — SSO, MFA, Passwordless + External Identities (concluída) | `single-sign-on`; `mfa-and-passwordless`; `external-identities` | 31 blocks, 16 cards e 15 Questions/60 options novas em três distribuições 2/2/1. As 10 Questions históricas de `authentication-vs-authorization` foram auditadas e permaneceram intactas por estarem associadas a outro objetivo. | Nenhuma Visual Experience; comparisons e cenários foram suficientes. |
+| 8.9.4 — Conditional Access + Azure RBAC (concluída) | `conditional-access`; `azure-rbac` | 25 blocks, 3 cards históricos corrigidos, 8 cards novos, 1 Question histórica preservada e 9 Questions/36 options novas. Ambas as Lessons possuem prática 2/2/1. | Uma Architecture Visual Experience criada apenas para RBAC; Conditional Access usa blocks, sem segundo visual. |
+| 8.9.5 — Zero Trust + Defense in Depth + Defender for Cloud (concluída) | `zero-trust-and-defense-in-depth`; `defender-for-cloud` | 26 blocks, 12 cards e 10 Questions/40 options novas em duas distribuições 2/2/1. Os três objetivos estão Covered. | Uma Architecture Visual Experience criada apenas para Defense in Depth; nenhum visual separado para Zero Trust ou Defender. |
+| 8.9.6 — Practice + fechamento (concluída) | As nove Lessons do Topic | 8 blocks e 3 cards adicionados apenas à Lesson de apoio; 10 Questions/40 options históricas corrigidas in-place. Lesson Quiz, Topic Quiz, Review, spaced repetition, fallback, RLS, isolamento e histórico validados. | Nenhum novo; os 3 visuais existentes foram validados. |
+
+### Preservação histórica e checkpoint
+
+Os nove UUIDs e slugs de Lesson foram preservados. Até a 8.9.6, 6 Flashcards históricos foram corrigidos in-place; 43 Flashcards, 39 Questions, 156 options e 2 Visual Experiences receberam UUIDs novos. Dez Questions históricas de autenticação/autorização e suas 40 options foram corrigidas in-place; a Question histórica de RBAC e suas options permaneceram intactas. Nenhuma Question foi reassociada entre Lessons e nenhum registro histórico foi removido.
+
+**Checkpoint da Etapa 8.9.1:** auditoria concluída; 9 Lessons encontradas, 0 Ready, 9 Needs enrichment, 0 Missing; 11 objetivos Partial, 0 Covered e 0 Missing; 0 Content Blocks, 1 Visual Experience, 6 Flashcards, 11 Questions (3 easy / 6 medium / 2 hard) e 90 minutos estimados. Nenhum conteúdo curricular, Question, Flashcard, Visual Experience, UUID ou slug foi modificado.
+
+**Checkpoint da Etapa 8.9.2:** Microsoft Entra ID e Microsoft Entra Domain Services estão `Covered`; `entra-id-and-domain-services` está `Ready` com 15 Content Blocks, 1 Flow reutilizado, 7 Flashcards e 5 Questions (2 easy / 2 medium / 1 hard). O Topic possui agora 2 objetivos Covered, 9 Partial e 0 Missing, com 15 blocks, 1 visual, 10 Flashcards, 16 Questions (5 easy / 8 medium / 3 hard) e 90 minutos estimados. Todos os UUIDs históricos e o fallback foram preservados; nenhuma Visual Experience foi criada.
+
+**Checkpoint da Etapa 8.9.3:** Single Sign-On, MFA, Passwordless Authentication e External Identities/Guest Access estão `Covered`; `single-sign-on`, `mfa-and-passwordless` e `external-identities` estão `Ready` com 31 novos Content Blocks, 16 novos Flashcards e 15 novas Questions (6 easy / 6 medium / 3 hard). O Topic possui agora 6 objetivos Covered, 5 Partial e 0 Missing, com 46 blocks, 1 visual, 26 Flashcards, 31 Questions (11 easy / 14 medium / 6 hard) e 94 minutos estimados. Nenhuma Visual Experience foi criada e todos os UUIDs históricos e fallbacks foram preservados.
+
+**Checkpoint da Etapa 8.9.4:** Conditional Access e Azure RBAC estão `Covered`; `conditional-access` e `azure-rbac` estão `Ready` com 25 novos Content Blocks, 1 nova Architecture Visual Experience, 3 Flashcards históricos corrigidos, 8 novos Flashcards e 9 novas Questions (4 easy / 3 medium / 2 hard). A Question histórica de RBAC e suas quatro options foram preservadas. O Topic possui agora 8 objetivos Covered, 3 Partial e 0 Missing, com 71 blocks, 2 visuais, 34 Flashcards, 40 Questions (15 easy / 17 medium / 8 hard) e 96 minutos estimados.
+
+**Checkpoint da Etapa 8.9.5:** Zero Trust, Defense in Depth e Microsoft Defender for Cloud estão `Covered`; `zero-trust-and-defense-in-depth` e `defender-for-cloud` estão `Ready` com 26 novos Content Blocks, 1 nova Architecture Visual Experience, 12 novos Flashcards e 10 novas Questions (4 easy / 4 medium / 2 hard). O Topic possui agora 11 objetivos Covered, 0 Partial e 0 Missing, com 97 blocks, 3 visuais, 46 Flashcards, 50 Questions (19 easy / 21 medium / 10 hard) e 100 minutos estimados. Todos os UUIDs históricos e fallbacks foram preservados.
+
+**Closure da Etapa 8.9.6 — Azure Identity, Access and Security: CLOSED.** Os 11 objetivos estão `Covered`, com 0 `Partial` e 0 `Missing`. O Topic possui 9 Lessons, 105 Content Blocks, 3 Visual Experiences, 49 Flashcards, 50 Questions (19 easy / 21 medium / 10 hard) e 100 minutos estimados. A Lesson de apoio `authentication-vs-authorization` recebeu 8 blocks e 3 cards; suas 10 Questions e 40 options históricas foram corrigidas in-place. O fechamento validou as nove Lessons no Topic Quiz round-robin, Lesson Quiz, Review, spaced repetition, progress, RLS, isolamento entre usuários, fallbacks e integridade histórica.
+
+### Fechamento do Domain 2
+
+Checagem final dos cinco grandes Topics:
+
+| Topic | Status | Covered | Partial | Missing |
+| --- | --- | ---: | ---: | ---: |
+| Core Architectural Components | CLOSED | 10 | 0 | 0 |
+| Azure Compute Services | CLOSED | 10 | 0 | 0 |
+| Azure Networking Services | CLOSED | 8 | 0 | 0 |
+| Azure Storage Services | CLOSED | 16 | 0 | 0 |
+| Azure Identity, Access and Security | CLOSED | 11 | 0 | 0 |
+
+Os cinco Topics preservam suas Lessons, práticas e visuais e passaram pelos validadores de fechamento correspondentes. Inventário consolidado do Domain: 38 Lessons, 357 Content Blocks, 11 Visual Experiences, 183 Flashcards, 219 Questions e 410 minutos estimados.
+
+**Domain 2 — Describe Azure architecture and services: CLOSED**
+
+## Domain 3 — Describe Azure management and governance
+
+### Azure Cost Management — Auditoria da Etapa 9.1
+
+Escopo auditado: somente o Topic `Cost Management` (`33000000-0000-4000-8000-000000000001`). A matriz segue o [guia oficial atual do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900), com habilidades medidas a partir de 20 de julho de 2026: fatores que afetam custos, exploração do Azure Pricing Calculator, capacidades de Cost Management e finalidade das tags. Reservations, Savings Plans e Spot pricing aparecem no [módulo oficial de Cost Management](https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/), mas são tratados abaixo apenas como conteúdo complementar, não como objetivos oficiais independentes.
+
+#### Inventário atual
+
+| # | Lesson / slug real | Min | Publicada | Blocks | Visuals | Flashcards | Questions E/M/H | Classificação |
+| ---: | --- | ---: | :---: | ---: | ---: | ---: | --- | --- |
+| 1 | Factors That Affect Azure Costs / `azure-cost-factors` | 12 | Sim | 14 | 0 | 8 | 3/5/2 | Ready |
+| 2 | Azure Pricing Calculator / `pricing-calculator` | 10 | Sim | 10 | 0 | 5 | 2/2/1 | Ready |
+| 3 | Azure Cost Management / `azure-cost-management` | 12 | Sim | 13 | 0 | 7 | 3/5/2 | Ready |
+| 4 | Resource Tags / `resource-tags` | 10 | Sim | 13 | 0 | 6 | 2/2/1 | Ready |
+| **Total** | **4 Lessons** | **44** | **4** | **50** | **0** | **26** | **10/14/6** | **4 Ready / 0 Needs enrichment / 0 Missing** |
+
+Todos os quatro registros, UUIDs e slugs reais permanecem preservados. Após a 9.3, as quatro Lessons possuem Content Blocks, summary, Flashcards e Questions suficientes, mantendo `lessons.content` como fallback.
+
+#### Matriz de cobertura
+
+| Objective | Lesson | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Factors that affect Azure costs | `azure-cost-factors` | 14 blocks + fallback | Not necessary | 8 | 10 (3/5/2) | Covered | Tipo, quantidade, configuração, consumo, tempo, Region, transferência, pay-as-you-go, Reservations, Savings Plans e Spot possuem comparação, cenários, traps, summary e prática revisada. |
+| Azure Pricing Calculator | `pricing-calculator` | 10 blocks + fallback | Not necessary | 5 | 5 (2/2/1) | Covered | Finalidade, inputs, fluxo, estimate, limitações e comparação explícita com Cost Management possuem cenários e prática. |
+| Cost Management capabilities in Azure | `azure-cost-management` | 13 blocks + fallback | Not necessary | 7 | 10 (3/5/2) | Covered | Cost Analysis, acompanhamento, Actual Cost, Forecast, Budgets, alerts e comparação com Pricing Calculator possuem cenários, traps, summary e prática revisada. |
+| Purpose of tags | `resource-tags` | 13 blocks + fallback | Not necessary | 6 | 5 (2/2/1) | Covered | Key/value, scopes suportados, organização, reporting, custos, ausência de herança e diferenças de RBAC/Locks/Policy possuem cenários e prática. |
+
+**Resultado final da Etapa 9.4:** 4 `Covered`, 0 `Partial`, 0 `Missing`. Conteúdo, prática, fluxo de estudo, RLS, isolamento e integridade histórica foram validados em produção.
+
+#### Qualidade factual e lacunas
+
+- **Fatores de custo:** tipo, quantidade, configuração, tempo, consumo, unidades provisionadas, Region e transferência estão explícitos sem preços numéricos. O exam trap deixa claro que desalocar compute não elimina necessariamente discos e outros custos associados.
+- **Pricing Calculator versus Cost Management:** a Lesson agora compara planejamento/estimate antes da implantação com acompanhamento e análise durante a operação. A calculadora não é apresentada como fatura ou garantia de custo final.
+- **TCO:** não aparece neste Topic. Há uma questão legada no conteúdo de CapEx/OpEx do Domain 1. Como TCO não é objetivo independente no guia oficial atual, deve permanecer apenas como contexto legado/cross-domain, sem orientar a criação de uma nova Lesson nesta trilha.
+- **Cost Management:** Cost Analysis, acompanhamento, Actual Cost, Forecast, Budgets, alerts, tendências e agrupamento estão explícitos. Exportações, APIs, invoices e billing scopes avançados permanecem fora do recorte Fundamentals. As 10 Questions históricas foram simplificadas in-place, removendo chargeback e processos organizacionais excessivos.
+- **Tags:** a Lesson define `key/value`, apresenta exemplos, cobre resources/Resource Groups/Subscriptions e conecta classificação a filtros, reporting e custos. Exam traps deixam explícito que não há herança automática e que Tags não substituem RBAC, Resource Locks, Azure Policy ou hierarquia.
+- **Modelos complementares:** Pay-as-you-go, Reservations, Savings Plans e Spot possuem comparação Fundamentals, cards e cenários. Permanecem complementares, sem objetivos oficiais ou Lessons independentes e sem detalhes de eligibility, billing ou SKUs.
+
+#### Auditoria da prática
+
+| Lesson | Questions | Easy | Medium | Hard | Flashcards | Observação |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `azure-cost-factors` | 10 | 3 | 5 | 2 | 8 | Dez UUIDs históricos preservados; textos e 40 options foram corrigidos in-place para cenários plausíveis, incluindo custo residual ao parar compute e Spot. |
+| `pricing-calculator` | 5 | 2 | 2 | 1 | 5 | Prática nova cobre finalidade, 20 VMs, mudança de Region/size, gasto já ocorrido e estimate versus fatura. |
+| `azure-cost-management` | 10 | 3 | 5 | 2 | 7 | Dez UUIDs históricos preservados; textos e 40 options corrigidos in-place para Cost Analysis, Actual/Forecast, Budget/alert, Calculator e Tags em custos. |
+| `resource-tags` | 5 | 2 | 2 | 1 | 6 | Prática nova cobre key/value, custos por Environment, scopes suportados, ausência de herança e distinção de RBAC/Locks. |
+
+Não há Questions textualmente idênticas nem Questions com quantidade inválida de options. As quatro Lessons possuem prática suficiente para Lesson Quiz e participação no Topic Quiz. Os distratores absurdos do conjunto histórico de Cost Management foram substituídos por confusões plausíveis, preservando UUIDs.
+
+#### Visual Experiences
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| Fatores que afetam custos | Not necessary | Uma lista agrupada e cenários curtos são mais claros que uma interação. |
+| Pricing Calculator versus Cost Management | Not necessary | Usar comparison block com `antes do deployment` versus `durante a operação`. |
+| Cost optimization models | Not necessary | Tabela curta pode comparar flexibilidade, previsibilidade e interrupção sem simulador. |
+| Tags | Not necessary | Exemplos `key=value`, filtros e exam traps são suficientes. |
+
+Não existe Visual Experience associada às quatro Lessons e nenhuma é necessária para fechar os objetivos. Não criar calculadora, dashboard ou simulador evita duplicar ferramentas Azure e mantém o foco Fundamentals.
+
+#### Plano exato para 9.2–9.4
+
+| Etapa | Lessons / slugs reais | Lacunas a tratar | Visual |
+| --- | --- | --- | --- |
+| 9.2 — Cost factors + Pricing Calculator (concluída) | `azure-cost-factors`; `pricing-calculator` | 24 blocks, 13 cards e 5 Questions/20 options novas; 10 Questions/40 options históricas corrigidas in-place. Os dois objetivos estão Covered. | Nenhuma Visual Experience; comparison blocks foram suficientes. |
+| 9.3 — Cost Management + Tags (concluída) | `azure-cost-management`; `resource-tags` | 26 blocks, 13 cards e 5 Questions/20 options novas; 10 Questions/40 options históricas corrigidas in-place. Os dois objetivos estão Covered. | Nenhuma Visual Experience; comparison blocks foram suficientes. |
+| 9.4 — Practice + fechamento (concluída) | As quatro Lessons | Nenhum conteúdo novo foi necessário. Inventário, precisão, Lesson Quiz, Topic Quiz balanceado, Review, spaced repetition, progress, RLS, isolamento, histórico e fallbacks foram validados em produção com dados temporários removidos no mesmo checkpoint. | Nenhum; 0 Visual Experiences é a decisão final. |
+
+#### Preservação e limitações registradas na auditoria 9.1
+
+Nenhum UUID, slug, Lesson, Content Block, Visual Experience, Flashcard ou Question foi alterado na auditoria 9.1. Naquele momento, o executor `supabase test db` não concluiu por ausência de Docker/`pg_prove`. A limitação foi superada no fechamento: as migrations 9.4 executaram diretamente em produção as invariantes de conteúdo, prática, RLS, referências históricas e o fluxo mutável completo, com usuários temporários removidos antes do commit final.
+
+**Checkpoint da Etapa 9.1:** auditoria concluída; 4 Lessons encontradas, 0 Ready, 4 Needs enrichment e 0 Missing; 0 objetivos Covered, 4 Partial e 0 Missing; 0 Content Blocks, 0 Visual Experiences, 0 Flashcards, 20 Questions (6 easy / 10 medium / 4 hard) e 36 minutos estimados. Nenhum conteúdo pedagógico foi criado ou enriquecido.
+
+**Checkpoint da Etapa 9.2:** Factors that affect Azure costs e Azure Pricing Calculator estão `Covered`; `azure-cost-factors` e `pricing-calculator` estão `Ready` com 24 Content Blocks, 13 Flashcards e 15 Questions (5 easy / 7 medium / 3 hard). Os 10 UUIDs históricos de Questions e seus 40 UUIDs de options foram preservados e corrigidos in-place; 5 Questions e 20 options novas foram adicionadas somente à Pricing Calculator. O Topic possui agora 2 objetivos Covered, 2 Partial e 0 Missing, com 24 blocks, 0 visuais, 13 cards, 25 Questions (8 easy / 12 medium / 5 hard) e 40 minutos estimados. Fallbacks, histórico e associações foram preservados.
+
+**Checkpoint da Etapa 9.3:** Cost Management capabilities in Azure e Purpose of tags estão `Covered`; `azure-cost-management` e `resource-tags` estão `Ready` com 26 Content Blocks, 13 Flashcards e 15 Questions (5 easy / 7 medium / 3 hard). Os 10 UUIDs históricos de Questions e seus 40 UUIDs de options foram preservados e corrigidos in-place; 5 Questions e 20 options novas foram adicionadas somente a Resource Tags. O Topic possui agora 4 objetivos Covered, 0 Partial e 0 Missing, com 50 blocks, 0 visuais, 26 cards, 30 Questions (10 easy / 14 medium / 6 hard) e 44 minutos estimados. Fallbacks, histórico e associações foram preservados.
+
+**Closure da Etapa 9.4 — Azure Cost Management: CLOSED.** Os 4 objetivos oficiais estão `Covered`, com 0 `Partial` e 0 `Missing`. O Topic possui 4 Lessons Ready, 50 Content Blocks, 0 Visual Experiences, 26 Flashcards, 30 Questions (10 easy / 14 medium / 6 hard) e 44 minutos estimados. Nenhuma Question ou Flashcard foi corrigida ou criada no fechamento. O Topic Quiz de dez itens incluiu as quatro Lessons, com no máximo três Questions por Lesson em três tentativas isoladas. Lesson Quiz, respostas, Review, conclusão, progress, Flashcard review, spaced repetition, RLS, isolamento entre usuários, fallbacks e referências históricas foram validados em produção; todos os dados temporários foram removidos.
+
+**Azure Cost Management: CLOSED**
+
+### Governance and Compliance — Auditoria da Etapa 9.5.1
+
+Escopo auditado: somente o Topic `Governance and Compliance` (`33000000-0000-4000-8000-000000000002`) do Domain `Describe Azure management and governance`. A matriz segue o [guia oficial atual do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900), com habilidades medidas a partir de 20 de julho de 2026. O guia possui exatamente três objetivos neste grupo: Microsoft Purview, Azure Policy e resource locks. O Service Trust Portal aparece no [módulo Learn de governança e conformidade](https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/), mas não como objetivo independente no guia da prova; por isso é tratado apenas como conteúdo suplementar.
+
+#### Inventário atual
+
+| # | Lesson / slug real | Min | Publicada | Blocks | Visuals | Flashcards | Questions E/M/H | Classificação |
+| ---: | --- | ---: | :---: | ---: | ---: | ---: | --- | --- |
+| 1 | Microsoft Purview / `microsoft-purview` | 12 | Sim | 13 | 0 | 7 | 2/2/1 | Ready |
+| 2 | Azure Policy / `azure-policy` | 12 | Sim | 12 | 0 | 7 | 2/2/1 | Ready |
+| 3 | Resource Locks / `resource-locks` | 10 | Sim | 12 | 0 | 6 | 2/2/1 | Ready |
+| **Total** | **3 Lessons** | **34** | **3** | **37** | **0** | **20** | **6/6/3** | **3 Ready / 0 Needs enrichment / 0 Missing** |
+
+Os três registros usam `lessons.content` como fallback e estão ordenados pedagogicamente como Purview → Policy → Locks. Nenhuma Lesson possui Content Blocks, Visual Experience, Flashcard ou Question associada no estado versionado. A migration preserva registros existentes por `on conflict (topic_id, slug)` e não fixa UUIDs novos para essas Lessons; portanto os UUIDs reais gerados no banco não podem ser inferidos com segurança do repositório. A leitura REST remota com o papel `anon` foi negada por falta de `SELECT` em `lessons`, como esperado. Nenhum UUID foi inventado ou alterado nesta auditoria.
+
+#### Matriz de cobertura oficial
+
+| Objective | Lesson | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Describe the purpose of Microsoft Purview in Azure | `microsoft-purview` | 13 blocks + fallback | Not necessary | 7 | 5 (2/2/1) | Covered | Finalidade, Data Governance, discovery, metadados, Data Map, Unified Catalog, classification, compliance conceitual, alcance multicloud e diferenças de Azure Policy, Defender for Cloud, Azure Storage e banco de dados possuem scenarios, traps e summary. |
+| Describe the purpose of Azure Policy | `azure-policy` | 12 blocks + fallback | Not necessary | 7 | 5 (2/2/1) | Covered | Finalidade, definition, assignment, scope, compliance, Audit/Deny, exemplos, remediation conceitual e diferenças de Tags, RBAC, Locks, Conditional Access e Purview possuem traps, summary e prática. |
+| Describe the purpose of resource locks | `resource-locks` | 12 blocks + fallback | Not necessary | 6 | 5 (2/2/1) | Covered | `CanNotDelete`, `ReadOnly`, scopes, herança, Owner, management plane e diferenças de RBAC, Policy e backup possuem cenários, traps, summary e prática. |
+
+**Resultado após a Etapa 9.5.3:** 3 `Covered`, 0 `Partial`, 0 `Missing`. As três Lessons possuem estrutura, comparação e prática suficientes; o fechamento integral do Topic permanece reservado à 9.5.4.
+
+#### Service Trust Portal — conteúdo suplementar
+
+| Item | Lesson / artefato atual | Status | Decisão |
+| --- | --- | --- | --- |
+| Service Trust Portal | Nenhum | Missing (Supplemental) | Pode receber uma menção curta em uma Lesson existente durante a 9.5.2, sem criar objetivo oficial, Lesson própria ou requisito de fechamento. |
+
+A ausência do Service Trust Portal não conta como `Missing` na matriz oficial e não impede o fechamento futuro dos três objetivos do guia da prova.
+
+#### Qualidade factual e riscos de confusão
+
+- **Microsoft Purview:** o fallback associa corretamente o produto a descoberta, classificação, catálogo, linhagem/origem e governança de dados em diferentes ambientes. Não o apresenta como banco de dados, antivírus ou recurso exclusivo do Azure Storage. A Lesson ainda precisa conectar, em nível Fundamentals, governança de dados a capacidades de compliance e risco e diferenciá-la de Microsoft Defender for Cloud.
+- **Azure Policy:** definition → assignment → scope → compliance, Audit/Deny, Allowed Locations, Tags obrigatórias e remediation conceitual estão explícitos. Policy é separada de RBAC e Conditional Access e não é apresentada como controle de acesso.
+- **Resource Locks:** `CanNotDelete` e `ReadOnly`, scopes, herança, Owner e management plane estão explícitos. A Lesson diferencia proteção administrativa de autorização, avaliação de compliance e recuperação por backup.
+- **Tags / Policy / RBAC / Locks / Purview:** a comparação agora está explícita. Tags classificam metadados; Policy avalia ou impõe padrões; RBAC autoriza ações de identidades; Locks protegem contra exclusão/alteração; Purview governa o patrimônio de dados. Conditional Access é separado como decisão de acesso baseada em sinais de identidade.
+- **Conteúdo fora de escopo:** não foi detectado conteúdo avançado nas três Lessons. Referências a Azure Policy em Lessons/Questions de Azure Arc pertencem a outro Topic e não foram contadas como cobertura ou prática de Governance and Compliance.
+
+#### Auditoria da prática
+
+| Lesson | Questions | Easy | Medium | Hard | Flashcards | Lacuna principal |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `microsoft-purview` | 5 | 2 | 2 | 1 | 7 | Cenários cobrem discovery/catalog, classification, Data Map/Unified Catalog, diferença de Policy e diferença de Defender for Cloud. |
+| `azure-policy` | 5 | 2 | 2 | 1 | 7 | Cenários cobrem Audit, assignment, RBAC versus Policy, Tags obrigatórias e Deny em scope hierárquico; card dedicado reforça compliant/non-compliant. |
+| `resource-locks` | 5 | 2 | 2 | 1 | 6 | Cenários cobrem CanNotDelete, ReadOnly, herança, Owner e separação de Lock/RBAC/backup. |
+
+Não há itens duplicados ou fora de escopo. As três Lessons possuem prática suficiente para Lesson Quiz, Topic Quiz distribuído e spaced repetition.
+
+#### Visual Experiences
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| Microsoft Purview | Not necessary | Explanation, example e comparison blocks são suficientes para o nível Fundamentals. |
+| Azure Policy | Not necessary | Um fluxo textual `definition → assignment → scope → evaluation/compliance` e cenários curtos são mais claros que uma interação. |
+| Resource Locks | Not necessary | Comparação `CanNotDelete` versus `ReadOnly` cabe em um comparison block. |
+| Tags / Policy / RBAC / Locks / Purview | Not necessary | Uma tabela comparativa curta evita duplicar visuais existentes de RBAC e hierarquia. |
+
+Não existe Visual Experience associada ao Topic. Nenhuma experiência existente oferece ganho suficiente para classificação `Reuse` ou `Upgrade later`, e criar interação nova não é necessário para fechar esses objetivos.
+
+#### Plano exato para 9.5.2–9.5.4
+
+| Etapa | Lessons / slugs reais | Lacunas a tratar | Visual |
+| --- | --- | --- | --- |
+| 9.5.2 — Microsoft Purview (concluída) | `microsoft-purview` | 13 blocks, 7 Flashcards e 5 Questions/20 options novas em 2/2/1. Finalidade, Data Governance, discovery, Data Map, Unified Catalog, classification, compliance conceitual e comparações estão Covered. Service Trust Portal permaneceu somente suplementar e não foi detalhado. | Nenhuma Visual Experience criada. |
+| 9.5.3 — Azure Policy + Resource Locks (concluída) | `azure-policy`; `resource-locks` | 24 blocks, 12 Flashcards e 10 Questions/40 options novas, cada Lesson em 2/2/1. Policy definition/assignment/scope/compliance/Audit/Deny, Locks `CanNotDelete`/`ReadOnly`/herança/Owner e comparações estão Covered. | Nenhuma Visual Experience criada; comparison blocks foram suficientes. |
+| 9.5.4 — Practice + fechamento (concluída) | As três Lessons | Um Flashcard de compliant/non-compliant foi adicionado como única lacuna. Duplicação, dificuldade, Lesson Quiz, Topic Quiz balanceado, Review, spaced repetition, fallbacks, RLS, isolamento, histórico e referências órfãs foram validados em produção. | Nenhuma Visual Experience criada; 0 é a decisão final. |
+
+#### Preservação e riscos arquiteturais
+
+- O Topic possui UUID estável `33000000-0000-4000-8000-000000000002`; seus três slugs reais foram preservados.
+- A migration curricular faz upsert por `(topic_id, slug)`, mantendo registros existentes, mas não registra em código os UUIDs gerados para essas três Lessons. Alterar slug, excluir/recriar Lesson ou tentar fixar UUID retroativamente criaria risco desnecessário para `user_lesson_progress`, quiz history, flashcard reviews e links.
+- As próximas etapas devem localizar cada Lesson pelo Topic e slug, atualizar o registro existente e preservar todos os UUIDs encontrados no banco.
+- A negação de leitura para `anon` é coerente com a superfície atual de segurança, mas limita auditorias remotas administrativas sem sessão autenticada/service role. Isso não justifica ampliar privilégios públicos.
+
+**Checkpoint da Etapa 9.5.1:** auditoria concluída; 3 Lessons encontradas, 0 Ready, 3 Needs enrichment e 0 Missing; 0 objetivos Covered, 3 Partial e 0 Missing; 0 Content Blocks, 0 Visual Experiences, 0 Flashcards, 0 Questions e 28 minutos estimados. Nenhum conteúdo pedagógico, Question, Flashcard, Visual Experience, UUID ou slug foi modificado.
+
+**Checkpoint da Etapa 9.5.2:** Microsoft Purview está `Covered`; `microsoft-purview` está `Ready` com 13 Content Blocks, 0 Visual Experiences, 7 Flashcards e 5 Questions (2 easy / 2 medium / 1 hard). O Topic possui agora 1 objetivo Covered, 2 Partial e 0 Missing, com 13 blocks, 0 visuais, 7 cards, 5 Questions e 30 minutos estimados. O UUID e slug históricos da Lesson, o fallback e todo histórico foram preservados; Azure Policy, Resource Locks e Service Trust Portal não foram implementados.
+
+**Checkpoint da Etapa 9.5.3:** Azure Policy e Resource Locks estão `Covered`; `azure-policy` e `resource-locks` estão `Ready` com 24 novos Content Blocks, 12 novos Flashcards e 10 novas Questions (4 easy / 4 medium / 2 hard). O Topic possui agora 3 objetivos Covered, 0 Partial e 0 Missing, com 37 blocks, 0 visuais, 19 cards, 15 Questions (6 easy / 6 medium / 3 hard) e 34 minutos estimados. UUIDs, slugs, fallbacks e histórico foram preservados. Lesson Quiz, Topic Quiz, progress, spaced repetition, RLS e limpeza de dados temporários passaram em produção.
+
+**Closure da Etapa 9.5.4 — Governance and Compliance: CLOSED.** Os 3 objetivos oficiais estão `Covered`, com 0 `Partial` e 0 `Missing`. O Topic possui 3 Lessons Ready, 37 Content Blocks, 0 Visual Experiences, 20 Flashcards, 15 Questions (6 easy / 6 medium / 3 hard) e 34 minutos estimados. Um único Flashcard de compliance foi adicionado; nenhuma Question foi corrigida ou criada no fechamento. Lesson Quiz, Topic Quiz de dez itens cobrindo as três Lessons com no máximo quatro Questions por Lesson, Review, completion, progress, spaced repetition, RLS, isolamento entre usuários, fallbacks, integridade histórica e limpeza dos dados temporários foram validados em produção. Service Trust Portal permanece `Supplemental` e não bloqueia o fechamento.
+
+**Governance and Compliance: CLOSED**
+
+### Tools for Managing and Deploying Azure Resources — Etapas 9.6.1–9.6.2
+
+Escopo auditado: somente o Topic real `Resource Management and Deployment` (`33000000-0000-4000-8000-000000000003`) do Domain `Describe Azure management and governance`. O nome curricular usado nesta seção acompanha o grupo **Tools for Managing and Deploying Azure Resources**. A matriz segue o [guia oficial atual do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900), com habilidades medidas a partir de 20 de julho de 2026: Azure portal; Cloud Shell, Azure CLI e Azure PowerShell; Azure Arc; Infrastructure as Code; Azure Resource Manager e ARM templates. Os objetivos combinados do guia foram separados abaixo em oito linhas para permitir uma auditoria pedagógica mais precisa.
+
+#### Inventário atual
+
+| # | Lesson / slug real | Min | Publicada | Blocks | Visuals | Flashcards | Questions E/M/H | Classificação |
+| ---: | --- | ---: | :---: | ---: | ---: | ---: | --- | --- |
+| 1 | Azure Portal / `azure-portal` | 10 | Sim | 10 | 0 | 6 | 2/2/1 | Ready |
+| 2 | Azure Cloud Shell / `azure-cloud-shell` | 10 | Sim | 10 | 0 | 6 | 3/5/2 | Ready |
+| 3 | Azure CLI / `azure-cli` | 10 | Sim | 10 | 0 | 6 | 3/5/2 | Ready |
+| 4 | Azure PowerShell / `azure-powershell` | 10 | Sim | 10 | 0 | 6 | 2/2/1 | Ready |
+| 5 | Azure Arc / `azure-arc` | 12 | Sim | 13 | 0 | 7 | 3/5/2 | Ready |
+| 6 | Infrastructure as Code / `infrastructure-as-code` | 12 | Sim | 12 | 0 | 6 | 2/2/1 | Ready |
+| 7 | Azure Resource Manager and ARM Templates / `azure-resource-manager-and-arm-templates` | 14 | Sim | 14 | 1 | 8 | 4/4/2 | Ready |
+| **Total** | **7 Lessons** | **78** | **7** | **79** | **1** | **45** | **19/25/11** | **7 Ready / 0 Needs enrichment / 0 Missing** |
+
+Todas as Lessons continuam publicadas e preservam `lessons.content` como fallback. A 9.6.2 estruturou somente Portal, Cloud Shell, CLI e PowerShell; Arc, IaC e ARM/Templates permanecem no estado auditado. O Topic usa UUID estável `33000000-0000-4000-8000-000000000003`, e as migrations localizam as Lessons existentes por Topic e slug, sem substituir seus UUIDs nem referências históricas.
+
+#### Matriz de cobertura oficial
+
+| Objective | Lesson(s) | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Azure Portal | `azure-portal` | 10 blocks | Not necessary | 6 | 5 (2/2/1) | Covered | GUI no navegador, criação/configuração/visualização/administração, cenários, comparação com os outros métodos, trap de não exclusividade e summary. |
+| Azure Cloud Shell | `azure-cloud-shell` | 10 blocks | Not necessary | 6 | 10 (3/5/2) | Covered | Terminal interativo autenticado e hospedado, Bash/PowerShell, ferramentas preconfiguradas e distinção explícita ambiente versus ferramenta. Três Questions desviantes foram corrigidas in-place. |
+| Azure CLI | `azure-cli` | 10 blocks | Not necessary | 6 | 10 (3/5/2) | Covered | Comandos `az`, exemplos ilustrativos, multiplataforma, scripting/repetibilidade e comparação atual com PowerShell. Três Questions desviantes foram corrigidas in-place. |
+| Azure PowerShell | `azure-powershell` | 10 blocks | Not necessary | 6 | 5 (2/2/1) | Covered | Módulos/cmdlets Az, padrão Verb-AzNoun, exemplos, objetos, automação, multiplataforma e contraste com CLI e Cloud Shell. |
+| Azure Arc | `azure-arc` | 13 blocks | Not necessary | 7 | 10 (3/5/2) | Covered | Finalidade, recursos fora do Azure, hybrid/multicloud, Arc-enabled Servers, capacidades condicionadas a suporte, Arc versus Migrate, cenários, traps e summary. As 10 Questions históricas foram preservadas e corrigidas in-place. |
+| Infrastructure as Code | `infrastructure-as-code` | 12 blocks | Not necessary | 6 | 5 (2/2/1) | Covered | Definição, manual versus IaC, repeatability, consistency, automation, version control, ambientes reproduzíveis, declarative versus imperative, cenários, traps e summary. |
+| Azure Resource Manager | `azure-resource-manager-and-arm-templates` | 14 blocks compartilhados | Architecture — 1 | 8 compartilhados | 10 (4/4/2) compartilhadas | Covered | ARM como management/deployment layer comum; Portal/CLI/PowerShell/Templates/API → ARM → Resource Providers → resources, com cenários e distinções explícitas. |
+| ARM Templates | `azure-resource-manager-and-arm-templates` | 14 blocks compartilhados | Architecture — 1 | 8 compartilhados | 10 (4/4/2) compartilhadas | Covered | JSON declarativo, IaC, repeatability, parameters/variables/resources/outputs conceituais, cenários, ARM versus template e Bicep apenas como contexto moderno. |
+
+**Resultado após a 9.6.4:** 8 `Covered`, 0 `Partial`, 0 `Missing`. As sete Lessons estão `Ready`; a 9.6.5 ainda deve auditar distribuição da prática e executar o fechamento completo do Topic antes de declará-lo encerrado.
+
+#### Qualidade factual e riscos encontrados
+
+- **Azure Portal:** o fallback descreve corretamente uma interface gráfica web para criar, configurar, visualizar e administrar recursos. O exam tip existente nega implicitamente exclusividade ao mencionar outras ferramentas; não foi encontrada a afirmação incorreta de que Portal é a única forma de administração.
+- **Cloud Shell:** o fallback separa corretamente ambiente e ferramentas: Cloud Shell é o terminal autenticado baseado em navegador; Azure CLI e Azure PowerShell podem ser executados nele. A prática histórica confirma Bash e PowerShell, mas dedica Questions a Azure Files, sessões interativas versus CI/CD e permissões, diluindo o foco oficial.
+- **Azure CLI:** o fallback cobre comandos `az`, multiplataforma, scripts e automação. Não há confusão com Azure PowerShell, mas o exemplo `az webapp deploy` e parte das Questions exigem detalhes operacionais desnecessários para a prova.
+- **Azure PowerShell:** o fallback cobre módulos/cmdlets Az, objetos e scripting. A distinção de CLI está correta, sem dezenas de comandos, porém o objetivo não possui qualquer prática.
+- **Azure Arc:** o fallback cobre recursos on-premises, outras nuvens e gerenciamento/governança centralizados, deixando explícito que Arc não move automaticamente o recurso para Azure. Não afirma transformar servidores em Azure VMs nem limitar Arc a Kubernetes. A prática histórica é excessivamente concentrada em variações do mesmo benefício e inclui Arc-enabled Kubernetes, conectividade e segmentação com profundidade desnecessária.
+- **Infrastructure as Code:** estado desejado, arquivos versionáveis, consistência, automação e repetibilidade aparecem corretamente. Terraform internals, GitOps, modules, pipelines avançados e state management não aparecem. Falta ensinar de modo explícito provisioning manual versus deployment declarativo/repetível.
+- **ARM:** o fallback define corretamente a camada de gerenciamento que recebe solicitações e organiza recursos. Não o apresenta como hardware ou ferramenta de linha de comando, mas não conecta explicitamente todas as ferramentas ao mesmo management plane.
+- **ARM Templates:** o fallback mantém ARM Template como arquivo JSON declarativo e dá exemplo de implantação consistente. Bicep está ausente; uma menção breve futura pode contextualizar a alternativa moderna, sem substituir o objetivo oficial de ARM Templates.
+
+#### Auditoria da prática
+
+| Lesson | Questions | Easy | Medium | Hard | Flashcards | Observação |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `azure-portal` | 5 | 2 | 2 | 1 | 6 | Cenários cobrem GUI, inspeção visual, repetição, Cloud Shell e métodos alternativos. |
+| `azure-cloud-shell` | 10 | 3 | 5 | 2 | 6 | UUIDs históricos preservados; os itens sobre persistência, CI/CD e segurança operacional foram substituídos in-place por ambiente versus ferramenta, uso fora do Cloud Shell e autenticação integrada. |
+| `azure-cli` | 10 | 3 | 5 | 2 | 6 | UUIDs históricos preservados; os itens sobre JSON, custo de scripts e exclusão foram substituídos in-place por CLI versus PowerShell, repetibilidade e CLI dentro do Cloud Shell. |
+| `azure-powershell` | 5 | 2 | 2 | 1 | 6 | Cenários cobrem cmdlets Az, multiplataforma, objetos PowerShell, ferramenta versus ambiente e escolha entre CLI/PowerShell. |
+| `azure-arc` | 10 | 3 | 5 | 2 | 7 | UUIDs históricos preservados; as 10 Questions foram orientadas a cenários e agora cobrem finalidade, servidor externo, hybrid/multicloud, Arc versus Migrate, Arc-enabled Server, suporte variável e traps próximos. |
+| `infrastructure-as-code` | 5 | 2 | 2 | 1 | 6 | Cenários cobrem definição, declarative, ambientes reproduzíveis, version control e automação imperative versus declarative. |
+| `azure-resource-manager-and-arm-templates` | 10 | 4 | 4 | 2 | 8 | Cobre management layer, ferramentas → ARM, Resource Providers, template JSON, parameters/resources/outputs, repetição, ARM versus template e Bicep como contexto. |
+
+Não foram detectadas Questions textualmente idênticas dentro do Topic, mas há repetição conceitual relevante nos três conjuntos históricos. As 30 Questions possuem quatro options e distribuição uniforme 3/5/2 por Lesson; essa aparente abundância não compensa a ausência total de Questions nas outras quatro Lessons nem a falta de Flashcards em todo o Topic.
+
+#### Visual Experiences
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| Portal / Cloud Shell / CLI / PowerShell | Not necessary | Um comparison block é suficiente para diferenciar interface gráfica, ambiente e ferramentas. |
+| Azure Arc | Missing (optional) | Um diagrama simples `resources outside Azure → Azure Arc → Azure management/governance` pode ajudar, mas não é requisito para fechar o objetivo. |
+| Infrastructure as Code | Not necessary | Comparação manual versus declarativo/repetível cabe em blocks. |
+| Azure Resource Manager | Implemented | Uma única Architecture Experience mostra `Portal / CLI / PowerShell / ARM Template / REST API → ARM → Resource Providers → Azure Resources`. |
+| ARM Templates | Not necessary | Explanation/comparison com JSON, declarativo e repeatability é suficiente junto ao visual de ARM. |
+
+Não existe Visual Experience associada às sete Lessons. Não há candidato `Reuse` ou `Upgrade later`; a criação de qualquer visual permanece para etapas de enriquecimento.
+
+#### Plano exato para 9.6.2–9.6.5
+
+| Etapa | Lessons / slugs reais | Lacunas a tratar | Visual |
+| --- | --- | --- | --- |
+| 9.6.2 — Portal + Cloud Shell + CLI + PowerShell | `azure-portal`; `azure-cloud-shell`; `azure-cli`; `azure-powershell` | **Concluída:** conteúdo, cenários, comparação GUI/ambiente/ferramentas, 24 cards, 10 Questions novas e seis históricas corrigidas in-place. | Não utilizada; tabelas em blocks foram suficientes. |
+| 9.6.3 — Azure Arc | `azure-arc` | **Concluída:** 13 blocks, hybrid/multicloud, recursos fora do Azure, Arc-enabled Servers, Arc versus Migrate, 7 cards e 10 Questions históricas corrigidas in-place. | Não utilizada; modelo conceitual e comparison table nos blocks foram suficientes. |
+| 9.6.4 — IaC + ARM + ARM Templates | `infrastructure-as-code`; `azure-resource-manager-and-arm-templates` | **Concluída:** 26 blocks, 14 cards, 15 Questions, manual versus IaC, declarative/imperative, ARM management layer, Resource Providers, ARM Template JSON e Bicep contextual. | Uma Architecture Experience criada para o fluxo comum de ARM; nenhum visual separado para IaC/template. |
+| 9.6.5 — Practice + fechamento | As sete Lessons | Auditar duplicações, difficulty, Lesson Quiz, Topic Quiz balanceado, Review, spaced repetition, fallbacks, RLS, isolamento e histórico; preencher apenas lacunas indispensáveis e atualizar a matriz final. | Nenhum novo além do eventual visual de ARM da 9.6.4. |
+
+#### Preservação e riscos arquiteturais
+
+- Nenhum UUID, slug, Lesson, Content Block, Visual Experience, Flashcard ou Question foi alterado nesta auditoria.
+- Os UUIDs das 30 Questions históricas (`63000000-0000-4000-8000-000000000031`–`060`) e suas options devem ser preservados; futuras correções devem ocorrer in-place.
+- As sete Lessons devem ser atualizadas pelos slugs reais dentro do Topic, preservando seus registros e referências de progress.
+- O desequilíbrio de prática atual faz Topic Quiz representar apenas três das sete Lessons. As próximas etapas precisam corrigir cobertura sem simplesmente aumentar ainda mais os três conjuntos que já possuem dez Questions.
+- `lessons.content` deve permanecer como fallback durante todo o enriquecimento.
+
+**Checkpoint da Etapa 9.6.2:** 7 Lessons no Topic, das quais 4 Ready e 3 Needs enrichment; 4 objetivos Covered, 4 Partial e 0 Missing; 40 Content Blocks, 0 Visual Experiences, 24 Flashcards, 40 Questions (13 easy / 19 medium / 8 hard) e 72 minutos estimados. As quatro Lessons-alvo totalizam 40 minutos. Nenhum UUID de Lesson, Flashcard ou Question histórico foi substituído; seis Questions e suas options foram corrigidas in-place.
+
+**Checkpoint da Etapa 9.6.3:** 7 Lessons no Topic, das quais 5 Ready e 2 Needs enrichment; 5 objetivos Covered, 3 Partial e 0 Missing; 53 Content Blocks, 0 Visual Experiences, 31 Flashcards, 40 Questions (13 easy / 19 medium / 8 hard) e 74 minutos estimados. Azure Arc possui 13 blocks, 7 cards e mantém suas 10 Questions (3 easy / 5 medium / 2 hard) nos UUIDs históricos. Não foi criada Visual Experience porque o fluxo conceitual e a comparação cabem de forma clara nos blocks.
+
+**Checkpoint da Etapa 9.6.4:** 7 Lessons Ready; 8 objetivos Covered, 0 Partial e 0 Missing; 79 Content Blocks, 1 Visual Experience, 45 Flashcards, 55 Questions (19 easy / 25 medium / 11 hard) e 78 minutos estimados. IaC recebeu 12 blocks, 6 cards e 5 Questions; ARM/Templates recebeu 14 blocks, 8 cards, 10 Questions e a única Architecture Experience do Topic. O fechamento formal permanece para a 9.6.5.

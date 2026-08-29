@@ -14,8 +14,8 @@ begin
   into total_count
   from public.visual_experiences;
 
-  if total_count <> 12 then
-    raise exception 'Expected exactly 12 visual experiences after the endpoint enrichment, found %', total_count;
+  if total_count <> 15 then
+    raise exception 'Expected exactly 15 visual experiences after the Defense in Depth enrichment, found %', total_count;
   end if;
 
   select count(*)
@@ -54,9 +54,18 @@ begin
       or (visual.id = '76000000-0000-4000-8000-000000000012'
         and lesson.slug = 'public-vs-private-endpoints'
         and visual.type = 'comparison')
+      or (visual.id = '76000000-0000-4000-8000-000000000013'
+        and lesson.slug = 'storage-redundancy-options'
+        and visual.type = 'architecture')
+      or (visual.id = '76000000-0000-4000-8000-000000000014'
+        and lesson.slug = 'azure-rbac'
+        and visual.type = 'architecture')
+      or (visual.id = '76000000-0000-4000-8000-000000000015'
+        and lesson.slug = 'zero-trust-and-defense-in-depth'
+        and visual.type = 'architecture')
     );
 
-  if target_count <> 9 then
+  if target_count <> 12 then
     raise exception 'One or more visual experience seeds target the wrong certification, lesson or type';
   end if;
 
@@ -498,8 +507,8 @@ set local role authenticated;
 
 do $$
 begin
-  if (select count(*) from public.visual_experiences) <> 12 then
-    raise exception 'Authenticated users should see exactly the 12 published visual experiences';
+  if (select count(*) from public.visual_experiences) <> 15 then
+    raise exception 'Authenticated users should see exactly the 15 published visual experiences';
   end if;
 
   if exists (

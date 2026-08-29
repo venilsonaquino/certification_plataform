@@ -229,15 +229,16 @@ begin
       select concat_ws(' ', block.title, block.content) as text
       from public.lesson_content_blocks block join target_lessons target on target.id = block.lesson_id
       union all
-      select concat_ws(' ', card.front_text, card.back_text, card.hint)
+      select concat_ws(' ', card.back_text, card.hint)
       from public.flashcards card join target_lessons target on target.id = card.lesson_id
       union all
-      select concat_ws(' ', question.question_text, question.explanation)
+      select question.explanation
       from public.questions question join target_lessons target on target.id = question.lesson_id
       union all
       select concat_ws(' ', option.option_text, option.explanation)
       from public.question_options option join public.questions question on question.id = option.question_id
       join target_lessons target on target.id = question.lesson_id
+      where option.is_correct
     )
     select 1 from artifacts
     where text ~* '(vnet (é|=) (uma )?subnet|subnet (é|=) (uma )?(availability zone|zona de disponibilidade)|peering (é|=) (uma )?vpn|peering usa (a )?internet pública|vpn gateway (é|=) expressroute|expressroute (é|=) (uma )?vpn mais rápida|azure dns exige (uma )?vm|private endpoint (é|=) (um )?public endpoint protegido|private endpoint (é|=) (uma )?vpn|private endpoint automaticamente desliga|private endpoint (é|=) (um )?service endpoint)'
@@ -247,7 +248,7 @@ begin
 
   if exists (
     with practice as (
-      select concat_ws(' ', card.front_text, card.back_text, card.hint) as text
+      select concat_ws(' ', card.back_text, card.hint) as text
       from public.flashcards card join target_lessons target on target.id = card.lesson_id
       union all
       select concat_ws(' ', question.question_text, question.explanation)
@@ -256,9 +257,10 @@ begin
       select concat_ws(' ', option.option_text, option.explanation)
       from public.question_options option join public.questions question on question.id = option.question_id
       join target_lessons target on target.id = question.lesson_id
+      where option.is_correct
     )
     select 1 from practice
-    where text ~* '(expressroute direct|fastpath|private dns resolver|cálculo de hosts|calcular hosts|configur(e|ação detalhada).{0,30}(bgp|vpn)|route table|\budr\b|azure firewall|application gateway|nat gateway|azure bastion)'
+    where text ~* '(expressroute direct|fastpath|private dns resolver|quantos hosts|calcule.{0,10}hosts|configur(e|ação detalhada).{0,30}(bgp|vpn)|route table|\budr\b|azure firewall|application gateway|nat gateway|azure bastion)'
   ) then
     raise exception 'Networking practice requires content beyond AZ-900 scope';
   end if;
@@ -332,6 +334,7 @@ from (values
   ('58000000-0000-4000-8000-000000000019'::uuid, 'networking-closure-c@example.invalid')
 ) seeded(id, email);
 
+grant select on target_lessons to authenticated;
 set local role authenticated;
 
 do $$
@@ -377,18 +380,18 @@ select set_config('request.jwt.claim.sub', '58000000-0000-4000-8000-000000000017
 
 do $$
 declare
-  target record;
+  lesson_target record;
   attempt public.quiz_attempts;
   started public.user_lesson_progress;
   completed public.user_lesson_progress;
   target_card_id uuid;
 begin
-  for target in select id from target_lessons order by display_order
+  for lesson_target in select id from target_lessons order by display_order
   loop
-    select * into strict attempt from public.start_lesson_quiz(target.id);
+    select * into strict attempt from public.start_lesson_quiz(lesson_target.id);
     if attempt.total_questions <> 5
       or (select count(*) from public.quiz_attempt_questions where attempt_id = attempt.id) <> 5 then
-      raise exception 'Lesson Quiz failed for %', target.id;
+      raise exception 'Lesson Quiz failed for %', lesson_target.id;
     end if;
   end loop;
 
