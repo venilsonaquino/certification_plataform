@@ -20,19 +20,19 @@ O guia contém 57 bullets oficiais: 15 no Domain 1, 27 no Domain 2 e 15 no Domai
 
 | Domain | Topics | Lessons | Blocks | Visuals | Flashcards | Questions | Easy / Medium / Hard | Minutes | Covered | Partial | Missing |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: |
-| Domain 1 — Describe cloud concepts | 3 | 18 | 94 | 4 | 84 | 153 | 48 / 77 / 28 | 184 | 13 | 2 | 0 |
+| Domain 1 — Describe cloud concepts | 3 | 18 | 129 | 4 | 84 | 153 | 48 / 77 / 28 | 184 | 15 | 0 | 0 |
 | Domain 2 — Describe Azure architecture and services | 5 | 38 | 357 | 11 | 183 | 219 | 81 / 94 / 44 | 410 | 27 | 0 | 0 |
 | Domain 3 — Describe Azure management and governance | 4 | 20 | 226 | 2 | 130 | 140 | 49 / 63 / 28 | 224 | 15 | 0 | 0 |
-| **AZ-900** | **12** | **76** | **677** | **17** | **397** | **512** | **178 / 234 / 100** | **818** | **55** | **2** | **0** |
+| **AZ-900** | **12** | **76** | **712** | **17** | **397** | **512** | **178 / 234 / 100** | **818** | **57** | **0** | **0** |
 
-O banco remoto é a autoridade para os totais. A auditoria encontrou 35 blocks a menos que o inventário anterior: cinco Lessons de Benefits of Cloud Services possuem zero blocks, sete esperados por Lesson.
+O banco remoto é a autoridade para os totais. A Etapa 10.2 restaurou os 35 blocks ausentes identificados pela auditoria, sem alterar o total de Lessons, Visual Experiences, Flashcards, Questions ou minutos.
 
 ## Topic Inventory
 
 | Domain | Topic | Lessons | Blocks | Visuals | Flashcards | Questions | Avg cards/Lesson | Minutes |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | 1 | Cloud Computing | 7 | 48 | 3 | 37 | 72 | 5.29 | 72 |
-| 1 | Benefits of Cloud Services | 7 | 16 | 0 | 28 | 61 | 4.00 | 72 |
+| 1 | Benefits of Cloud Services | 7 | 51 | 0 | 28 | 61 | 4.00 | 72 |
 | 1 | Cloud Service Types | 4 | 30 | 1 | 19 | 20 | 4.75 | 40 |
 | 2 | Core Architectural Components | 7 | 55 | 2 | 37 | 42 | 5.29 | 70 |
 | 2 | Azure Compute Services | 9 | 73 | 2 | 34 | 51 | 3.78 | 96 |
@@ -59,8 +59,8 @@ Esta é a visão normalizada pelos 57 bullets do guia oficial atual. Os slugs in
 | Describe the consumption-based model | `consumption-based-model` | Covered | Consumo, flexibilidade e custo conforme uso. |
 | Compare cloud pricing models | `consumption-based-model`, `capex-vs-opex` | Covered | Comparação explícita, prática e distinção entre pricing e natureza do gasto. |
 | Describe serverless | `serverless-computing` | Covered | Abstração, eventos e trap “serverless ≠ sem servidores”. |
-| Describe the benefits of high availability and scalability in the cloud | `high-availability`, `scalability` | Partial | Fallback e prática existem, mas ambas estão sem blocks/summary estruturado. |
-| Describe the benefits of reliability and predictability in the cloud | `reliability`, `predictability` | Partial | Fallback e prática existem, mas ambas estão sem blocks/summary estruturado. |
+| Describe the benefits of high availability and scalability in the cloud | `high-availability`, `scalability` | Covered | Sete blocks e um summary por Lesson, comparações explícitas e prática preservada. |
+| Describe the benefits of reliability and predictability in the cloud | `reliability`, `predictability` | Covered | Sete blocks e um summary por Lesson, diferenciação conceitual e prática preservada. |
 | Describe the benefits of security and governance in the cloud | `security-and-governance-benefits` | Covered | Blocks, comparação, prática e summary. |
 | Describe the benefits of manageability in the cloud | `manageability` | Covered | Blocks, ferramentas conceituais, prática e summary. |
 | Describe infrastructure as a service (IaaS) | `infrastructure-as-a-service` | Covered | Responsabilidade, VM, prática e summary. |
@@ -122,26 +122,26 @@ Esta é a visão normalizada pelos 57 bullets do guia oficial atual. Os slugs in
 
 ## Domain 1
 
-- Status: **OPEN**.
+- Status: **CLOSED**.
 - Lessons: 18.
-- Blocks: 94.
+- Blocks: 129.
 - Visuals: 4.
 - Flashcards: 84.
 - Questions: 153.
 - Minutes: 184.
-- Official objectives: 13 Covered / 2 Partial / 0 Missing.
+- Official objectives: 15 Covered / 0 Partial / 0 Missing.
 
-Cinco Lessons publicadas estão sem `lesson_content_blocks` e sem summary estruturado:
+As cinco Lessons que estavam sem `lesson_content_blocks` foram restauradas aditivamente na Etapa 10.2:
 
 | Lesson | Blocks | Flashcards | Questions | Impacto oficial |
 | --- | ---: | ---: | ---: | --- |
-| `high-availability` | 0 | 4 | 10 | Parte de “benefits of high availability and scalability” |
-| `scalability` | 0 | 4 | 10 | Parte de “benefits of high availability and scalability” |
-| `elasticity` | 0 | 4 | 10 | Contexto complementar de scalability; não é bullet isolado no guia atual |
-| `reliability` | 0 | 4 | 10 | Parte de “benefits of reliability and predictability” |
-| `predictability` | 0 | 4 | 10 | Parte de “benefits of reliability and predictability” |
+| `high-availability` | 7 | 4 | 10 | Disponibilidade, redundância, comparação, tip/trap e summary |
+| `scalability` | 7 | 4 | 10 | Scale up/down, scale out/in, comparação, tip/trap e summary |
+| `elasticity` | 7 | 4 | 10 | Ajuste dinâmico, cenário, limite de automação e summary |
+| `reliability` | 7 | 4 | 10 | Resiliência, recuperação, comparação, tip/trap e summary |
+| `predictability` | 7 | 4 | 10 | Performance/cost predictability, conexões, tip/trap e summary |
 
-As Lessons possuem fallback, prática e tempo coerente, portanto os objetivos não estão Missing. Entretanto, a regra global exige conteúdo estruturado, exemplo/comparação e summary; os dois bullets compostos permanecem Partial.
+Os UUIDs, slugs, fallbacks, 20 Flashcards, 50 Questions e tempos foram preservados. Os dois bullets compostos agora possuem evidência estruturada suficiente e passaram a Covered.
 
 ## Domain 2
 
@@ -287,8 +287,9 @@ As Lessons variam entre 10 e 14 minutos; não foi encontrada Lesson simples com 
 ## Legacy Content Issues
 
 - `lessons.content` permanece não vazio nas 76 Lessons e continua sendo fallback.
-- Cinco Lessons de Benefits dependem exclusivamente do fallback, tornando a divergência estrutural um P1.
+- Nenhuma Lesson depende exclusivamente do fallback após a restauração dos 35 blocks da Etapa 10.2.
 - Em Lessons convertidas, migrations posteriores corrigiram blocks/cards/questions sem atualizar sistematicamente `lessons.content`; não foi detectada contradição factual crítica, mas não existe garantia automática de paridade semântica.
+- Os cinco fallbacks de Benefits foram preservados byte a byte e comparados com os novos blocks; nenhuma contradição factual relevante foi encontrada.
 - Os exemplos legados de Azure CLI e algumas explicações históricas de Azure Arc são mais operacionais que os blocks atuais.
 - O fallback não deve ser removido; a ação futura é reconciliar diferenças in-place.
 
@@ -297,7 +298,7 @@ As Lessons variam entre 10 e 14 minutos; não foi encontrada Lesson simples com 
 Validação em produção:
 
 - 3 Domains, 12 Topics e 76 Lessons;
-- 677 blocks publicados e ordem contínua em todas as Lessons estruturadas;
+- 712 blocks publicados e ordem contínua nas 76 Lessons;
 - 17 visuais válidos, vinculados à mesma Lesson do block;
 - 397 Flashcards e 512 Questions;
 - quatro options distintas, uma correta e explanation em todas as Questions;
@@ -313,7 +314,8 @@ Validação em produção:
 
 | Check | Result |
 | --- | --- |
-| Global SQL inventory/integrity validator | Passed with five known structured-content gaps explicitly asserted |
+| Global SQL inventory/integrity validator | Passed; 10.2 validator confirmed 712 blocks and all 76 Lessons structured |
+| Domain 1 Benefits cleanup | Passed: 5 Lessons, 35 blocks, order 1–7, 5 summaries, immutable fallback hashes |
 | 76 Lesson Quizzes | Passed, cinco Questions cada |
 | 12 Topic Quizzes | Passed, todas as Lessons representadas |
 | Review | Passed |
@@ -321,6 +323,7 @@ Validação em produção:
 | Flashcard review/spaced repetition | Passed |
 | RLS/user isolation | Passed |
 | Orphan references | None |
+| Protected route/mobile UI | Passed at 390×844 with no horizontal overflow or console errors; two existing React Router v7 future warnings remain |
 | Typecheck | Passed (`tsc --noEmit`) |
 | Lint | Passed (zero warnings) |
 | Vitest | Passed: 8 files, 79/79 tests |
@@ -332,24 +335,32 @@ Validação em produção:
 
 | Severity | Area | Problem | Required Action |
 | --- | --- | --- | --- |
-| P1 | Domain 1 / Benefits | Cinco Lessons não possuem Content Blocks nem summary; dois bullets oficiais estão Partial. | 10.2: restaurar/enriquecer os blocks nas Lessons existentes, preservando UUIDs, fallback e histórico. |
 | P2 | Topic Quiz | Retakes usam deterministicamente as mesmas primeiras Questions. | 10.3: adicionar rotação sem perder round-robin, persistência e isolamento. |
-| P2 | Legacy fallback | Não há verificação automática de paridade entre fallback e blocks; alguns fallbacks são mais operacionais. | 10.2: auditoria/correção editorial in-place, sem remover fallback. |
+| P3 | Legacy fallback | Não há verificação automática global de paridade semântica entre fallback e blocks; alguns fallbacks são mais operacionais. | Revisão editorial futura in-place, sem remover fallback. |
 | P3 | Coverage documentation | Matrizes históricas contam subconceitos atômicos, não apenas os 57 bullets oficiais. | Manter detalhe, mas sempre publicar também a visão normalizada oficial. |
 | P3 | Future Mock weighting | Banco bruto não segue sozinho os pesos oficiais. | Seleção futura deve estratificar 25–30 / 35–40 / 30–35. |
 | P3 | Frontend bundle | Bundle principal supera 500 kB minificado. | Avaliar code splitting em etapa técnica futura, sem bloquear conteúdo. |
 
-P0: 0. P1: 1 grupo. P2: 2. P3: 3.
+P0: 0. P1: 0. P2: 1. P3: 4.
+
+## Etapa 10.2 Delta
+
+- Problema anterior: cinco Lessons de Benefits sem Content Blocks; dois objetivos oficiais Partial.
+- Correção: 35 blocks determinísticos adicionados, sete por Lesson, com `display_order` 1–7 e um summary final em cada uma.
+- Preservação: Lesson/Topic/Domain UUIDs, slugs, `lessons.content`, 20 Flashcards, 50 Questions, options e histórico não foram alterados.
+- Cobertura após a correção: Domain 1 15/0/0; global 57/0/0.
+- P1 de conteúdo: **RESOLVED**.
+- Estado: curriculum coverage complete; practice blocker remains.
 
 ## Final Readiness
 
-**Classification: NOT READY**
+**Classification: CONTENT READY**
 
-Motivo: existem dois objetivos oficiais `Partial` e um blocker P1. O banco de prática possui volume e diversidade suficientes para desenvolvimento futuro de Mock Exams, mas a regra de certificação completa impede declarar `AZ-900 CONTENT READY` enquanto as cinco Lessons de Benefits não recuperarem conteúdo estruturado.
+Motivo: os 57 objetivos oficiais estão Covered e não resta P0/P1. A plataforma ainda não está `READY FOR MOCK DEVELOPMENT`, porque a rotação de retakes do Topic Quiz permanece como blocker P2 para a Etapa 10.3 e a validação final pertence à 10.4.
 
 Status por Domain:
 
-- Domain 1: OPEN — 13 Covered / 2 Partial / 0 Missing.
+- Domain 1: CLOSED — 15 Covered / 0 Partial / 0 Missing.
 - Domain 2: CLOSED — 27 Covered / 0 Partial / 0 Missing.
 - Domain 3: CLOSED — 15 Covered / 0 Partial / 0 Missing.
 
@@ -357,7 +368,7 @@ Status por Domain:
 
 ### 10.2 — Global Content Cleanup
 
-Obrigatória. Restaurar Content Blocks e summaries somente em `high-availability`, `scalability`, `elasticity`, `reliability` e `predictability`; revisar paridade do fallback e simplificar profundidade editorial identificada. Não trocar UUIDs.
+**Concluída.** Foram restaurados Content Blocks e summaries somente em `high-availability`, `scalability`, `elasticity`, `reliability` e `predictability`, preservando UUIDs, fallback, prática e histórico.
 
 ### 10.3 — Global Practice Balancing
 
@@ -365,7 +376,7 @@ Recomendada. Não é necessário aumentar artificialmente o banco. Implementar r
 
 ### 10.4 — Final Pre-Mock Validation
 
-Reexecutar os 57 objetivos oficiais, integridade global, 76 Lesson Quizzes, 12 Topic Quizzes, Review, spaced repetition, RLS, isolamento, mobile e acessibilidade. Somente declarar `AZ-900 CONTENT READY` se Partial e Missing forem zero e não houver P0/P1.
+Reexecutar os 57 objetivos oficiais, integridade global, 76 Lesson Quizzes, 12 Topic Quizzes, Review, spaced repetition, RLS, isolamento, mobile e acessibilidade. Somente declarar `READY FOR MOCK DEVELOPMENT` depois de eliminar o P2 de prática e concluir esta validação.
 
 ### 11.x — Mock Exam System
 

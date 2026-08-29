@@ -2,7 +2,7 @@
 
 ## Domain 1 — Describe cloud concepts
 
-Auditoria realizada em 25 de agosto de 2026 e atualizada em 26 de agosto de 2026 após a Etapa 8.4.7, sobre o Domain **Describe cloud concepts (25–30%)**.
+Auditoria realizada em 25 de agosto de 2026 e atualizada em 29 de agosto de 2026 após a Etapa 10.2, sobre o Domain **Describe cloud concepts (25–30%)**.
 
 Referências curriculares primárias:
 
@@ -23,11 +23,11 @@ O guia oficial vigente organiza este Domain em três grupos: cloud computing, be
 | --- | ---: |
 | Topics | 3 |
 | Lessons publicadas | 18 |
-| Lesson Content Blocks publicados | 94 |
+| Lesson Content Blocks publicados | 129 |
 | Flashcards publicados | 84 |
 | Questions publicadas | 153 |
 
-Treze das 18 Lessons do Domain usam Content Blocks. `high-availability`, `scalability`, `elasticity`, `reliability` e `predictability` permanecem publicadas e possuem fallback, Flashcards e Questions, mas estão sem Content Blocks no banco remoto. O conteúdo em `lessons.content` foi mantido em todas as Lessons.
+As 18 Lessons do Domain usam Content Blocks e preservam `lessons.content` como fallback. A Etapa 10.2 restaurou aditivamente os 35 blocks ausentes de `high-availability`, `scalability`, `elasticity`, `reliability` e `predictability`, sem alterar Lessons, Flashcards, Questions ou histórico.
 
 | # | Topic / Lesson | Blocks | Flashcards | Questions |
 | ---: | --- | ---: | ---: | ---: |
@@ -38,11 +38,11 @@ Treze das 18 Lessons do Domain usam Content Blocks. `high-availability`, `scalab
 | 5 | Cloud Computing / `consumption-based-model` | 7 | 4 | 10 |
 | 6 | Cloud Computing / `capex-vs-opex` | 7 | 4 | 10 |
 | 7 | Cloud Computing / `serverless-computing` | 7 | 4 | 10 |
-| 8 | Benefits of Cloud Services / `high-availability` | 0 | 4 | 10 |
-| 9 | Benefits of Cloud Services / `scalability` | 0 | 4 | 10 |
-| 10 | Benefits of Cloud Services / `elasticity` | 0 | 4 | 10 |
-| 11 | Benefits of Cloud Services / `reliability` | 0 | 4 | 10 |
-| 12 | Benefits of Cloud Services / `predictability` | 0 | 4 | 10 |
+| 8 | Benefits of Cloud Services / `high-availability` | 7 | 4 | 10 |
+| 9 | Benefits of Cloud Services / `scalability` | 7 | 4 | 10 |
+| 10 | Benefits of Cloud Services / `elasticity` | 7 | 4 | 10 |
+| 11 | Benefits of Cloud Services / `reliability` | 7 | 4 | 10 |
+| 12 | Benefits of Cloud Services / `predictability` | 7 | 4 | 10 |
 | 13 | Benefits of Cloud Services / `security-and-governance-benefits` | 9 | 4 | 6 |
 | 14 | Benefits of Cloud Services / `manageability` | 7 | 4 | 5 |
 | 15 | Cloud Service Types / `infrastructure-as-a-service` | 7 | 4 | 5 |
@@ -62,11 +62,11 @@ Treze das 18 Lessons do Domain usam Content Blocks. `high-availability`, `scalab
 | CapEx vs OpEx | `capex-vs-opex` | Covered | Sete blocks e uma comparação responsiva distinguem investimento antecipado e despesa recorrente, com a nuance de que classificação contábil depende do contrato e da organização; 4 flashcards e 10 questions. |
 | Cloud pricing models — formulação oficial atual | `consumption-based-model`; `capex-vs-opex`; `predictability` | Covered | Sete blocks comparam explicitamente pay-as-you-go e compromisso planejado por flexibilidade e previsibilidade; os traps separam pricing model de CapEx/OpEx. Dois Flashcards e uma Question de cenário reforçam a comparação. |
 | Serverless Computing | `serverless-computing` | Covered | Sete blocks explicam que os servidores existem, mas são abstraídos e administrados pelo provider; cobrem execução por eventos, escala automática e Azure Functions apenas como exemplo, com 4 flashcards e 10 questions. |
-| High Availability | `high-availability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks e summary estruturado no banco remoto. |
-| Scalability | `scalability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks; a comparação scale up/down versus scale out/in não está disponível no renderer estruturado. |
-| Elasticity | `elasticity` | Partial | Conceito complementar ao objetivo oficial atual de scalability; fallback, cards e prática existem, mas nenhum Content Block está publicado. |
-| Reliability | `reliability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks e summary estruturado. |
-| Predictability | `predictability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks; a cobertura estruturada de performance e cost não está disponível. |
+| High Availability | `high-availability` | Covered | Sete blocks cobrem disponibilidade durante falhas, redundância, múltiplas instâncias, downtime, comparação com Reliability, tip/trap e summary; 4 Flashcards e 10 Questions foram preservados. |
+| Scalability | `scalability` | Covered | Sete blocks diferenciam scale up/down e scale out/in, com VM maior versus mais VMs, comparação com Elasticity, tip/trap e summary; 4 Flashcards e 10 Questions foram preservados. |
+| Elasticity | `elasticity` | Covered | Sete blocks cobrem ajuste dinâmico, aumento/redução conforme demanda, cenário de e-commerce, limite de automação, comparação com Scalability e summary; prática preservada. |
+| Reliability | `reliability` | Covered | Sete blocks cobrem operação correta, resiliência, redundância, recuperação, comparação com High Availability, tip/trap e summary; prática preservada. |
+| Predictability | `predictability` | Covered | Sete blocks distinguem performance e cost predictability, conectam scaling/consumption às ferramentas posteriores sem aprofundá-las e incluem tip/trap e summary; prática preservada. |
 | Security | `security-and-governance-benefits` | Covered | Nove blocks, 4 flashcards e 6 questions cobrem identity, encryption, controls, Shared Responsibility e cenários de configuração incorreta. |
 | Governance | `security-and-governance-benefits` | Covered | Nove blocks, 4 flashcards e 6 questions cobrem padronização, policies, compliance, regras organizacionais e sobreposição com Security. |
 | Manageability | `manageability` | Covered | Sete blocks, 4 flashcards e 5 questions cobrem Portal, CLI, PowerShell, APIs, Infrastructure as Code e escolha por cenário. |
@@ -77,10 +77,10 @@ Treze das 18 Lessons do Domain usam Content Blocks. `high-availability`, `scalab
 
 ### Resultado consolidado
 
-- Objetivos atômicos **Covered:** 15.
-- Objetivos atômicos **Partial:** 5 (`High Availability`, `Scalability`, `Elasticity`, `Reliability` e `Predictability`).
+- Objetivos atômicos **Covered:** 20.
+- Objetivos atômicos **Partial:** nenhum.
 - Objetivos solicitados **Missing:** nenhum.
-- Na formulação oficial atual, que agrupa High Availability + Scalability e Reliability + Predictability e não lista Elasticity isoladamente, o resultado normalizado é **13 Covered, 2 Partial e 0 Missing**.
+- Na formulação oficial atual, que agrupa High Availability + Scalability e Reliability + Predictability e não lista Elasticity isoladamente, o resultado normalizado é **15 Covered, 0 Partial e 0 Missing**.
 
 ## Problemas e riscos detectados
 
@@ -90,7 +90,7 @@ Não há Lesson ausente para os objetivos solicitados. Os 19 objetivos estão ma
 
 ### Lessons superficiais
 
-Cinco Lessons de Benefits dependem exclusivamente de `lessons.content`: `high-availability`, `scalability`, `elasticity`, `reliability` e `predictability`. A prática existe, mas a ausência de Content Blocks e summary estruturado impede considerá-las prontas segundo o critério global da Etapa 10.1.
+Não resta Lesson superficial por ausência estrutural. As cinco Lessons identificadas na Etapa 10.1 agora possuem sete blocks e um summary final cada, mantendo o fallback e a prática existentes.
 
 ### Duplicação
 
@@ -106,7 +106,7 @@ Algumas questions `hard` de Benefits pedem decisões de arquitetura/operação m
 
 ### Correção conceitual
 
-Não foi encontrada afirmação claramente incorreta nos conteúdos auditados. Pontos que exigem nuance na futura reescrita:
+Não foi encontrada afirmação claramente incorreta nos conteúdos auditados. Os blocks restaurados preservam as seguintes nuances:
 
 - nuvem frequentemente desloca investimento inicial para consumo operacional, mas classificação CapEx/OpEx depende do contrato e da contabilidade da organização;
 - Availability e Reliability se relacionam, mas não são sinônimos;
@@ -160,7 +160,7 @@ Não é recomendada mudança de `display_order` nesta etapa. Ao enriquecer as Le
 - Foram corrigidos 31 flashcards e quatro questions existentes no mesmo UUID; 34 distratores foram substituídos por alternativas plausíveis e 20 questions originais foram adicionadas.
 - Progresso, histórico de quiz, histórico de flashcards e links permanecem preservados.
 - A FK por `lesson_id` permite auditar cobertura com precisão, mas também evidencia que questions comparativas podem cobrir um objetivo sem estar associadas à Lesson individual correspondente. Relatórios futuros devem considerar objetivo + Lesson, não apenas contagem por Lesson.
-- A coexistência de `lessons.content` e `lesson_content_blocks` preserva o fallback, mas a auditoria global encontrou cinco Lessons sem qualquer block publicado; portanto o fallback está mascarando uma regressão estrutural no Topic Benefits of Cloud Services.
+- A coexistência de `lessons.content` e `lesson_content_blocks` preserva o fallback. A regressão estrutural encontrada na Etapa 10.1 foi corrigida aditivamente na Etapa 10.2, sem remover ou reescrever o conteúdo legado.
 
 Consultas reproduzíveis usadas nesta auditoria:
 
@@ -189,7 +189,7 @@ O validador final confirmou:
 - `display_order` contínuo em todas as Lessons;
 - todos os 129 blocks publicados e com `config` válido;
 - exatamente um `summary` final por Lesson, com 3–6 itens;
-- `exam_tip` nas 18 Lessons e 15 `exam_trap` nos conceitos que exigem diferenciação;
+- `exam_tip` nas 18 Lessons e 16 `exam_trap` nos conceitos que exigem diferenciação;
 - fallback não vazio em `lessons.content` nas 18 Lessons;
 - mínimo de quatro Flashcards e cinco Questions por Lesson;
 - quatro alternativas distintas, uma resposta correta e explicação didática em cada Question publicada;
@@ -198,26 +198,26 @@ O validador final confirmou:
 
 Regressão concluída:
 
-- fluxo de Lesson e fallback: 77/77 testes Vitest passaram;
+- fluxo de Lesson e fallback: 79/79 testes Vitest passaram;
 - Lesson Quiz, Topic Quiz, Review, Spaced Repetition, conclusão e isolamento de progresso: validadores SQL transacionais passaram em produção;
 - rota protegida redireciona usuário não autenticado para `/login` sem erros de console;
 - login em 1280×720 e 390×844 não apresentou overflow horizontal;
 - `typecheck`, `lint` e `build` passaram;
 - Supabase remoto está atualizado (`db push --dry-run` sem migrations pendentes).
 
-O conteúdo legado permite percorrer o Domain 1, mas a auditoria global da Etapa 10.1 reabriu o Domain porque cinco Lessons de Benefits não possuem Content Blocks. A comparação de pricing permanece íntegra; a regressão está concentrada em High Availability, Scalability, Elasticity, Reliability e Predictability.
+Após a Etapa 10.2, todas as 18 Lessons podem usar o renderer estruturado e continuam protegidas pelo fallback legado. High Availability, Scalability, Elasticity, Reliability e Predictability voltaram a possuir cobertura estruturada sem alteração de prática ou histórico.
 
-## Checkpoint — Etapa 8.4.8
+## Checkpoint — Etapa 10.2
 
-**Domain 1: OPEN — reaberto pela auditoria global da Etapa 10.1**
+**Domain 1: CLOSED — P1 da auditoria global resolvido**
 
 | Indicador final | Resultado |
 | --- | ---: |
-| Objetivos oficiais Covered | 13 |
-| Objetivos oficiais Partial | 2 |
+| Objetivos oficiais Covered | 15 |
+| Objetivos oficiais Partial | 0 |
 | Objetivos Missing | 0 |
 | Lessons publicadas | 18 |
-| Content Blocks publicados | 94 |
+| Content Blocks publicados | 129 |
 | Visual Experiences utilizadas pelo Domain | 4 |
 | Flashcards publicados | 84 |
 | Questions publicadas | 153 |
