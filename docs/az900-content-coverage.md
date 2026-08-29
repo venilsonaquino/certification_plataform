@@ -23,11 +23,11 @@ O guia oficial vigente organiza este Domain em três grupos: cloud computing, be
 | --- | ---: |
 | Topics | 3 |
 | Lessons publicadas | 18 |
-| Lesson Content Blocks publicados | 129 |
+| Lesson Content Blocks publicados | 94 |
 | Flashcards publicados | 84 |
 | Questions publicadas | 153 |
 
-Todas as 18 Lessons do Domain usam Content Blocks. O conteúdo em `lessons.content` foi mantido em todas elas como fallback seguro.
+Treze das 18 Lessons do Domain usam Content Blocks. `high-availability`, `scalability`, `elasticity`, `reliability` e `predictability` permanecem publicadas e possuem fallback, Flashcards e Questions, mas estão sem Content Blocks no banco remoto. O conteúdo em `lessons.content` foi mantido em todas as Lessons.
 
 | # | Topic / Lesson | Blocks | Flashcards | Questions |
 | ---: | --- | ---: | ---: | ---: |
@@ -38,11 +38,11 @@ Todas as 18 Lessons do Domain usam Content Blocks. O conteúdo em `lessons.conte
 | 5 | Cloud Computing / `consumption-based-model` | 7 | 4 | 10 |
 | 6 | Cloud Computing / `capex-vs-opex` | 7 | 4 | 10 |
 | 7 | Cloud Computing / `serverless-computing` | 7 | 4 | 10 |
-| 8 | Benefits of Cloud Services / `high-availability` | 7 | 4 | 10 |
-| 9 | Benefits of Cloud Services / `scalability` | 7 | 4 | 10 |
-| 10 | Benefits of Cloud Services / `elasticity` | 7 | 4 | 10 |
-| 11 | Benefits of Cloud Services / `reliability` | 7 | 4 | 10 |
-| 12 | Benefits of Cloud Services / `predictability` | 7 | 4 | 10 |
+| 8 | Benefits of Cloud Services / `high-availability` | 0 | 4 | 10 |
+| 9 | Benefits of Cloud Services / `scalability` | 0 | 4 | 10 |
+| 10 | Benefits of Cloud Services / `elasticity` | 0 | 4 | 10 |
+| 11 | Benefits of Cloud Services / `reliability` | 0 | 4 | 10 |
+| 12 | Benefits of Cloud Services / `predictability` | 0 | 4 | 10 |
 | 13 | Benefits of Cloud Services / `security-and-governance-benefits` | 9 | 4 | 6 |
 | 14 | Benefits of Cloud Services / `manageability` | 7 | 4 | 5 |
 | 15 | Cloud Service Types / `infrastructure-as-a-service` | 7 | 4 | 5 |
@@ -62,11 +62,11 @@ Todas as 18 Lessons do Domain usam Content Blocks. O conteúdo em `lessons.conte
 | CapEx vs OpEx | `capex-vs-opex` | Covered | Sete blocks e uma comparação responsiva distinguem investimento antecipado e despesa recorrente, com a nuance de que classificação contábil depende do contrato e da organização; 4 flashcards e 10 questions. |
 | Cloud pricing models — formulação oficial atual | `consumption-based-model`; `capex-vs-opex`; `predictability` | Covered | Sete blocks comparam explicitamente pay-as-you-go e compromisso planejado por flexibilidade e previsibilidade; os traps separam pricing model de CapEx/OpEx. Dois Flashcards e uma Question de cenário reforçam a comparação. |
 | Serverless Computing | `serverless-computing` | Covered | Sete blocks explicam que os servidores existem, mas são abstraídos e administrados pelo provider; cobrem execução por eventos, escala automática e Azure Functions apenas como exemplo, com 4 flashcards e 10 questions. |
-| High Availability | `high-availability` | Covered | Sete blocks, 4 flashcards e 10 questions cobrem redução de downtime, redundância, continuidade e SLA, sem antecipar Availability Zones. |
-| Scalability | `scalability` | Covered | Sete blocks distinguem scale up/down de scale out/in, com VM maior versus mais instâncias e exemplo .NET; 4 flashcards e 10 questions reforçam aplicação e limites. |
-| Elasticity | `elasticity` | Covered | Sete blocks explicam crescimento e redução conforme a demanda e comparam Scalability versus Elasticity sem oposição absoluta; 4 flashcards e 10 questions incluem autoscaling. |
-| Reliability | `reliability` | Covered | Sete blocks ensinam resiliência, recuperação, redundância e continuidade, além de comparar Availability versus Reliability e afirmar que a nuvem não elimina falhas; possui 4 flashcards e 10 questions. |
-| Predictability | `predictability` | Covered | Sete blocks abrangem previsibilidade de performance e cost por monitoramento, dimensionamento, autoscaling e modelos de preço, sem aprofundar ferramentas do Domain 3; possui 4 flashcards e 10 questions. |
+| High Availability | `high-availability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks e summary estruturado no banco remoto. |
+| Scalability | `scalability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks; a comparação scale up/down versus scale out/in não está disponível no renderer estruturado. |
+| Elasticity | `elasticity` | Partial | Conceito complementar ao objetivo oficial atual de scalability; fallback, cards e prática existem, mas nenhum Content Block está publicado. |
+| Reliability | `reliability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks e summary estruturado. |
+| Predictability | `predictability` | Partial | Fallback, 4 Flashcards e 10 Questions existem, mas a Lesson está sem Content Blocks; a cobertura estruturada de performance e cost não está disponível. |
 | Security | `security-and-governance-benefits` | Covered | Nove blocks, 4 flashcards e 6 questions cobrem identity, encryption, controls, Shared Responsibility e cenários de configuração incorreta. |
 | Governance | `security-and-governance-benefits` | Covered | Nove blocks, 4 flashcards e 6 questions cobrem padronização, policies, compliance, regras organizacionais e sobreposição com Security. |
 | Manageability | `manageability` | Covered | Sete blocks, 4 flashcards e 5 questions cobrem Portal, CLI, PowerShell, APIs, Infrastructure as Code e escolha por cenário. |
@@ -77,11 +77,10 @@ Todas as 18 Lessons do Domain usam Content Blocks. O conteúdo em `lessons.conte
 
 ### Resultado consolidado
 
-- Objetivos solicitados **Covered:** 19.
-- Objetivos solicitados **Partial:** nenhum.
+- Objetivos atômicos **Covered:** 15.
+- Objetivos atômicos **Partial:** 5 (`High Availability`, `Scalability`, `Elasticity`, `Reliability` e `Predictability`).
 - Objetivos solicitados **Missing:** nenhum.
-- Objetivo adicional da formulação oficial atual **Covered:** comparação de cloud pricing models.
-- Total consolidado: **20 Covered, 0 Partial e 0 Missing**.
+- Na formulação oficial atual, que agrupa High Availability + Scalability e Reliability + Predictability e não lista Elasticity isoladamente, o resultado normalizado é **13 Covered, 2 Partial e 0 Missing**.
 
 ## Problemas e riscos detectados
 
@@ -91,7 +90,7 @@ Não há Lesson ausente para os objetivos solicitados. Os 19 objetivos estão ma
 
 ### Lessons superficiais
 
-Não restam Lessons exclusivamente legadas nem lacunas curriculares no Domain 1. Todas possuem Content Blocks e mantêm o conteúdo anterior como fallback. Permanece apenas a oportunidade editorial de revisar gradualmente os cenários longos importados, sem reduzir a cobertura útil.
+Cinco Lessons de Benefits dependem exclusivamente de `lessons.content`: `high-availability`, `scalability`, `elasticity`, `reliability` e `predictability`. A prática existe, mas a ausência de Content Blocks e summary estruturado impede considerá-las prontas segundo o critério global da Etapa 10.1.
 
 ### Duplicação
 
@@ -161,7 +160,7 @@ Não é recomendada mudança de `display_order` nesta etapa. Ao enriquecer as Le
 - Foram corrigidos 31 flashcards e quatro questions existentes no mesmo UUID; 34 distratores foram substituídos por alternativas plausíveis e 20 questions originais foram adicionadas.
 - Progresso, histórico de quiz, histórico de flashcards e links permanecem preservados.
 - A FK por `lesson_id` permite auditar cobertura com precisão, mas também evidencia que questions comparativas podem cobrir um objetivo sem estar associadas à Lesson individual correspondente. Relatórios futuros devem considerar objetivo + Lesson, não apenas contagem por Lesson.
-- A coexistência de `lessons.content` e `lesson_content_blocks` funciona como planejado: a auditoria pós-8.4.5 encontrou as 18 Lessons convertidas e todo o conteúdo legado preservado como fallback.
+- A coexistência de `lessons.content` e `lesson_content_blocks` preserva o fallback, mas a auditoria global encontrou cinco Lessons sem qualquer block publicado; portanto o fallback está mascarando uma regressão estrutural no Topic Benefits of Cloud Services.
 
 Consultas reproduzíveis usadas nesta auditoria:
 
@@ -206,19 +205,19 @@ Regressão concluída:
 - `typecheck`, `lint` e `build` passaram;
 - Supabase remoto está atualizado (`db push --dry-run` sem migrations pendentes).
 
-O Domain 1 pode ser estudado de ponta a ponta e todos os seus objetivos estão `Covered`. A Etapa 8.4.7 acrescentou somente uma comparação curta em `consumption-based-model`, ajustou conteúdo complementar nas Lessons existentes e reforçou a prática sem criar nova Lesson, novo sistema de custos ou conteúdo do Domain 2.
+O conteúdo legado permite percorrer o Domain 1, mas a auditoria global da Etapa 10.1 reabriu o Domain porque cinco Lessons de Benefits não possuem Content Blocks. A comparação de pricing permanece íntegra; a regressão está concentrada em High Availability, Scalability, Elasticity, Reliability e Predictability.
 
 ## Checkpoint — Etapa 8.4.8
 
-**Domain 1: CLOSED**
+**Domain 1: OPEN — reaberto pela auditoria global da Etapa 10.1**
 
 | Indicador final | Resultado |
 | --- | ---: |
-| Objetivos Covered | 20 |
-| Objetivos Partial | 0 |
+| Objetivos oficiais Covered | 13 |
+| Objetivos oficiais Partial | 2 |
 | Objetivos Missing | 0 |
 | Lessons publicadas | 18 |
-| Content Blocks publicados | 129 |
+| Content Blocks publicados | 94 |
 | Visual Experiences utilizadas pelo Domain | 4 |
 | Flashcards publicados | 84 |
 | Questions publicadas | 153 |
@@ -1104,7 +1103,7 @@ Não existe Visual Experience associada ao Topic. Nenhuma experiência existente
 
 **Governance and Compliance: CLOSED**
 
-### Tools for Managing and Deploying Azure Resources — Etapas 9.6.1–9.6.2
+### Tools for Managing and Deploying Azure Resources — Etapas 9.6.1–9.6.5 — CLOSED
 
 Escopo auditado: somente o Topic real `Resource Management and Deployment` (`33000000-0000-4000-8000-000000000003`) do Domain `Describe Azure management and governance`. O nome curricular usado nesta seção acompanha o grupo **Tools for Managing and Deploying Azure Resources**. A matriz segue o [guia oficial atual do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900), com habilidades medidas a partir de 20 de julho de 2026: Azure portal; Cloud Shell, Azure CLI e Azure PowerShell; Azure Arc; Infrastructure as Code; Azure Resource Manager e ARM templates. Os objetivos combinados do guia foram separados abaixo em oito linhas para permitir uma auditoria pedagógica mais precisa.
 
@@ -1136,7 +1135,7 @@ Todas as Lessons continuam publicadas e preservam `lessons.content` como fallbac
 | Azure Resource Manager | `azure-resource-manager-and-arm-templates` | 14 blocks compartilhados | Architecture — 1 | 8 compartilhados | 10 (4/4/2) compartilhadas | Covered | ARM como management/deployment layer comum; Portal/CLI/PowerShell/Templates/API → ARM → Resource Providers → resources, com cenários e distinções explícitas. |
 | ARM Templates | `azure-resource-manager-and-arm-templates` | 14 blocks compartilhados | Architecture — 1 | 8 compartilhados | 10 (4/4/2) compartilhadas | Covered | JSON declarativo, IaC, repeatability, parameters/variables/resources/outputs conceituais, cenários, ARM versus template e Bicep apenas como contexto moderno. |
 
-**Resultado após a 9.6.4:** 8 `Covered`, 0 `Partial`, 0 `Missing`. As sete Lessons estão `Ready`; a 9.6.5 ainda deve auditar distribuição da prática e executar o fechamento completo do Topic antes de declará-lo encerrado.
+**Resultado consolidado após a 9.6.5:** 8 `Covered`, 0 `Partial`, 0 `Missing`. As sete Lessons estão `Ready`; a distribuição da prática e o fluxo completo do Topic foram validados no fechamento.
 
 #### Qualidade factual e riscos encontrados
 
@@ -1173,7 +1172,7 @@ Não foram detectadas Questions textualmente idênticas dentro do Topic, mas há
 | Azure Resource Manager | Implemented | Uma única Architecture Experience mostra `Portal / CLI / PowerShell / ARM Template / REST API → ARM → Resource Providers → Azure Resources`. |
 | ARM Templates | Not necessary | Explanation/comparison com JSON, declarativo e repeatability é suficiente junto ao visual de ARM. |
 
-Não existe Visual Experience associada às sete Lessons. Não há candidato `Reuse` ou `Upgrade later`; a criação de qualquer visual permanece para etapas de enriquecimento.
+Existe uma única Visual Experience, associada a `azure-resource-manager-and-arm-templates`. O fluxo ARM concentra o ganho pedagógico necessário; não há visual redundante para Portal, Arc, IaC ou ARM Template.
 
 #### Plano exato para 9.6.2–9.6.5
 
@@ -1182,18 +1181,124 @@ Não existe Visual Experience associada às sete Lessons. Não há candidato `Re
 | 9.6.2 — Portal + Cloud Shell + CLI + PowerShell | `azure-portal`; `azure-cloud-shell`; `azure-cli`; `azure-powershell` | **Concluída:** conteúdo, cenários, comparação GUI/ambiente/ferramentas, 24 cards, 10 Questions novas e seis históricas corrigidas in-place. | Não utilizada; tabelas em blocks foram suficientes. |
 | 9.6.3 — Azure Arc | `azure-arc` | **Concluída:** 13 blocks, hybrid/multicloud, recursos fora do Azure, Arc-enabled Servers, Arc versus Migrate, 7 cards e 10 Questions históricas corrigidas in-place. | Não utilizada; modelo conceitual e comparison table nos blocks foram suficientes. |
 | 9.6.4 — IaC + ARM + ARM Templates | `infrastructure-as-code`; `azure-resource-manager-and-arm-templates` | **Concluída:** 26 blocks, 14 cards, 15 Questions, manual versus IaC, declarative/imperative, ARM management layer, Resource Providers, ARM Template JSON e Bicep contextual. | Uma Architecture Experience criada para o fluxo comum de ARM; nenhum visual separado para IaC/template. |
-| 9.6.5 — Practice + fechamento | As sete Lessons | Auditar duplicações, difficulty, Lesson Quiz, Topic Quiz balanceado, Review, spaced repetition, fallbacks, RLS, isolamento e histórico; preencher apenas lacunas indispensáveis e atualizar a matriz final. | Nenhum novo além do eventual visual de ARM da 9.6.4. |
+| 9.6.5 — Practice + fechamento | As sete Lessons | **Concluída:** duplicações, difficulty, Lesson Quiz, Topic Quiz com as sete Lessons, Review, spaced repetition, fallback, RLS, isolamento, UUIDs e histórico validados sem criar conteúdo redundante. | Nenhum visual novo; a Architecture Experience de ARM foi validada. |
 
 #### Preservação e riscos arquiteturais
 
-- Nenhum UUID, slug, Lesson, Content Block, Visual Experience, Flashcard ou Question foi alterado nesta auditoria.
-- Os UUIDs das 30 Questions históricas (`63000000-0000-4000-8000-000000000031`–`060`) e suas options devem ser preservados; futuras correções devem ocorrer in-place.
-- As sete Lessons devem ser atualizadas pelos slugs reais dentro do Topic, preservando seus registros e referências de progress.
-- O desequilíbrio de prática atual faz Topic Quiz representar apenas três das sete Lessons. As próximas etapas precisam corrigir cobertura sem simplesmente aumentar ainda mais os três conjuntos que já possuem dez Questions.
-- `lessons.content` deve permanecer como fallback durante todo o enriquecimento.
+- Nenhum UUID ou slug de Lesson foi substituído; referências de progresso continuam apontando para os registros originais.
+- Os UUIDs das 30 Questions históricas (`63000000-0000-4000-8000-000000000031`–`060`) e de suas options foram preservados. Correções ocorreram in-place.
+- As sete Lessons foram enriquecidas por Topic e slug, preservando progress, quiz history e flashcard history.
+- O Topic Quiz de 10 itens inclui as sete Lessons e limita concentração a no máximo duas Questions por Lesson.
+- `lessons.content` permanece publicado e válido como fallback em todas as Lessons.
 
 **Checkpoint da Etapa 9.6.2:** 7 Lessons no Topic, das quais 4 Ready e 3 Needs enrichment; 4 objetivos Covered, 4 Partial e 0 Missing; 40 Content Blocks, 0 Visual Experiences, 24 Flashcards, 40 Questions (13 easy / 19 medium / 8 hard) e 72 minutos estimados. As quatro Lessons-alvo totalizam 40 minutos. Nenhum UUID de Lesson, Flashcard ou Question histórico foi substituído; seis Questions e suas options foram corrigidas in-place.
 
 **Checkpoint da Etapa 9.6.3:** 7 Lessons no Topic, das quais 5 Ready e 2 Needs enrichment; 5 objetivos Covered, 3 Partial e 0 Missing; 53 Content Blocks, 0 Visual Experiences, 31 Flashcards, 40 Questions (13 easy / 19 medium / 8 hard) e 74 minutos estimados. Azure Arc possui 13 blocks, 7 cards e mantém suas 10 Questions (3 easy / 5 medium / 2 hard) nos UUIDs históricos. Não foi criada Visual Experience porque o fluxo conceitual e a comparação cabem de forma clara nos blocks.
 
 **Checkpoint da Etapa 9.6.4:** 7 Lessons Ready; 8 objetivos Covered, 0 Partial e 0 Missing; 79 Content Blocks, 1 Visual Experience, 45 Flashcards, 55 Questions (19 easy / 25 medium / 11 hard) e 78 minutos estimados. IaC recebeu 12 blocks, 6 cards e 5 Questions; ARM/Templates recebeu 14 blocks, 8 cards, 10 Questions e a única Architecture Experience do Topic. O fechamento formal permanece para a 9.6.5.
+
+**Checkpoint da Etapa 9.6.5 — CLOSED:** 7 Lessons Ready; 8 objetivos Covered, 0 Partial e 0 Missing; 79 Content Blocks, 1 Visual Experience, 45 Flashcards, 55 Questions (19 easy / 25 medium / 11 hard) e 78 minutos. Nenhum card ou Question adicional foi necessário no fechamento. Lesson Quiz, Topic Quiz distribuído pelas sete Lessons, Review, progress, spaced repetition, isolamento entre usuários, fallback, UUIDs históricos, RLS, grants e referências órfãs foram validados. **Tools for Managing and Deploying Azure Resources: CLOSED.**
+
+### Azure Monitoring Tools — Etapas 9.7.1–9.7.4 — CLOSED
+
+Escopo auditado: somente o Topic real `Monitoring` (`33000000-0000-4000-8000-000000000004`) do Domain `Describe Azure management and governance`. A matriz segue o [guia oficial atual do AZ-900](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900), com habilidades medidas a partir de 20 de julho de 2026: Azure Advisor; Azure Service Health; e Azure Monitor, incluindo Log Analytics, Azure Monitor alerts e Azure Monitor Application Insights. As seis Lessons reais foram mantidas dentro do mesmo Topic; nenhum Topic, slug, UUID ou conteúdo foi criado ou alterado nesta auditoria.
+
+#### Inventário atual
+
+| # | Lesson / slug real | Min | Publicada | Blocks | Visuals | Flashcards | Questions E/M/H | Classificação |
+| ---: | --- | ---: | :---: | ---: | ---: | ---: | --- | --- |
+| 1 | Azure Advisor / `azure-advisor` | 12 | Sim | 11 | 0 | 7 | 3/5/2 | Ready |
+| 2 | Azure Service Health / `azure-service-health` | 12 | Sim | 12 | 0 | 8 | 2/2/1 | Ready |
+| 3 | Azure Monitor / `azure-monitor` | 12 | Sim | 11 | 1 | 6 | 2/2/1 | Ready |
+| 4 | Log Analytics / `log-analytics` | 10 | Sim | 8 | 0 | 6 | 2/2/1 | Ready |
+| 5 | Azure Monitor Alerts / `azure-monitor-alerts` | 10 | Sim | 8 | 0 | 6 | 2/2/1 | Ready |
+| 6 | Application Insights / `application-insights` | 12 | Sim | 10 | 0 | 6 | 3/5/2 | Ready |
+| **Total** | **6 Lessons** | **68** | **6** | **60** | **1** | **39** | **14/18/8** | **6 Ready / 0 Needs enrichment / 0 Missing** |
+
+Todas as Lessons possuem `lessons.content` publicado e utilizável como fallback e agora também contam com conteúdo estruturado, summary, exam tip/trap, Flashcards e prática. Uma única Architecture Experience compartilhada está associada a Azure Monitor.
+
+#### Matriz de cobertura oficial
+
+| Objective | Lesson(s) | Content | Visual | Flashcards | Questions | Status | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Azure Advisor | `azure-advisor` | 11 blocks | Not necessary | 7 | 10 (3/5/2) | Covered | Finalidade, recommendations, cinco categorias, decisão humana, cenários e comparações com Monitor, Service Health e Cost Management. As 10 Questions históricas foram corrigidas in-place. |
+| Azure Service Health | `azure-service-health` | 12 blocks | Not necessary | 8 | 5 (2/2/1) | Covered | Personalized health information, service issues, planned maintenance, health advisories, Azure Status, Resource Health, comparação global/personalizado/específico e prática por cenário. |
+| Azure Monitor | `azure-monitor` | 11 blocks | Architecture — 1 | 6 | 5 (2/2/1) | Covered | Plataforma central, telemetry, metrics, logs, analysis/visualization/alerts, cenários e comparação com Advisor e health tools. |
+| Log Analytics | `log-analytics` | 8 blocks | Reuse Monitor flow | 6 | 5 (2/2/1) | Covered | Consulta e análise conceitual de logs, KQL apenas como contexto, Metrics versus Logs, cenário, trap e prática. |
+| Azure Monitor Alerts | `azure-monitor-alerts` | 8 blocks | Reuse Monitor flow | 6 | 5 (2/2/1) | Covered | Signal → condition → alert → notification/action, CPU threshold, falhas de aplicação e distinção entre Metric e Alert. |
+| Application Insights | `application-insights` | 10 blocks | Reuse Monitor flow | 6 | 10 (3/5/2) | Covered | APM, requests, failures, response times, dependencies, application telemetry, exemplo ASP.NET Core e prática histórica simplificada in-place. |
+
+**Resultado final após a 9.7.4:** 6 `Covered`, 0 `Partial`, 0 `Missing`. As seis Lessons estão `Ready`; conteúdo estruturado, prática, visual, fallbacks e fluxos de estudo foram validados em produção.
+
+#### Qualidade factual e problemas encontrados
+
+- **Azure Advisor:** 11 blocks estruturam a finalidade, as cinco categorias conceituais, cenários, decisão humana e comparação com Monitor, Service Health e Cost Management. O exam trap deixa explícito que Advisor analisa e recomenda, mas não aplica universalmente toda mudança nem monitora outages.
+- **Azure Service Health:** 12 blocks cobrem service issues, planned maintenance, health advisories, Azure Status e Resource Health. A comparação `global → personalizado → recurso específico` está explícita, assim como a diferença entre Resource Health e métricas detalhadas do Azure Monitor.
+- **Azure Monitor:** 11 blocks e um visual cobrem o ciclo `resources/apps → telemetry → Monitor → analysis/visualization/alerts`, Metrics versus Logs e diferenças para Advisor, Service Health e Resource Health.
+- **Log Analytics:** 8 blocks mantêm o foco em consulta/análise de logs; KQL aparece somente como contexto, sem sintaxe, joins, ingestion ou administração de workspace.
+- **Azure Monitor Alerts:** 8 blocks cobrem signal, condition, alert e notification/action sem aprofundar Action Groups, processing rules ou thresholds dinâmicos.
+- **Application Insights:** 10 blocks cobrem APM, requests, failures, response times, dependencies e application telemetry. O exemplo ASP.NET Core é conceitual, sem SDK, connection strings, sampling ou configuração de OpenTelemetry.
+
+#### Auditoria da prática
+
+| Lesson | Questions | Easy | Medium | Hard | Flashcards | Observação |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `azure-advisor` | 10 | 3 | 5 | 2 | 7 | UUIDs históricos preservados; os dez itens agora usam cenários Fundamentals e distratores próximos entre Advisor, Monitor, Service Health e Cost Management. |
+| `azure-service-health` | 5 | 2 | 2 | 1 | 8 | Cobre manutenção personalizada, Azure Status global, Resource Health específico, CPU como Azure Monitor e incidente regional relevante à Subscription. |
+| `azure-monitor` | 5 | 2 | 2 | 1 | 6 | Cobre plataforma, Metrics, CPU, Advisor versus Monitor e Resource Health versus Monitor. |
+| `log-analytics` | 5 | 2 | 2 | 1 | 6 | Cobre consulta de logs, Logs versus Metrics, KQL conceitual e relação com Azure Monitor. |
+| `azure-monitor-alerts` | 5 | 2 | 2 | 1 | 6 | Cobre signal/condition, CPU threshold, Metric versus Alert e necessidade de regra apropriada. |
+| `application-insights` | 10 | 3 | 5 | 2 | 6 | UUIDs históricos preservados; cinco itens avançados foram simplificados in-place para APM, performance, failures, dependencies e distinção de Service Health. |
+
+Não foram detectadas Questions textualmente idênticas. Todas possuem quatro options distintas, exatamente uma resposta correta e explicação suficiente; os distratores absurdos do conjunto histórico de Advisor foram substituídos in-place por confusões reais de prova. Cada Lesson possui pelo menos cinco Questions para Lesson Quiz. O Topic Quiz de dez itens representa as seis Lessons, sem concentrar mais de dois itens em uma única Lesson. Não restam lacunas de prática ou Flashcards neste Topic.
+
+#### Visual Experiences
+
+| Conceito | Classificação | Decisão recomendada |
+| --- | --- | --- |
+| Advisor versus Service Health versus Monitor | Not necessary | Um comparison block curto é suficiente: recommendations versus eventos de saúde personalizados versus monitoring data. |
+| Azure Status / Service Health / Resource Health | Not necessary | Uma comparação em três linhas comunica melhor os diferentes escopos que uma interação. |
+| Azure Monitor flow | Implemented | Uma única Architecture Experience mostra `Resources / Apps → Metrics + Logs → Azure Monitor → Log Analytics / Alerts / Application Insights`. |
+| Log Analytics, Alerts e Application Insights isoladamente | Not necessary | Devem reutilizar o eventual fluxo de Monitor, sem experiências independentes. |
+
+Existe uma única Visual Experience associada a `azure-monitor`, com oito nós e nove conexões. Log Analytics, Alerts e Application Insights reutilizam conceitualmente esse fluxo; nenhuma experiência separada foi criada.
+
+#### Roadmap recomendado para 9.7.2–9.7.4
+
+| Etapa | Lessons / slugs reais | Lacunas a tratar | Visual |
+| --- | --- | --- | --- |
+| 9.7.2 — Azure Advisor + Azure Service Health | `azure-advisor`; `azure-service-health` | **Concluída:** 23 blocks, 15 cards, 10 Questions históricas de Advisor corrigidas in-place e 5 Questions novas de Service Health. Recommendations, categorias, incidentes/manutenção/advisories e comparações de health estão Covered. | Nenhum visual criado; comparison blocks foram suficientes. |
+| 9.7.3 — Azure Monitor + Log Analytics + Alerts + Application Insights | `azure-monitor`; `log-analytics`; `azure-monitor-alerts`; `application-insights` | **Concluída:** 37 blocks, 24 cards, 15 Questions novas e cinco Questions históricas simplificadas in-place. Plataforma, signals, queries, alerts e APM estão Covered. | Uma Architecture Experience compartilhada criada em Azure Monitor; nenhuma experiência por componente. |
+| 9.7.4 — Practice + fechamento + Domain 3 | As seis Lessons | **Concluída:** duplicações, difficulty, distratores, Lesson Quiz, Topic Quiz nas seis Lessons, Review, spaced repetition, fallbacks, RLS, isolamento, histórico e matriz final do Domain 3 foram validados. Nenhuma Question ou Flashcard foi adicionada ou corrigida. | Visual da 9.7.3 reutilizado e validado; nenhum novo. |
+
+#### Preservação e riscos arquiteturais
+
+- O Topic possui UUID estável `33000000-0000-4000-8000-000000000004`; seus seis slugs reais devem permanecer inalterados.
+- A migration curricular faz upsert por `(topic_id, slug)`, mas não fixa em código os UUIDs gerados para essas Lessons. Excluir/recriar Lesson ou alterar slug arriscaria `user_lesson_progress`, quiz history, flashcard reviews, spaced repetition e links.
+- As próximas etapas devem localizar cada Lesson pelo Topic e slug e atualizar o registro existente. `lessons.content` deve permanecer como fallback.
+- Os UUIDs históricos das Questions de Application Insights (`63000000-0000-4000-8000-000000000001`–`010`) e Azure Advisor (`63000000-0000-4000-8000-000000000021`–`030`), assim como suas options, devem ser preservados; correções devem ocorrer in-place.
+- A leitura curricular remota exige sessão autenticada/service role por RLS. O projeto vinculado está sincronizado com as migrations, mas não foi ampliado o acesso público nem exportado histórico de usuário para esta auditoria.
+
+**Checkpoint da Etapa 9.7.1:** auditoria concluída; 6 Lessons encontradas, 0 Ready, 6 Needs enrichment e 0 Missing; 0 objetivos Covered, 6 Partial e 0 Missing; 0 Content Blocks, 0 Visual Experiences, 0 Flashcards, 20 Questions (6 easy / 10 medium / 4 hard) e 54 minutos estimados. Nenhum conteúdo pedagógico, Flashcard, Question, Visual Experience, UUID ou slug foi modificado.
+
+**Checkpoint da Etapa 9.7.2:** Azure Advisor e Azure Service Health estão `Covered` e `Ready`; o Topic possui agora 2 objetivos Covered, 4 Partial e 0 Missing, com 23 Content Blocks, 0 Visual Experiences, 15 Flashcards, 25 Questions (8 easy / 12 medium / 5 hard) e 62 minutos estimados. Os UUIDs das 10 Questions e 40 options históricas de Advisor foram preservados e corrigidos in-place. Lesson Quiz, seleção do Topic Quiz, fallbacks, RLS, grants, integridade histórica e ausência de mudanças fora de escopo foram validados em produção.
+
+**Checkpoint da Etapa 9.7.3:** as seis Lessons estão `Ready`; 6 objetivos Covered, 0 Partial e 0 Missing; 60 Content Blocks, 1 Visual Experience, 39 Flashcards, 40 Questions (14 easy / 18 medium / 8 hard) e 68 minutos estimados. Azure Monitor, Log Analytics e Alerts receberam cinco Questions cada; os 10 UUIDs e 40 options históricos de Application Insights foram preservados, com cinco Questions e 20 options simplificadas in-place. Lesson Quiz, Topic Quiz com as seis Lessons, visual, fallbacks, RLS e integridade histórica foram validados em produção.
+
+**Closure da Etapa 9.7.4 — Azure Monitoring Tools: CLOSED.** Os 6 objetivos oficiais e seus subconceitos Azure Status, Resource Health, Metrics e Logs estão `Covered`, com 0 `Partial` e 0 `Missing`. O Topic possui 6 Lessons Ready, 60 Content Blocks, 1 Visual Experience, 39 Flashcards, 40 Questions (14 easy / 18 medium / 8 hard) e 68 minutos estimados. O block existente `7b290000-0000-4000-8000-000000000007` foi consolidado in-place como mapa das oito ferramentas/conceitos, mantendo o tipo válido `important`; nenhuma Question, Flashcard, Lesson, slug, Topic ou Visual Experience foi criada. Lesson Quiz, Topic Quiz de dez itens cobrindo as seis Lessons com no máximo dois itens por Lesson, Review, completion, progress, spaced repetition, RLS, isolamento entre usuários, fallbacks, UUIDs históricos e referências órfãs foram validados em produção.
+
+**Azure Monitoring Tools: CLOSED**
+
+### Fechamento final do Domain 3
+
+| Bloco | Objectives Covered | Partial | Missing | Status |
+| --- | ---: | ---: | ---: | --- |
+| Azure Cost Management | 4 | 0 | 0 | CLOSED |
+| Governance and Compliance | 3 | 0 | 0 | CLOSED |
+| Tools for Managing and Deploying Azure Resources | 8 | 0 | 0 | CLOSED |
+| Azure Monitoring Tools | 6 | 0 | 0 | CLOSED |
+| **Domain 3 — total** | **21** | **0** | **0** | **CLOSED** |
+
+O Domain 3 possui 20 Lessons publicadas, 226 Content Blocks, 2 Visual Experiences, 130 Flashcards, 140 Questions (49 easy / 63 medium / 28 hard) e 224 minutos estimados. Nenhum dos quatro blocos possui objetivo `Partial` ou `Missing`.
+
+**Domain 3 — Describe Azure Management and Governance: CLOSED**
