@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest'
 import {
   mockExamAttemptDatabaseRowSchema,
   mockExamAttemptQuestionDatabaseRowSchema,
+  mockExamResultDatabaseRowSchema,
+  mockExamReviewDatabaseRowSchema,
   mockExamSnapshotSchema,
   saveMockExamAnswerInputSchema,
 } from './mockExamValidation'
@@ -74,5 +76,48 @@ describe('Mock Exam validation', () => {
     })
 
     expect(result.success).toBe(false)
+  })
+
+  it('accepts a consistent persisted result with complete breakdowns', () => {
+    const breakdown = { totalQuestions: 40, correctAnswers: 30, incorrectAnswers: 5, unansweredQuestions: 5, percentage: 75 }
+    const result = mockExamResultDatabaseRowSchema.safeParse({
+      attempt_id: id(1), total_questions: 40, answered_questions: 35,
+      correct_answers: 30, incorrect_answers: 5, unanswered_questions: 5,
+      practice_score_percentage: 75, started_at: timestamp, submitted_at: timestamp,
+      elapsed_seconds: 1200,
+      domain_breakdown: [{ domainId: id(2), domainTitle: 'Domain', ...breakdown }],
+      topic_breakdown: [{ domainId: id(2), domainTitle: 'Domain', topicId: id(3), topicTitle: 'Topic', ...breakdown }],
+      difficulty_breakdown: [{ difficulty: 'medium', ...breakdown }],
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects result breakdowns that do not cover the full Attempt', () => {
+    const breakdown = { totalQuestions: 39, correctAnswers: 29, incorrectAnswers: 5, unansweredQuestions: 5, percentage: 74.36 }
+    const result = mockExamResultDatabaseRowSchema.safeParse({
+      attempt_id: id(1), total_questions: 40, answered_questions: 35,
+      correct_answers: 30, incorrect_answers: 5, unanswered_questions: 5,
+      practice_score_percentage: 75, started_at: timestamp, submitted_at: timestamp,
+      elapsed_seconds: null,
+      domain_breakdown: [{ domainId: id(2), domainTitle: 'Domain', ...breakdown }],
+      topic_breakdown: [{ domainId: id(2), domainTitle: 'Domain', topicId: id(3), topicTitle: 'Topic', ...breakdown }],
+      difficulty_breakdown: [{ difficulty: 'medium', ...breakdown }],
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('validates completed Review status against selected and correct options', () => {
+    const base = {
+      id: id(1), attempt_id: id(2), question_id: id(3), display_order: 1,
+      domain_id: id(4), domain_title: 'Domain', topic_id: id(5), topic_title: 'Topic',
+      lesson_id: id(6), lesson_title: 'Lesson', lesson_slug: 'lesson', difficulty: 'hard',
+      question_text: 'Question?', options: [
+        { key: id(7), text: 'A', displayOrder: 1 },
+        { key: id(8), text: 'B', displayOrder: 2 },
+      ], selected_option_key: id(7), correct_option_key: id(8),
+      answer_status: 'incorrect', explanation: 'Because B is correct.',
+    }
+    expect(mockExamReviewDatabaseRowSchema.safeParse(base).success).toBe(true)
+    expect(mockExamReviewDatabaseRowSchema.safeParse({ ...base, answer_status: 'correct' }).success).toBe(false)
   })
 })

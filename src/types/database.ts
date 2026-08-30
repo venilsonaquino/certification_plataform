@@ -372,6 +372,43 @@ type SaveMockExamAnswerRow = Pick<
   'id' | 'attempt_id' | 'attempt_question_id' | 'selected_option_key' | 'answered_at'
 >
 
+type MockExamResultRow = {
+  attempt_id: string
+  total_questions: number
+  answered_questions: number
+  correct_answers: number
+  incorrect_answers: number
+  unanswered_questions: number
+  practice_score_percentage: number
+  started_at: string
+  submitted_at: string
+  elapsed_seconds: number | null
+  domain_breakdown: Json
+  topic_breakdown: Json
+  difficulty_breakdown: Json
+}
+
+type MockExamReviewRow = {
+  id: string
+  attempt_id: string
+  question_id: string
+  display_order: number
+  domain_id: string
+  domain_title: string
+  topic_id: string
+  topic_title: string
+  lesson_id: string
+  lesson_title: string
+  lesson_slug: string
+  difficulty: QuestionDifficulty
+  question_text: string
+  options: Json
+  selected_option_key: string | null
+  correct_option_key: string
+  answer_status: 'correct' | 'incorrect' | 'unanswered'
+  explanation: string | null
+}
+
 type DatabaseRelationship = {
   foreignKeyName: string
   columns: string[]
@@ -872,6 +909,14 @@ export interface Database {
         Args: { p_attempt_id: string }
         Returns: MockExamAttemptRow[]
       }
+      get_mock_exam_result: {
+        Args: { p_attempt_id: string }
+        Returns: MockExamResultRow[]
+      }
+      get_mock_exam_review: {
+        Args: { p_attempt_id: string }
+        Returns: MockExamReviewRow[]
+      }
     }
     Enums: Record<string, never>
     CompositeTypes: Record<string, never>
@@ -907,3 +952,5 @@ export type MockExamAttemptQuestionDatabaseRow = MockExamAttemptQuestionRow
 export type MockExamAnswerDatabaseRow = MockExamAnswerRow
 export type MockExamAttemptQuestionPublicDatabaseRow = MockExamAttemptQuestionPublicRow
 export type SaveMockExamAnswerDatabaseRow = SaveMockExamAnswerRow
+export type MockExamResultDatabaseRow = MockExamResultRow
+export type MockExamReviewDatabaseRow = MockExamReviewRow

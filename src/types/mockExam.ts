@@ -125,8 +125,63 @@ export interface MockExamProgress {
 
 export interface MockExamResult {
   readonly attemptId: string
+  readonly totalQuestions: number
+  readonly answeredQuestions: number
   readonly correctAnswers: number
   readonly incorrectAnswers: number
   readonly unansweredQuestions: number
   readonly practiceScorePercentage: number
+  readonly startedAt: string
+  readonly submittedAt: string
+  readonly elapsedSeconds: number | null
+  readonly domains: readonly MockExamDomainBreakdown[]
+  readonly topics: readonly MockExamTopicBreakdown[]
+  readonly difficulties: readonly MockExamDifficultyBreakdown[]
+}
+
+export interface MockExamBreakdown {
+  readonly totalQuestions: number
+  readonly correctAnswers: number
+  readonly incorrectAnswers: number
+  readonly unansweredQuestions: number
+  readonly percentage: number
+}
+
+export interface MockExamDomainBreakdown extends MockExamBreakdown {
+  readonly domainId: string
+  readonly domainTitle: string
+}
+
+export interface MockExamTopicBreakdown extends MockExamBreakdown {
+  readonly domainId: string
+  readonly domainTitle: string
+  readonly topicId: string
+  readonly topicTitle: string
+}
+
+export interface MockExamDifficultyBreakdown extends MockExamBreakdown {
+  readonly difficulty: QuestionDifficulty
+}
+
+export type MockExamReviewStatus = 'correct' | 'incorrect' | 'unanswered'
+
+export interface MockExamQuestionForReview {
+  readonly id: string
+  readonly attemptId: string
+  readonly questionId: string
+  readonly displayOrder: number
+  readonly domainId: string
+  readonly domainTitle: string
+  readonly topicId: string
+  readonly topicTitle: string
+  readonly lessonId: string
+  readonly lessonTitle: string
+  readonly lessonSlug: string
+  readonly difficulty: QuestionDifficulty
+  readonly questionText: string
+  readonly options: readonly MockExamExecutionOption[]
+  readonly selectedOptionKey: string | null
+  readonly correctOptionKey: string
+  readonly status: MockExamReviewStatus
+  readonly explanation: string | null
 }

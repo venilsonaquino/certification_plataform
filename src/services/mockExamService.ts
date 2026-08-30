@@ -4,6 +4,8 @@ import {
   mockExamAnswerDatabaseRowSchema,
   mockExamAttemptDatabaseRowSchema,
   mockExamAttemptQuestionDatabaseRowSchema,
+  mockExamResultDatabaseRowSchema,
+  mockExamReviewDatabaseRowSchema,
   saveMockExamAnswerInputSchema,
 } from '../lib/mockExamValidation'
 import { supabase } from '../lib/supabase'
@@ -12,6 +14,8 @@ import type {
   MockExamAttempt,
   MockExamAttemptData,
   MockExamQuestionForExecution,
+  MockExamQuestionForReview,
+  MockExamResult,
   SaveMockExamAnswerInput,
 } from '../types/mockExam'
 
@@ -91,6 +95,49 @@ function mapAnswer(input: unknown): MockExamAnswer {
     attemptQuestionId: row.attempt_question_id,
     selectedOptionKey: row.selected_option_key,
     answeredAt: row.answered_at,
+  }
+}
+
+function mapResult(input: unknown): MockExamResult {
+  const row = parseExternal(mockExamResultDatabaseRowSchema, input)
+  return {
+    attemptId: row.attempt_id,
+    totalQuestions: row.total_questions,
+    answeredQuestions: row.answered_questions,
+    correctAnswers: row.correct_answers,
+    incorrectAnswers: row.incorrect_answers,
+    unansweredQuestions: row.unanswered_questions,
+    practiceScorePercentage: row.practice_score_percentage,
+    startedAt: row.started_at,
+    submittedAt: row.submitted_at,
+    elapsedSeconds: row.elapsed_seconds,
+    domains: row.domain_breakdown,
+    topics: row.topic_breakdown,
+    difficulties: row.difficulty_breakdown,
+  }
+}
+
+function mapReviewQuestion(input: unknown): MockExamQuestionForReview {
+  const row = parseExternal(mockExamReviewDatabaseRowSchema, input)
+  return {
+    id: row.id,
+    attemptId: row.attempt_id,
+    questionId: row.question_id,
+    displayOrder: row.display_order,
+    domainId: row.domain_id,
+    domainTitle: row.domain_title,
+    topicId: row.topic_id,
+    topicTitle: row.topic_title,
+    lessonId: row.lesson_id,
+    lessonTitle: row.lesson_title,
+    lessonSlug: row.lesson_slug,
+    difficulty: row.difficulty,
+    questionText: row.question_text,
+    options: row.options,
+    selectedOptionKey: row.selected_option_key,
+    correctOptionKey: row.correct_option_key,
+    status: row.answer_status,
+    explanation: row.explanation,
   }
 }
 
@@ -196,4 +243,22 @@ export async function submitMockExam(attemptId: string): Promise<MockExamAttempt
   throwQueryError(error)
   if (!data) throw new MockExamDataError('A confirmação do envio não foi retornada.')
   return mapAttempt(data)
+}
+
+export async function getMockExamResult(attemptId: string): Promise<MockExamResult | null> {
+  const { data, error } = await getClient()
+    .rpc('get_mock_exam_result', { p_attempt_id: attemptId })
+    .maybeSingle()
+  throwQueryError(error)
+  return data ? mapResult(data) : null
+}
+
+export async function getMockExamReview(
+  attemptId: string,
+): Promise<MockExamQuestionForReview[]> {
+  const { data, error } = await getClient().rpc('get_mock_exam_review', {
+    p_attempt_id: attemptId,
+  })
+  throwQueryError(error)
+  return (data ?? []).map(mapReviewQuestion)
 }

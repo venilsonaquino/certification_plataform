@@ -592,3 +592,46 @@ Migrations:
 - AI Tutor or any automatic remediation.
 
 The `/result` route is intentionally a minimal completion acknowledgement. Stage 11.5 can consume the server-owned completed totals without trusting client-side scoring.
+
+## Implementation Status — 11.5
+
+Stage 11.5 completes the server-authoritative Practice Score, persisted Result experience and completed-only Question Review.
+
+### Submit and persistence
+
+- `submit_mock_exam(uuid)` remains the single finalization contract introduced in 11.4; no duplicate scoring path was created.
+- The function locks the owned `in_progress` Attempt, checks its 40 frozen Question snapshots, evaluates persisted selections against each snapshot's historical `correct_option_key`, writes `is_correct`, persists correct/incorrect/unanswered totals and calculates `correct / 40 * 100` as Practice Score.
+- Unanswered Questions remain separate from incorrect Questions and contribute zero to the numerator.
+- Submit is idempotent: a repeated call returns the already persisted completed Attempt without changing `submitted_at` or its result.
+- Authenticated clients cannot update result columns or answer correctness directly. `save_mock_exam_answer` rejects every mutation after completion.
+
+### Result and breakdowns
+
+- `get_mock_exam_result(uuid)` is an owner-only, completed-only read contract.
+- Attempt totals, Practice Score, start/submission timestamps and elapsed duration are persisted on `mock_exam_attempts` for future History use.
+- Domain, Topic and difficulty breakdowns are recomputed deterministically from the immutable Attempt snapshots and frozen evaluated answers; no current curriculum text or answer key is used to reinterpret history.
+- Every breakdown contains questions, correct, incorrect, unanswered and percentage. Domain/Topic/difficulty totals are runtime-validated against the Attempt total.
+- Topics absent from the Attempt are omitted instead of receiving a false zero score.
+- The Result Page shows objective Practice Score data, lightweight progress bars and a clear disclaimer that it is not an official Microsoft scaled score or pass/fail prediction.
+
+### Completed Review and DTO separation
+
+- `/certifications/:certificationCode/exams/:attemptId/review` provides completed Review with All, Incorrect, Unanswered, Correct and default Incorrect + Unanswered filters.
+- `get_mock_exam_review(uuid)` returns Question/order, sanitized options, selected and correct keys, answer status, snapshot explanation and snapshot Domain/Topic/Lesson context only for an owned `completed` Attempt.
+- Review marks selected/correct options and correct/incorrect/unanswered status with text and icons in addition to color, and offers a `Review Lesson` route.
+- The active `MockExamQuestionForExecution` DTO remains unchanged and cannot contain answer keys, explanations, difficulty or curricular metadata. `MockExamQuestionForReview` is a distinct completed-only contract.
+- Editorial Mock metadata (`mock_eligible`, audit grade, selection reason and weighting rubric) is not exposed.
+
+Migrations:
+
+- `20260830069000_add_mock_results_and_review_contract.sql`
+- `20260830070000_validate_mock_results_and_review.sql`
+- `20260830071000_validate_mock_results_quiz_regression.sql`
+
+### Validation and deferred scope
+
+- SQL fixtures cover 40/40, 0/40, 30 correct + 5 incorrect + 5 unanswered, a mixed result, double submit, breakdown invariants, pre-completion secrecy, completed immutability and user A/B isolation.
+- UI tests cover Result summaries, neutral score language, Review states, filters, Lesson links and the execution → submit → result → review flow.
+- Timer/expiration behavior, full History UI, Readiness Score, weak-topic recommendations, AI Tutor, achievements and leaderboards remain deferred.
+
+**Mock Results + Review: READY.**

@@ -176,3 +176,122 @@ export const mockExamAnswerDatabaseRowSchema = z
     answered_at: timestampSchema,
   })
   .strict()
+
+const mockExamBreakdownFields = {
+  totalQuestions: z.number().int().positive(),
+  correctAnswers: z.number().int().nonnegative(),
+  incorrectAnswers: z.number().int().nonnegative(),
+  unansweredQuestions: z.number().int().nonnegative(),
+  percentage: z.coerce.number().min(0).max(100),
+}
+
+function validateBreakdownCounts(
+  value: { totalQuestions: number; correctAnswers: number; incorrectAnswers: number; unansweredQuestions: number },
+  context: z.RefinementCtx,
+) {
+  if (value.correctAnswers + value.incorrectAnswers + value.unansweredQuestions !== value.totalQuestions) {
+    context.addIssue({ code: 'custom', message: 'Breakdown totals are inconsistent.' })
+  }
+}
+
+export const mockExamDomainBreakdownSchema = z
+  .object({
+    domainId: uuidSchema,
+    domainTitle: z.string().trim().min(1),
+    ...mockExamBreakdownFields,
+  })
+  .strict()
+  .superRefine(validateBreakdownCounts)
+
+export const mockExamTopicBreakdownSchema = z
+  .object({
+    domainId: uuidSchema,
+    domainTitle: z.string().trim().min(1),
+    topicId: uuidSchema,
+    topicTitle: z.string().trim().min(1),
+    ...mockExamBreakdownFields,
+  })
+  .strict()
+  .superRefine(validateBreakdownCounts)
+
+export const mockExamDifficultyBreakdownSchema = z
+  .object({
+    difficulty: z.enum(['easy', 'medium', 'hard']),
+    ...mockExamBreakdownFields,
+  })
+  .strict()
+  .superRefine(validateBreakdownCounts)
+
+export const mockExamResultDatabaseRowSchema = z
+  .object({
+    attempt_id: uuidSchema,
+    total_questions: z.number().int().positive(),
+    answered_questions: z.number().int().nonnegative(),
+    correct_answers: z.number().int().nonnegative(),
+    incorrect_answers: z.number().int().nonnegative(),
+    unanswered_questions: z.number().int().nonnegative(),
+    practice_score_percentage: z.coerce.number().min(0).max(100),
+    started_at: timestampSchema,
+    submitted_at: timestampSchema,
+    elapsed_seconds: z.number().int().nonnegative().nullable(),
+    domain_breakdown: z.array(mockExamDomainBreakdownSchema).min(1),
+    topic_breakdown: z.array(mockExamTopicBreakdownSchema).min(1),
+    difficulty_breakdown: z.array(mockExamDifficultyBreakdownSchema).min(1),
+  })
+  .strict()
+  .superRefine((result, context) => {
+    if (
+      result.correct_answers + result.incorrect_answers + result.unanswered_questions !== result.total_questions ||
+      result.answered_questions !== result.correct_answers + result.incorrect_answers
+    ) {
+      context.addIssue({ code: 'custom', message: 'Mock result totals are inconsistent.' })
+    }
+    for (const [path, breakdown] of [
+      ['domain_breakdown', result.domain_breakdown],
+      ['topic_breakdown', result.topic_breakdown],
+      ['difficulty_breakdown', result.difficulty_breakdown],
+    ] as const) {
+      if (breakdown.reduce((total, item) => total + item.totalQuestions, 0) !== result.total_questions) {
+        context.addIssue({ code: 'custom', path: [path], message: 'Breakdown does not cover the full Mock.' })
+      }
+    }
+  })
+
+export const mockExamReviewDatabaseRowSchema = z
+  .object({
+    id: uuidSchema,
+    attempt_id: uuidSchema,
+    question_id: uuidSchema,
+    display_order: z.number().int().positive(),
+    domain_id: uuidSchema,
+    domain_title: z.string().trim().min(1),
+    topic_id: uuidSchema,
+    topic_title: z.string().trim().min(1),
+    lesson_id: uuidSchema,
+    lesson_title: z.string().trim().min(1),
+    lesson_slug: z.string().trim().min(1),
+    difficulty: z.enum(['easy', 'medium', 'hard']),
+    question_text: z.string().trim().min(1),
+    options: z.array(mockExamExecutionOptionSchema).min(2).max(10),
+    selected_option_key: z.string().trim().min(1).nullable(),
+    correct_option_key: z.string().trim().min(1),
+    answer_status: z.enum(['correct', 'incorrect', 'unanswered']),
+    explanation: z.string().trim().min(1).nullable(),
+  })
+  .strict()
+  .superRefine((review, context) => {
+    const optionKeys = review.options.map((option) => option.key)
+    if (!optionKeys.includes(review.correct_option_key)) {
+      context.addIssue({ code: 'custom', path: ['correct_option_key'], message: 'Correct option is missing.' })
+    }
+    if (review.selected_option_key && !optionKeys.includes(review.selected_option_key)) {
+      context.addIssue({ code: 'custom', path: ['selected_option_key'], message: 'Selected option is missing.' })
+    }
+    if (
+      (review.answer_status === 'unanswered' && review.selected_option_key !== null) ||
+      (review.answer_status === 'correct' && review.selected_option_key !== review.correct_option_key) ||
+      (review.answer_status === 'incorrect' && (review.selected_option_key === null || review.selected_option_key === review.correct_option_key))
+    ) {
+      context.addIssue({ code: 'custom', path: ['answer_status'], message: 'Review status is inconsistent.' })
+    }
+  })

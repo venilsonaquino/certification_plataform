@@ -11,6 +11,8 @@ const mocks = vi.hoisted(() => ({
   loadMockExamAttempt: vi.fn(),
   saveMockExamAnswer: vi.fn(),
   submitMockExam: vi.fn(),
+  getMockExamResult: vi.fn(),
+  getMockExamReview: vi.fn(),
 }))
 
 vi.mock('../hooks/useCertification', () => ({ useCertification: mocks.useCertification }))
@@ -19,9 +21,13 @@ vi.mock('../services/mockExamService', () => ({
   loadMockExamAttempt: mocks.loadMockExamAttempt,
   saveMockExamAnswer: mocks.saveMockExamAnswer,
   submitMockExam: mocks.submitMockExam,
+  getMockExamResult: mocks.getMockExamResult,
+  getMockExamReview: mocks.getMockExamReview,
 }))
 
 import { MockExamExecutionPage } from './MockExamExecutionPage'
+import { MockExamResultPage } from './MockExamResultPage'
+import { MockExamReviewPage } from './MockExamReviewPage'
 
 const attempt: MockExamAttempt = {
   id: 'attempt-1',
@@ -154,5 +160,59 @@ describe('MockExamExecutionPage', () => {
     renderPage()
     expect(await screen.findByText('Resultado mínimo')).toBeInTheDocument()
     expect(mocks.loadMockExamAttempt).not.toHaveBeenCalled()
+  })
+
+  it('integra execution, submit, persisted result e completed Review', async () => {
+    const completedAttempt = {
+      ...attempt,
+      status: 'completed' as const,
+      answeredQuestions: 1,
+      correctAnswers: 1,
+      incorrectAnswers: 0,
+      unansweredQuestions: 39,
+      practiceScorePercentage: 2.5,
+      submittedAt: '2026-08-30T12:10:00.000Z',
+    }
+    mocks.getMockExamAttempt
+      .mockResolvedValueOnce(attempt)
+      .mockResolvedValue(completedAttempt)
+    const summary = { totalQuestions: 40, correctAnswers: 1, incorrectAnswers: 0, unansweredQuestions: 39, percentage: 2.5 }
+    mocks.getMockExamResult.mockResolvedValue({
+      attemptId: attempt.id, totalQuestions: 40, answeredQuestions: 1,
+      correctAnswers: 1, incorrectAnswers: 0, unansweredQuestions: 39,
+      practiceScorePercentage: 2.5, startedAt: attempt.startedAt,
+      submittedAt: completedAttempt.submittedAt, elapsedSeconds: 600,
+      domains: [{ domainId: 'domain-1', domainTitle: 'Cloud Concepts', ...summary }],
+      topics: [{ domainId: 'domain-1', domainTitle: 'Cloud Concepts', topicId: 'topic-1', topicTitle: 'Cloud Benefits', ...summary }],
+      difficulties: [{ difficulty: 'medium', ...summary }],
+    })
+    mocks.getMockExamReview.mockResolvedValue(questions.map((question, index) => ({
+      ...question,
+      domainId: 'domain-1', domainTitle: 'Cloud Concepts', topicId: 'topic-1',
+      topicTitle: 'Cloud Benefits', lessonId: 'lesson-1', lessonTitle: 'Benefits',
+      lessonSlug: 'benefits', difficulty: 'medium' as const,
+      selectedOptionKey: index === 0 ? 'A' : null, correctOptionKey: 'A',
+      status: index === 0 ? 'correct' as const : 'unanswered' as const,
+      explanation: 'Snapshot explanation.',
+    })))
+
+    render(
+      <MemoryRouter initialEntries={['/certifications/az-900/exams/attempt-1']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Routes>
+          <Route path="/certifications/:certificationCode/exams/:attemptId" element={<MockExamExecutionPage />} />
+          <Route path="/certifications/:certificationCode/exams/:attemptId/result" element={<MockExamResultPage />} />
+          <Route path="/certifications/:certificationCode/exams/:attemptId/review" element={<MockExamReviewPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Finalizar' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Submit Mock' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Confirmar envio' }))
+    expect(await screen.findByRole('heading', { name: 'AZ-900 Practice Mock Result' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '2.5%' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('link', { name: 'Review Questions' }))
+    expect(await screen.findByRole('heading', { name: 'Review Questions' })).toBeInTheDocument()
+    expect(screen.getByText('39 de 40 Questions exibidas')).toBeInTheDocument()
   })
 })

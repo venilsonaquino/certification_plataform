@@ -50,3 +50,7 @@ export function mockExamExecutionRoute(certificationCode: string, attemptId: str
 export function mockExamResultRoute(certificationCode: string, attemptId: string) {
   return `${mockExamExecutionRoute(certificationCode, attemptId)}/result`
 }
+
+export function mockExamReviewRoute(certificationCode: string, attemptId: string) {
+  return `${mockExamExecutionRoute(certificationCode, attemptId)}/review`
+}
