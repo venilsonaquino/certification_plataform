@@ -1,6 +1,7 @@
 import type { LessonProgressStatus } from './progress'
 import type { QuestionDifficulty, QuestionType } from './question'
 import type { QuizAttemptStatus, QuizType } from './quiz'
+import type { MockExamAttemptStatus } from './mockExam'
 import type { FlashcardReviewRating } from './flashcard'
 import type {
   LessonContentBlockConfig,
@@ -180,6 +181,7 @@ type QuestionRow = {
   difficulty: QuestionDifficulty | null
   explanation: string | null
   is_published: boolean
+  mock_eligible: boolean
   display_order: number
   created_at: string
   updated_at: string
@@ -295,6 +297,90 @@ type QuestionReviewStatsRow = {
   last_result: boolean
 }
 
+type MockExamAttemptRow = {
+  id: string
+  user_id: string
+  certification_id: string
+  status: MockExamAttemptStatus
+  total_questions: number
+  answered_questions: number
+  correct_answers: number | null
+  incorrect_answers: number | null
+  unanswered_questions: number | null
+  practice_score_percentage: number | null
+  started_at: string
+  submitted_at: string | null
+  abandoned_at: string | null
+  expires_at: string | null
+  time_limit_seconds: number | null
+  elapsed_seconds: number | null
+  last_activity_at: string
+  selection_policy_version: string
+  domain_allocation: Json
+  difficulty_allocation: Json
+  created_at: string
+  updated_at: string
+}
+
+type MockExamAttemptQuestionRow = {
+  id: string
+  attempt_id: string
+  question_id: string
+  display_order: number
+  domain_id: string
+  domain_title_snapshot: string
+  topic_id: string
+  topic_title_snapshot: string
+  lesson_id: string
+  lesson_title_snapshot: string
+  lesson_slug_snapshot: string
+  difficulty_snapshot: QuestionDifficulty
+  question_type_snapshot: QuestionType
+  question_text_snapshot: string
+  options_snapshot: Json
+  correct_option_key: string
+  question_explanation_snapshot: string | null
+  question_source_updated_at: string
+  snapshot_schema_version: number
+  created_at: string
+}
+
+type MockExamAnswerRow = {
+  id: string
+  attempt_id: string
+  attempt_question_id: string
+  selected_option_key: string
+  is_correct: boolean | null
+  answered_at: string
+  created_at: string
+  updated_at: string
+}
+
+type MockExamAttemptQuestionPublicRow = {
+  id: string
+  attempt_id: string
+  question_id: string
+  display_order: number
+  domain_id: string
+  domain_title: string
+  topic_id: string
+  topic_title: string
+  lesson_id: string
+  lesson_title: string
+  lesson_slug: string
+  difficulty: QuestionDifficulty
+  question_type: QuestionType
+  question_text: string
+  options: Json
+  selected_option_key: string | null
+  answered_at: string | null
+}
+
+type SaveMockExamAnswerRow = Pick<
+  MockExamAnswerRow,
+  'id' | 'attempt_id' | 'attempt_question_id' | 'selected_option_key' | 'answered_at'
+>
+
 type DatabaseRelationship = {
   foreignKeyName: string
   columns: string[]
@@ -377,6 +463,7 @@ export interface Database {
           estimated_minutes?: number | null
           display_order?: number
           is_published?: boolean
+          mock_eligible?: boolean
           created_at?: string
           updated_at?: string
         },
@@ -631,6 +718,75 @@ export interface Database {
         },
         Partial<QuizAnswerRow>
       >
+      mock_exam_attempts: TableDefinition<
+        MockExamAttemptRow,
+        Pick<
+          MockExamAttemptRow,
+          'user_id' | 'certification_id' | 'total_questions' | 'selection_policy_version'
+        > & {
+          id?: string
+          status?: MockExamAttemptStatus
+          answered_questions?: number
+          correct_answers?: number | null
+          incorrect_answers?: number | null
+          unanswered_questions?: number | null
+          practice_score_percentage?: number | null
+          started_at?: string
+          submitted_at?: string | null
+          abandoned_at?: string | null
+          expires_at?: string | null
+          time_limit_seconds?: number | null
+          elapsed_seconds?: number | null
+          last_activity_at?: string
+          domain_allocation?: Json
+          difficulty_allocation?: Json
+          created_at?: string
+          updated_at?: string
+        },
+        Partial<MockExamAttemptRow>
+      >
+      mock_exam_attempt_questions: TableDefinition<
+        MockExamAttemptQuestionRow,
+        Pick<
+          MockExamAttemptQuestionRow,
+          | 'attempt_id'
+          | 'question_id'
+          | 'display_order'
+          | 'domain_id'
+          | 'domain_title_snapshot'
+          | 'topic_id'
+          | 'topic_title_snapshot'
+          | 'lesson_id'
+          | 'lesson_title_snapshot'
+          | 'lesson_slug_snapshot'
+          | 'difficulty_snapshot'
+          | 'question_type_snapshot'
+          | 'question_text_snapshot'
+          | 'options_snapshot'
+          | 'correct_option_key'
+          | 'question_source_updated_at'
+        > & {
+          id?: string
+          question_explanation_snapshot?: string | null
+          snapshot_schema_version?: number
+          created_at?: string
+        },
+        Partial<MockExamAttemptQuestionRow>
+      >
+      mock_exam_answers: TableDefinition<
+        MockExamAnswerRow,
+        Pick<
+          MockExamAnswerRow,
+          'attempt_id' | 'attempt_question_id' | 'selected_option_key'
+        > & {
+          id?: string
+          is_correct?: boolean | null
+          answered_at?: string
+          created_at?: string
+          updated_at?: string
+        },
+        Partial<MockExamAnswerRow>
+      >
     }
     Views: {
       question_options_public: {
@@ -701,6 +857,26 @@ export interface Database {
         Args: { p_certification_id: string }
         Returns: FlashcardReviewOverviewRow[]
       }
+      get_mock_exam_attempt_questions: {
+        Args: { p_attempt_id: string }
+        Returns: MockExamAttemptQuestionPublicRow[]
+      }
+      save_mock_exam_answer: {
+        Args: {
+          p_attempt_id: string
+          p_attempt_question_id: string
+          p_selected_option_key: string
+        }
+        Returns: SaveMockExamAnswerRow[]
+      }
+      abandon_mock_exam_attempt: {
+        Args: { p_attempt_id: string }
+        Returns: MockExamAttemptRow[]
+      }
+      start_mock_exam: {
+        Args: { p_certification_id: string }
+        Returns: MockExamAttemptRow[]
+      }
     }
     Enums: Record<string, never>
     CompositeTypes: Record<string, never>
@@ -731,3 +907,8 @@ export type SubmitQuizAnswerDatabaseRow = SubmitQuizAnswerRow
 export type TopicQuizPerformanceDatabaseRow = TopicQuizPerformanceRow
 export type TopicQuizSummaryDatabaseRow = TopicQuizSummaryRow
 export type QuestionReviewStatsDatabaseRow = QuestionReviewStatsRow
+export type MockExamAttemptDatabaseRow = MockExamAttemptRow
+export type MockExamAttemptQuestionDatabaseRow = MockExamAttemptQuestionRow
+export type MockExamAnswerDatabaseRow = MockExamAnswerRow
+export type MockExamAttemptQuestionPublicDatabaseRow = MockExamAttemptQuestionPublicRow
+export type SaveMockExamAnswerDatabaseRow = SaveMockExamAnswerRow

@@ -262,13 +262,26 @@ A distribuição bruta do banco é Domain 1 29.9%, Domain 2 42.8% e Domain 3 27.
 
 ## Topic Quiz Issues
 
-Todas as 12 seleções atuais têm dez Questions, representam todas as Lessons de seu Topic e usam round-robin por `lesson_id`. Nenhuma Lesson fica fora, pois o maior Topic possui nove Lessons.
+Todas as 12 seleções têm dez Questions e representam todas as Lessons publicadas do Topic, com diferença máxima de um item entre Lessons. A Etapa 10.3 substituiu a ordenação fixa por rotação baseada no histórico do usuário e adicionou uma meta determinística de 3 easy / 5 medium / 2 hard.
 
-| Severity | Issue | Impact |
-| --- | --- | --- |
-| Medium | Seleção determinística por `display_order` e UUID | Após concluir e refazer um Topic Quiz, o algoritmo volta às mesmas primeiras dez Questions; bancos maiores não rotacionam a prática. |
+Preferência aplicada: cobertura de Lessons e distribuição de dificuldade; dentro dessas restrições, Questions unseen; depois Questions vistas fora do último attempt, ordenadas da menos recente para a mais recente; Questions do attempt imediatamente anterior entram por último.
 
-Não há concentração crítica dentro de uma tentativa: Topics de 3–4 Lessons usam no máximo 3–4 itens por Lesson; Topics de 5–9 Lessons usam no máximo 2.
+| Topic | Pool | Quiz Size | Attempt 1→2 overlap | Lesson balance | Difficulty balance | Status |
+| --- | ---: | ---: | ---: | --- | --- | --- |
+| Cloud Computing | 72 | 10 | 0 | 7/7; Δ≤1 | 3/5/2 | PASS |
+| Benefits of Cloud Services | 61 | 10 | 0 | 7/7; Δ≤1 | 3/5/2 | PASS |
+| Cloud Service Types | 20 | 10 | 2 | 4/4; Δ≤1 | 3/5/2 | LIMITED BY POOL |
+| Core Architectural Components | 42 | 10 | 0 | 7/7; Δ≤1 | 3/5/2 | PASS |
+| Compute Services | 51 | 10 | 0 | 9/9; Δ≤1 | 3/5/2 | PASS |
+| Networking Services | 30 | 10 | 0 | 5/5; Δ≤1 | 3/5/2 | PASS |
+| Storage Services | 46 | 10 | 0 | 8/8; Δ≤1 | 3/5/2 | PASS |
+| Identity, Access and Security | 50 | 10 | 0 | 9/9; Δ≤1 | 3/5/2 | PASS |
+| Cost Management | 30 | 10 | 0 | 4/4; Δ≤1 | 3/5/2 | PASS |
+| Governance and Compliance | 15 | 10 | 5 | 3/3; Δ≤1 | 3/5/2 | LIMITED BY POOL |
+| Resource Management and Deployment | 55 | 10 | 0 | 7/7; Δ≤1 | 3/5/2 | PASS |
+| Monitoring | 40 | 10 | 0 | 6/6; Δ≤1 | 3/5/2 | PASS |
+
+`Cloud Service Types` possui somente oito medium no pool; duas tentativas balanceadas precisam de dez, portanto overlap 2 é o mínimo compatível. `Governance and Compliance` possui 15 Questions, tornando overlap 5 inevitável. O retake seguinte de Governance, já com todo o pool visto, continuou funcionando e manteve esse mínimo contra o attempt anterior.
 
 ## Estimated Study Time
 
@@ -316,6 +329,7 @@ Validação em produção:
 | --- | --- |
 | Global SQL inventory/integrity validator | Passed; 10.2 validator confirmed 712 blocks and all 76 Lessons structured |
 | Domain 1 Benefits cleanup | Passed: 5 Lessons, 35 blocks, order 1–7, 5 summaries, immutable fallback hashes |
+| Topic Quiz rotation validator | Passed: Cases A–G, 12 Topics, 3/5/2, least-recently-seen and user isolation |
 | 76 Lesson Quizzes | Passed, cinco Questions cada |
 | 12 Topic Quizzes | Passed, todas as Lessons representadas |
 | Review | Passed |
@@ -335,13 +349,12 @@ Validação em produção:
 
 | Severity | Area | Problem | Required Action |
 | --- | --- | --- | --- |
-| P2 | Topic Quiz | Retakes usam deterministicamente as mesmas primeiras Questions. | 10.3: adicionar rotação sem perder round-robin, persistência e isolamento. |
 | P3 | Legacy fallback | Não há verificação automática global de paridade semântica entre fallback e blocks; alguns fallbacks são mais operacionais. | Revisão editorial futura in-place, sem remover fallback. |
 | P3 | Coverage documentation | Matrizes históricas contam subconceitos atômicos, não apenas os 57 bullets oficiais. | Manter detalhe, mas sempre publicar também a visão normalizada oficial. |
 | P3 | Future Mock weighting | Banco bruto não segue sozinho os pesos oficiais. | Seleção futura deve estratificar 25–30 / 35–40 / 30–35. |
 | P3 | Frontend bundle | Bundle principal supera 500 kB minificado. | Avaliar code splitting em etapa técnica futura, sem bloquear conteúdo. |
 
-P0: 0. P1: 0. P2: 1. P3: 4.
+P0: 0. P1: 0. P2: 0. P3: 4.
 
 ## Etapa 10.2 Delta
 
@@ -350,19 +363,150 @@ P0: 0. P1: 0. P2: 1. P3: 4.
 - Preservação: Lesson/Topic/Domain UUIDs, slugs, `lessons.content`, 20 Flashcards, 50 Questions, options e histórico não foram alterados.
 - Cobertura após a correção: Domain 1 15/0/0; global 57/0/0.
 - P1 de conteúdo: **RESOLVED**.
-- Estado: curriculum coverage complete; practice blocker remains.
+- Estado ao fim da 10.2: curriculum coverage complete; practice blocker remained for 10.3.
 
-## Final Readiness
+## Etapa 10.3 Delta
 
-**Classification: CONTENT READY**
+- Problema anterior: `start_topic_quiz(uuid)` selecionava sempre as mesmas primeiras dez Questions por `display_order` e UUID; três reproduções pré-correção tiveram overlap 10/10.
+- Causa: o RPC não consultava `quiz_attempts` ou `quiz_attempt_questions` anteriores e não incluía dificuldade no ranking.
+- Correção: o mesmo RPC agora calcula histórico somente do usuário autenticado e do Topic solicitado, preservando o contrato do frontend e todo o histórico existente.
+- Rotação: unseen primeiro dentro das restrições pedagógicas; depois Questions fora do último attempt por `last_seen_at` ascendente; último attempt com menor prioridade.
+- Balanceamento: todas as Lessons elegíveis são representadas com Δ≤1 e os 12 Topics usam 3 easy / 5 medium / 2 hard.
+- Resultado: 10 Topics com overlap 0; dois `LIMITED BY POOL` no mínimo compatível (2 e 5).
+- P2 de Topic Quiz: **RESOLVED**.
 
-Motivo: os 57 objetivos oficiais estão Covered e não resta P0/P1. A plataforma ainda não está `READY FOR MOCK DEVELOPMENT`, porque a rotação de retakes do Topic Quiz permanece como blocker P2 para a Etapa 10.3 e a validação final pertence à 10.4.
+# Final Pre-Mock Validation
 
-Status por Domain:
+Validação final executada em 29 de agosto de 2026 contra o currículo oficial vigente a partir de 20 de julho de 2026. O checkpoint SQL `20260829057000_validate_az900_final_pre_mock.sql` foi aplicado no banco remoto; seus fixtures funcionais foram revertidos na própria migration.
 
-- Domain 1: CLOSED — 15 Covered / 0 Partial / 0 Missing.
-- Domain 2: CLOSED — 27 Covered / 0 Partial / 0 Missing.
-- Domain 3: CLOSED — 15 Covered / 0 Partial / 0 Missing.
+## Curriculum
+
+- Domain 1: **CLOSED — 15 Covered / 0 Partial / 0 Missing**.
+- Domain 2: **CLOSED — 27 Covered / 0 Partial / 0 Missing**.
+- Domain 3: **CLOSED — 15 Covered / 0 Partial / 0 Missing**.
+- Total oficial normalizado: **57 Covered / 0 Partial / 0 Missing**.
+
+Os 57 bullets continuam alinhados ao guia oficial e aos pesos 25–30%, 35–40% e 30–35%. Nenhum objetivo voltou a `Partial` ou `Missing`.
+
+## Content
+
+O snapshot final contém 3 Domains, 12 Topics, 76 Lessons, 712 Content Blocks, 17 Visual Experiences, 397 Flashcards, 512 Questions e 818 minutos. A única diferença material em relação à auditoria 10.1 é `677 → 712` blocks: os 35 blocks das cinco Lessons de Benefits restaurados na 10.2. Todos os demais totais e UUIDs permaneceram estáveis.
+
+| Lesson restaurada | UUID preservado | Blocks | Summary | Cards | Questions | Fallback | Lesson Quiz |
+| --- | --- | ---: | ---: | ---: | ---: | --- | --- |
+| `high-availability` | `40000000-0000-4000-8000-000000000002` | 7 | 1 | 4 | 10 | Hash preservado | Passed |
+| `scalability` | `8e04bfc9-03a6-4ae4-be9c-e7238e5c2783` | 7 | 1 | 4 | 10 | Hash preservado | Passed |
+| `elasticity` | `a7bb4f85-9cc1-46ad-9f65-44f978abf851` | 7 | 1 | 4 | 10 | Hash preservado | Passed |
+| `reliability` | `b74f3c89-867f-409e-b5b2-8ad1713c1428` | 7 | 1 | 4 | 10 | Hash preservado | Passed |
+| `predictability` | `e709cd4e-c17a-469e-b7a8-70271c79e52e` | 7 | 1 | 4 | 10 | Hash preservado | Passed |
+
+As distinções High Availability ≠ Reliability, Scalability ≠ Elasticity e Predictability ≠ fixed price foram verificadas nos blocks. `lessons.content` permanece preenchido nas 76 Lessons, nenhum fallback foi modificado e nenhuma Lesson depende exclusivamente dele.
+
+## Practice
+
+- As 76 Lesson Quizzes foram iniciadas, receberam cinco Questions da Lesson correta, persistiram cinco answers, concluíram e calcularam score corretamente.
+- As 76 conclusões temporárias de Lesson produziram progress válido.
+- Os 12 Topic Quizzes foram executados em dois attempts completos por Topic, com Questions selecionadas e answers persistidas.
+- Review foi gerado a partir de respostas incorretas, concluído e pontuado.
+- Spaced repetition criou review/progress e recolocou corretamente um card vencido na fila.
+- Todos os dados usados nesta validação foram fixtures transacionais removidos por `ROLLBACK`.
+
+## Topic Quiz Retakes
+
+A tabela de 12 Topics em **Topic Quiz Issues** foi revalidada sem mudança: dez Topics ficaram `PASS`; `Cloud Service Types` permaneceu `LIMITED BY POOL` com overlap mínimo 2 e `Governance and Compliance` com overlap mínimo 5. Todos os attempts mantiveram todas as Lessons elegíveis, Δ≤1 entre Lessons e dificuldade 3 easy / 5 medium / 2 hard. Não houve `FAIL`.
+
+## Question Pool
+
+As 512 Questions possuem quatro options distintas, exatamente uma marcada correta, explanation válida, Lesson/Topic/Domain coerentes e zero duplicatas exatas normalizadas. A heurística conservadora de proximidade textual por contenção encontrou zero candidatos; a heurística de resposta correta óbvia por comprimento encontrou zero candidatos. A revisão direcionada a Questions hard, comparações cross-domain e termos operacionais não encontrou P0/P1; os itens mais operacionais de Cloud Benefits continuam como polish P3.
+
+| Topic | Easy | Medium | Hard | Classificação |
+| --- | ---: | ---: | ---: | --- |
+| Cloud Computing | 21 | 37 | 14 | Balanced |
+| Benefits of Cloud Services | 19 | 32 | 10 | Acceptable |
+| Cloud Service Types | 8 | 8 | 4 | Balanced |
+| Core Architectural Components | 15 | 19 | 8 | Balanced |
+| Compute Services | 19 | 22 | 10 | Balanced |
+| Networking Services | 11 | 13 | 6 | Balanced |
+| Storage Services | 17 | 19 | 10 | Balanced |
+| Identity, Access and Security | 19 | 21 | 10 | Balanced |
+| Cost Management | 10 | 14 | 6 | Balanced |
+| Governance and Compliance | 6 | 6 | 3 | Balanced; pool menor |
+| Resource Management and Deployment | 19 | 25 | 11 | Balanced |
+| Monitoring | 14 | 18 | 8 | Balanced |
+
+Dois mocks conceituais de 40 Questions foram selecionados sem persistência e sem overlap entre eles. Cada seleção representou os 12 Topics e usou:
+
+| Domain | Questions | Easy / Medium / Hard | Peso simulado |
+| --- | ---: | --- | ---: |
+| Domain 1 | 11 | 4 / 5 / 2 | 27.5% |
+| Domain 2 | 15 | 5 / 7 / 3 | 37.5% |
+| Domain 3 | 14 | 5 / 6 / 3 | 35.0% |
+| **Total** | **40** | **14 / 18 / 8** | **100%** |
+
+O pool suporta, portanto, variação entre mocks, todos os Topics, três difficulties e os pesos oficiais sem criar Questions ou tabelas de Mock.
+
+## Flashcards
+
+Os 397 cards permanecem associados a Lessons válidas, sem duplicatas exatas normalizadas, sem front/back vazio e sem respostas acima de 500 caracteres. Review history, `user_flashcard_progress`, fila de novos cards e cards vencidos passaram. Repetições conceituais cross-domain permanecem intencionais e não são blocker.
+
+## Visual Experiences
+
+As 17 experiências permanecem publicadas, vinculadas a uma Lesson e a exatamente um block `visual_experience`, com tipos `comparison`, `architecture`, `flow` ou `responsibility` e config estrutural válida. Renderer, configuração inválida isolada, fallback, teclado e comportamento responsivo são cobertos pelos testes automatizados. A inspeção mobile 390×844 já registrada continua válida; não houve mudança de frontend na 10.4.
+
+## Database Integrity
+
+- 712 blocks publicados, tipos suportados, ordem contínua e um summary por Lesson.
+- Payloads de image, video, visual experience e azure lab validados sem introduzir novos tipos.
+- Nenhuma referência órfã em conteúdo, progresso, quizzes, answers ou spaced repetition.
+- As Questions mantêm hierarquia consistente e as options pertencem à Question respondida.
+- Nenhum UUID ou histórico existente foi reescrito.
+- Migration final aplicada; fixtures e permissão temporária de teste foram revertidos.
+
+## Security
+
+RLS permanece habilitado nas 14 tabelas auditadas. Usuário autenticado não recebe escrita curricular nem leitura direta de Questions/gabarito. O cenário com dois usuários confirmou ausência de acesso cruzado a progress, attempts, attempt Questions, answers, Flashcard reviews e Flashcard progress.
+
+## Technical Validation
+
+| Check | Final result |
+| --- | --- |
+| Final SQL pre-Mock validator | Passed in remote Supabase |
+| Curriculum/inventory/orphans | Passed |
+| 76 Lesson Quizzes | Passed |
+| 12 Topic Quizzes × 2 attempts | Passed |
+| Two conceptual 40-question mocks | Passed; zero overlap |
+| Review/Spaced Repetition | Passed |
+| RLS/user isolation | Passed |
+| Content Blocks/Visual Experiences | Passed |
+| Typecheck | Passed |
+| Lint | Passed, zero warnings |
+| Vitest | Passed: 8 files, 79/79 tests |
+| Build | Passed: 1,821 modules |
+| `git diff --check` | Passed; advisory LF→CRLF only |
+| `db:push:dry-run` | Passed; remote up to date, no pending migration |
+
+O único warning técnico é o bundle principal de 656.67 kB após minificação. Não houve regressão funcional; permanece P3.
+
+## Remaining Issues
+
+| Severity | Area | Previous Status | Current Status | Notes |
+| --- | --- | --- | --- | --- |
+| P1 | Domain 1 Benefits blocks | Open na 10.1 | RESOLVED na 10.2 | Cinco Lessons estruturadas e revalidadas. |
+| P2 | Topic Quiz retakes | Open na 10.1 | RESOLVED na 10.3 | Rotação por usuário e overlap mínimo confirmados novamente. |
+| P3 | Legacy fallback parity | Open | Non-blocking | Sem contradição crítica; reconciliação editorial futura. |
+| P3 | Coverage documentation granularity | Open | Non-blocking | Manter visão oficial normalizada junto ao detalhe atômico. |
+| P3 | Future Mock weighting | Open | Implementation constraint | O futuro seletor deve estratificar 25–30 / 35–40 / 30–35. |
+| P3 | Frontend bundle | Open | Non-blocking | Avaliar code splitting futuramente. |
+
+Totais finais: **P0: 0 · P1: 0 · P2: 0 · P3: 4**.
+
+## Final Decision
+
+**AZ-900 CONTENT READY**
+
+**READY FOR MOCK DEVELOPMENT**
+
+Todos os critérios objetivos da Etapa 10.4 foram satisfeitos. Essa decisão significa que a plataforma possui base curricular e prática suficiente para iniciar o sistema de Mock Exams; ela **não** significa `USER IS READY FOR EXAM`.
 
 ## Recommended Roadmap
 
@@ -372,12 +516,12 @@ Status por Domain:
 
 ### 10.3 — Global Practice Balancing
 
-Recomendada. Não é necessário aumentar artificialmente o banco. Implementar rotação de Topic Quiz preservando round-robin e validar que retakes usam combinações diferentes. Preparar metadados/consultas para futura seleção por pesos oficiais, sem criar Mock Exam.
+**Concluída.** A rotação usa histórico por usuário, minimiza overlap, preserva todas as Lessons, mantém 3/5/2 e não adiciona Questions nem altera conteúdo.
 
 ### 10.4 — Final Pre-Mock Validation
 
-Reexecutar os 57 objetivos oficiais, integridade global, 76 Lesson Quizzes, 12 Topic Quizzes, Review, spaced repetition, RLS, isolamento, mobile e acessibilidade. Somente declarar `READY FOR MOCK DEVELOPMENT` depois de eliminar o P2 de prática e concluir esta validação.
+**Concluída.** Currículo, inventário, 76 Lesson Quizzes, 12 Topic Quizzes com retake, Review, spaced repetition, RLS, isolamento, blocks, visuais, fallback, dois mocks conceituais e regressão técnica foram revalidados. Decisão: `READY FOR MOCK DEVELOPMENT`.
 
 ### 11.x — Mock Exam System
 
-Bloqueada até a conclusão das Etapas 10.2–10.4.
+Liberada para planejamento e implementação em etapa própria. Nenhum componente de Mock foi criado na 10.4.

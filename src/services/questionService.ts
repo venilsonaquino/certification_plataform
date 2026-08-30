@@ -17,7 +17,7 @@ function getClient() {
   return supabase
 }
 
-function mapQuestion(row: Omit<QuestionDatabaseRow, 'explanation'>): PublicQuestion {
+function mapQuestion(row: Omit<QuestionDatabaseRow, 'explanation' | 'mock_eligible'>): PublicQuestion {
   return {
     id: row.id,
     certificationId: row.certification_id,

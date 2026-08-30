@@ -107,7 +107,9 @@ function mapReview(row: QuizAnswerReviewDatabaseRow): QuizAnswerReview {
   }
 }
 
-function mapPublicQuestion(row: Omit<QuestionDatabaseRow, 'explanation'>): PublicQuestion {
+function mapPublicQuestion(
+  row: Omit<QuestionDatabaseRow, 'explanation' | 'mock_eligible'>,
+): PublicQuestion {
   return {
     id: row.id,
     certificationId: row.certification_id,
