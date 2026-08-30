@@ -4,8 +4,10 @@ import {
   mockExamAnswerDatabaseRowSchema,
   mockExamAttemptDatabaseRowSchema,
   mockExamAttemptQuestionDatabaseRowSchema,
+  mockExamHistoryDatabaseRowSchema,
   mockExamResultDatabaseRowSchema,
   mockExamReviewDatabaseRowSchema,
+  mockExamSessionDatabaseRowSchema,
   saveMockExamAnswerInputSchema,
 } from '../lib/mockExamValidation'
 import { supabase } from '../lib/supabase'
@@ -13,9 +15,12 @@ import type {
   MockExamAnswer,
   MockExamAttempt,
   MockExamAttemptData,
+  MockExamHistoryItem,
+  MockExamHistoryPage,
   MockExamQuestionForExecution,
   MockExamQuestionForReview,
   MockExamResult,
+  MockExamSession,
   SaveMockExamAnswerInput,
 } from '../types/mockExam'
 
@@ -141,6 +146,26 @@ function mapReviewQuestion(input: unknown): MockExamQuestionForReview {
   }
 }
 
+function mapHistoryItem(input: unknown): MockExamHistoryItem {
+  const row = parseExternal(mockExamHistoryDatabaseRowSchema, input)
+  return {
+    attemptId: row.attempt_id,
+    attemptNumber: row.attempt_number,
+    status: row.status,
+    totalQuestions: row.total_questions,
+    answeredQuestions: row.answered_questions,
+    correctAnswers: row.correct_answers,
+    incorrectAnswers: row.incorrect_answers,
+    unansweredQuestions: row.unanswered_questions,
+    practiceScorePercentage: row.practice_score_percentage,
+    startedAt: row.started_at,
+    submittedAt: row.submitted_at,
+    expiresAt: row.expires_at,
+    timeLimitSeconds: row.time_limit_seconds,
+    elapsedSeconds: row.elapsed_seconds,
+  }
+}
+
 export async function getMockExamAttempt(attemptId: string): Promise<MockExamAttempt | null> {
   const { data, error } = await getClient()
     .from('mock_exam_attempts')
@@ -172,6 +197,34 @@ export async function listMockExamAttempts(
   return (data ?? []).map(mapAttempt)
 }
 
+export async function syncMockExamAttempt(attemptId: string): Promise<MockExamSession | null> {
+  const { data, error } = await getClient()
+    .rpc('sync_mock_exam_attempt', { p_attempt_id: attemptId })
+    .maybeSingle()
+  throwQueryError(error)
+  if (!data) return null
+  const row = parseExternal(mockExamSessionDatabaseRowSchema, data)
+  return { attempt: mapAttempt(row.attempt), serverNow: row.server_now }
+}
+
+export async function getMockExamHistory(
+  certificationId: string,
+  limit = 10,
+  offset = 0,
+): Promise<MockExamHistoryPage> {
+  const { data, error } = await getClient().rpc('get_mock_exam_history', {
+    p_certification_id: certificationId,
+    p_limit: limit,
+    p_offset: offset,
+  })
+  throwQueryError(error)
+  const rows = (data ?? []).map((row) => ({
+    parsed: parseExternal(mockExamHistoryDatabaseRowSchema, row),
+    item: mapHistoryItem(row),
+  }))
+  return { items: rows.map(({ item }) => item), totalCount: rows[0]?.parsed.total_count ?? 0 }
+}
+
 export async function getActiveMockExamAttempt(
   certificationId: string,
 ): Promise<MockExamAttempt | null> {
@@ -185,8 +238,11 @@ export async function getActiveMockExamAttempt(
   return data ? mapAttempt(data) : null
 }
 
-export async function loadMockExamAttempt(attemptId: string): Promise<MockExamAttemptData | null> {
-  const attempt = await getMockExamAttempt(attemptId)
+export async function loadMockExamAttempt(
+  attemptId: string,
+  synchronizedAttempt?: MockExamAttempt,
+): Promise<MockExamAttemptData | null> {
+  const attempt = synchronizedAttempt ?? await getMockExamAttempt(attemptId)
   if (!attempt) return null
   if (attempt.status !== 'in_progress') {
     throw new MockExamDataError('Somente um Mock Exam em andamento pode ser retomado.')

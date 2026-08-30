@@ -44,7 +44,7 @@ export function MockExamReviewPage() {
         navigate(mockExamExecutionRoute(currentCertification.code, attempt.id), { replace: true })
         return
       }
-      if (attempt.status !== 'completed') {
+      if (attempt.status !== 'completed' && attempt.status !== 'expired') {
         setError('Este Mock Exam não está disponível para Review.')
         return
       }
@@ -86,7 +86,7 @@ export function MockExamReviewPage() {
       <header className="mt-4">
         <p className="text-sm font-bold text-blue-700">AZ-900 · Review pós-Mock</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Review Questions</h1>
-        <p className="mt-2 text-sm leading-6 text-slate-600">Answer keys e explanations são liberados somente porque este Attempt está completed.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600">Answer keys e explanations são liberados somente porque este Attempt está finalizado.</p>
       </header>
 
       <nav aria-label="Filtros do Review" className="mt-6 flex gap-2 overflow-x-auto pb-2">

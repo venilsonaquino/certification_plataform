@@ -101,9 +101,9 @@ export const mockExamAttemptDatabaseRowSchema = z
         message: 'Answered count cannot exceed total Questions.',
       })
     }
-    if (attempt.status === 'completed') {
+    if (attempt.status === 'completed' || attempt.status === 'expired') {
       if (!hasResult || attempt.submitted_at === null || attempt.abandoned_at !== null) {
-        context.addIssue({ code: 'custom', path: ['status'], message: 'Completed lifecycle is invalid.' })
+        context.addIssue({ code: 'custom', path: ['status'], message: 'Finalized lifecycle is invalid.' })
       }
       if (
         attempt.correct_answers !== null &&
@@ -116,7 +116,7 @@ export const mockExamAttemptDatabaseRowSchema = z
         context.addIssue({ code: 'custom', path: ['status'], message: 'Result totals are inconsistent.' })
       }
     } else if (!hasNoResult) {
-      context.addIssue({ code: 'custom', path: ['status'], message: 'Only completed attempts have results.' })
+      context.addIssue({ code: 'custom', path: ['status'], message: 'Only finalized attempts have results.' })
     }
     if (attempt.status === 'in_progress' && (attempt.submitted_at || attempt.abandoned_at)) {
       context.addIssue({ code: 'custom', path: ['status'], message: 'In-progress lifecycle is invalid.' })
@@ -124,8 +124,8 @@ export const mockExamAttemptDatabaseRowSchema = z
     if (attempt.status === 'abandoned' && attempt.abandoned_at === null) {
       context.addIssue({ code: 'custom', path: ['abandoned_at'], message: 'Abandoned timestamp is required.' })
     }
-    if (attempt.status !== 'completed' && attempt.submitted_at !== null) {
-      context.addIssue({ code: 'custom', path: ['submitted_at'], message: 'Only completed attempts are submitted.' })
+    if (!['completed', 'expired'].includes(attempt.status) && attempt.submitted_at !== null) {
+      context.addIssue({ code: 'custom', path: ['submitted_at'], message: 'Only finalized attempts are submitted.' })
     }
     if (attempt.status !== 'abandoned' && attempt.abandoned_at !== null) {
       context.addIssue({ code: 'custom', path: ['abandoned_at'], message: 'Abandon timestamp is invalid.' })
@@ -136,7 +136,37 @@ export const mockExamAttemptDatabaseRowSchema = z
     if ((attempt.time_limit_seconds === null) !== (attempt.expires_at === null)) {
       context.addIssue({ code: 'custom', path: ['expires_at'], message: 'Timer fields must be set together.' })
     }
+    if (attempt.elapsed_seconds !== null && attempt.time_limit_seconds !== null && attempt.elapsed_seconds > attempt.time_limit_seconds) {
+      context.addIssue({ code: 'custom', path: ['elapsed_seconds'], message: 'Elapsed time cannot exceed the time limit.' })
+    }
   })
+
+export const mockExamSessionDatabaseRowSchema = z
+  .object({
+    attempt: mockExamAttemptDatabaseRowSchema,
+    server_now: timestampSchema,
+  })
+  .strict()
+
+export const mockExamHistoryDatabaseRowSchema = z
+  .object({
+    attempt_id: uuidSchema,
+    attempt_number: z.coerce.number().int().positive(),
+    status: mockExamAttemptStatusSchema,
+    total_questions: z.number().int().positive(),
+    answered_questions: z.number().int().nonnegative(),
+    correct_answers: nullableCountSchema,
+    incorrect_answers: nullableCountSchema,
+    unanswered_questions: nullableCountSchema,
+    practice_score_percentage: z.coerce.number().min(0).max(100).nullable(),
+    started_at: timestampSchema,
+    submitted_at: nullableTimestampSchema,
+    expires_at: nullableTimestampSchema,
+    time_limit_seconds: z.number().int().positive().nullable(),
+    elapsed_seconds: z.number().int().nonnegative().nullable(),
+    total_count: z.coerce.number().int().nonnegative(),
+  })
+  .strict()
 
 export const mockExamExecutionOptionSchema = z
   .object({

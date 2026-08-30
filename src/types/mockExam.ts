@@ -11,6 +11,7 @@ export type MockExamAttemptStatus = (typeof MOCK_EXAM_ATTEMPT_STATUSES)[number]
 
 export const AZ900_PRACTICE_MOCK_CONFIGURATION = {
   totalQuestions: 40,
+  timeLimitMinutes: 60,
   domainAllocation: { 1: 11, 2: 15, 3: 14 },
   difficultyAllocation: { easy: 12, medium: 20, hard: 8 },
   selectionPolicyVersion: 'az900-mock-v1',
@@ -105,6 +106,33 @@ export interface SaveMockExamAnswerInput {
 export interface MockExamAttemptData {
   readonly attempt: MockExamAttempt
   readonly questions: readonly MockExamQuestionForExecution[]
+}
+
+export interface MockExamSession {
+  readonly attempt: MockExamAttempt
+  readonly serverNow: string
+}
+
+export interface MockExamHistoryItem {
+  readonly attemptId: string
+  readonly attemptNumber: number
+  readonly status: MockExamAttemptStatus
+  readonly totalQuestions: number
+  readonly answeredQuestions: number
+  readonly correctAnswers: number | null
+  readonly incorrectAnswers: number | null
+  readonly unansweredQuestions: number | null
+  readonly practiceScorePercentage: number | null
+  readonly startedAt: string
+  readonly submittedAt: string | null
+  readonly expiresAt: string | null
+  readonly timeLimitSeconds: number | null
+  readonly elapsedSeconds: number | null
+}
+
+export interface MockExamHistoryPage {
+  readonly items: readonly MockExamHistoryItem[]
+  readonly totalCount: number
 }
 
 export type MockExamAnswerSaveStatus = 'idle' | 'saving' | 'saved' | 'error'

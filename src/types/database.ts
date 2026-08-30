@@ -409,6 +409,29 @@ type MockExamReviewRow = {
   explanation: string | null
 }
 
+type MockExamSessionRow = {
+  attempt: Json
+  server_now: string
+}
+
+type MockExamHistoryRow = {
+  attempt_id: string
+  attempt_number: number
+  status: MockExamAttemptStatus
+  total_questions: number
+  answered_questions: number
+  correct_answers: number | null
+  incorrect_answers: number | null
+  unanswered_questions: number | null
+  practice_score_percentage: number | null
+  started_at: string
+  submitted_at: string | null
+  expires_at: string | null
+  time_limit_seconds: number | null
+  elapsed_seconds: number | null
+  total_count: number
+}
+
 type DatabaseRelationship = {
   foreignKeyName: string
   columns: string[]
@@ -917,6 +940,14 @@ export interface Database {
         Args: { p_attempt_id: string }
         Returns: MockExamReviewRow[]
       }
+      sync_mock_exam_attempt: {
+        Args: { p_attempt_id: string }
+        Returns: MockExamSessionRow[]
+      }
+      get_mock_exam_history: {
+        Args: { p_certification_id: string; p_limit?: number; p_offset?: number }
+        Returns: MockExamHistoryRow[]
+      }
     }
     Enums: Record<string, never>
     CompositeTypes: Record<string, never>
@@ -954,3 +985,5 @@ export type MockExamAttemptQuestionPublicDatabaseRow = MockExamAttemptQuestionPu
 export type SaveMockExamAnswerDatabaseRow = SaveMockExamAnswerRow
 export type MockExamResultDatabaseRow = MockExamResultRow
 export type MockExamReviewDatabaseRow = MockExamReviewRow
+export type MockExamSessionDatabaseRow = MockExamSessionRow
+export type MockExamHistoryDatabaseRow = MockExamHistoryRow

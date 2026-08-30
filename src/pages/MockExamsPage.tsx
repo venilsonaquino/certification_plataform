@@ -3,16 +3,19 @@ import { useNavigate } from 'react-router-dom'
 
 import { CertificationDataState } from '../components/certifications/CertificationDataState'
 import { MockExamStart } from '../components/mockExam/MockExamStart'
+import { MockExamHistory } from '../components/mockExam/MockExamHistory'
+import { MockExamScoreHistory } from '../components/mockExam/MockExamScoreHistory'
 import { useCertification } from '../hooks/useCertification'
-import { mockExamExecutionRoute } from '../lib/routes'
+import { mockExamExecutionRoute, mockExamResultRoute } from '../lib/routes'
 import {
-  getActiveMockExamAttempt,
+  getMockExamHistory,
   startMockExam,
 } from '../services/mockExamService'
-import type { MockExamAttempt } from '../types/mockExam'
+import type { MockExamHistoryItem } from '../types/mockExam'
 
 const START_ERROR = 'Não foi possível preparar o Mock agora. Tente novamente em instantes.'
 const POOL_ERROR = 'O banco de Questions ainda não possui capacidade suficiente para iniciar este Mock.'
+const PAGE_SIZE = 10
 
 function getStartError(error: unknown) {
   const message = error instanceof Error ? error.message.toLowerCase() : ''
@@ -25,15 +28,27 @@ export function MockExamsPage() {
   const { currentCertification } = useCertification()
   const navigate = useNavigate()
   const requestInFlight = useRef(false)
-  const [activeAttempt, setActiveAttempt] = useState<MockExamAttempt | null>(null)
+  const [activeAttempt, setActiveAttempt] = useState<{ id: string } | null>(null)
+  const [history, setHistory] = useState<readonly MockExamHistoryItem[]>([])
+  const [recentHistory, setRecentHistory] = useState<readonly MockExamHistoryItem[]>([])
+  const [historyTotal, setHistoryTotal] = useState(0)
+  const [page, setPage] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const loadActiveAttempt = useCallback(async () => {
+  const loadHistory = useCallback(async (targetPage = 0) => {
     setLoading(true)
     setError(null)
     try {
-      setActiveAttempt(await getActiveMockExamAttempt(currentCertification.id))
+      const loaded = await getMockExamHistory(currentCertification.id, PAGE_SIZE, targetPage * PAGE_SIZE)
+      setHistory(loaded.items)
+      setHistoryTotal(loaded.totalCount)
+      setPage(targetPage)
+      if (targetPage === 0) {
+        setRecentHistory(loaded.items)
+        const active = loaded.items.find((item) => item.status === 'in_progress')
+        setActiveAttempt(active ? { id: active.attemptId } : null)
+      }
     } catch (cause) {
       console.error('Falha ao localizar Mock Exam em andamento.', cause)
       setError(START_ERROR)
@@ -42,9 +57,7 @@ export function MockExamsPage() {
     }
   }, [currentCertification.id])
 
-  useEffect(() => {
-    void loadActiveAttempt()
-  }, [loadActiveAttempt])
+  useEffect(() => { void loadHistory(0) }, [loadHistory])
 
   const handleStart = async () => {
     if (requestInFlight.current) return
@@ -63,18 +76,14 @@ export function MockExamsPage() {
     }
   }
 
-  if (loading && !activeAttempt && !error) {
+  if (loading && history.length === 0 && !error) {
     return <CertificationDataState title="Verificando seus simulados..." loading />
   }
 
-  return (
-    <MockExamStart
-      activeAttempt={activeAttempt}
-      loading={loading}
-      error={error}
-      onStart={() => void handleStart()}
-      onResume={(attemptId) => navigate(mockExamExecutionRoute(currentCertification.code, attemptId))}
-      onRetry={() => void loadActiveAttempt()}
-    />
-  )
+  const resume = (attemptId: string) => navigate(mockExamExecutionRoute(currentCertification.code, attemptId))
+  return <>
+    <MockExamStart activeAttempt={activeAttempt} hasHistory={historyTotal > 0} loading={loading} error={error} onStart={() => void handleStart()} onResume={resume} onRetry={() => void loadHistory(page)} />
+    <MockExamScoreHistory items={recentHistory} />
+    <MockExamHistory items={history} totalCount={historyTotal} page={page} pageSize={PAGE_SIZE} loading={loading} onPageChange={(next) => void loadHistory(next)} onResume={resume} onViewResult={(attemptId) => navigate(mockExamResultRoute(currentCertification.code, attemptId))} />
+  </>
 }

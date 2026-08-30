@@ -8,21 +8,25 @@ import type { MockExamAttempt, MockExamQuestionForExecution } from '../types/moc
 const mocks = vi.hoisted(() => ({
   useCertification: vi.fn(),
   getMockExamAttempt: vi.fn(),
+  syncMockExamAttempt: vi.fn(),
   loadMockExamAttempt: vi.fn(),
   saveMockExamAnswer: vi.fn(),
   submitMockExam: vi.fn(),
   getMockExamResult: vi.fn(),
   getMockExamReview: vi.fn(),
+  startMockExam: vi.fn(),
 }))
 
 vi.mock('../hooks/useCertification', () => ({ useCertification: mocks.useCertification }))
 vi.mock('../services/mockExamService', () => ({
   getMockExamAttempt: mocks.getMockExamAttempt,
+  syncMockExamAttempt: mocks.syncMockExamAttempt,
   loadMockExamAttempt: mocks.loadMockExamAttempt,
   saveMockExamAnswer: mocks.saveMockExamAnswer,
   submitMockExam: mocks.submitMockExam,
   getMockExamResult: mocks.getMockExamResult,
   getMockExamReview: mocks.getMockExamReview,
+  startMockExam: mocks.startMockExam,
 }))
 
 import { MockExamExecutionPage } from './MockExamExecutionPage'
@@ -43,8 +47,8 @@ const attempt: MockExamAttempt = {
   startedAt: '2026-08-30T12:00:00.000Z',
   submittedAt: null,
   abandonedAt: null,
-  expiresAt: null,
-  timeLimitSeconds: null,
+  expiresAt: '2026-08-30T13:00:00.000Z',
+  timeLimitSeconds: 3600,
   elapsedSeconds: null,
   lastActivityAt: '2026-08-30T12:00:00.000Z',
   selectionPolicyVersion: 'az900-mock-v1',
@@ -85,6 +89,7 @@ describe('MockExamExecutionPage', () => {
     sessionStorage.clear()
     mocks.useCertification.mockReturnValue({ currentCertification: { id: 'certification-1', code: 'az-900' } })
     mocks.getMockExamAttempt.mockResolvedValue(attempt)
+    mocks.syncMockExamAttempt.mockResolvedValue({ attempt, serverNow: attempt.startedAt })
     mocks.loadMockExamAttempt.mockResolvedValue({ attempt, questions })
     mocks.saveMockExamAnswer.mockImplementation(({ attemptQuestionId, selectedOptionKey }) => Promise.resolve({
       id: `answer-${attemptQuestionId}`,
@@ -127,7 +132,7 @@ describe('MockExamExecutionPage', () => {
     sessionStorage.setItem(`mock-position:${attempt.id}`, '5')
     renderPage()
     expect(await screen.findByText('Enunciado seguro 6')).toBeInTheDocument()
-    expect(mocks.loadMockExamAttempt).toHaveBeenCalledWith(attempt.id)
+    expect(mocks.loadMockExamAttempt).toHaveBeenCalledWith(attempt.id, attempt)
     expect(screen.getByRole('button', { name: 'Question 2, respondida' })).toBeInTheDocument()
   })
 
@@ -156,7 +161,7 @@ describe('MockExamExecutionPage', () => {
   })
 
   it('redireciona attempt completado sem carregar Questions editáveis', async () => {
-    mocks.getMockExamAttempt.mockResolvedValue({ ...attempt, status: 'completed' })
+    mocks.syncMockExamAttempt.mockResolvedValue({ attempt: { ...attempt, status: 'completed' }, serverNow: attempt.startedAt })
     renderPage()
     expect(await screen.findByText('Resultado mínimo')).toBeInTheDocument()
     expect(mocks.loadMockExamAttempt).not.toHaveBeenCalled()
@@ -173,9 +178,8 @@ describe('MockExamExecutionPage', () => {
       practiceScorePercentage: 2.5,
       submittedAt: '2026-08-30T12:10:00.000Z',
     }
-    mocks.getMockExamAttempt
-      .mockResolvedValueOnce(attempt)
-      .mockResolvedValue(completedAttempt)
+    mocks.syncMockExamAttempt.mockResolvedValue({ attempt, serverNow: attempt.startedAt })
+    mocks.getMockExamAttempt.mockResolvedValue(completedAttempt)
     const summary = { totalQuestions: 40, correctAnswers: 1, incorrectAnswers: 0, unansweredQuestions: 39, percentage: 2.5 }
     mocks.getMockExamResult.mockResolvedValue({
       attemptId: attempt.id, totalQuestions: 40, answeredQuestions: 1,

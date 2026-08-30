@@ -5,13 +5,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
   useCertification: vi.fn(),
-  getActiveMockExamAttempt: vi.fn(),
+  getMockExamHistory: vi.fn(),
   startMockExam: vi.fn(),
 }))
 
 vi.mock('../hooks/useCertification', () => ({ useCertification: mocks.useCertification }))
 vi.mock('../services/mockExamService', () => ({
-  getActiveMockExamAttempt: mocks.getActiveMockExamAttempt,
+  getMockExamHistory: mocks.getMockExamHistory,
   startMockExam: mocks.startMockExam,
 }))
 
@@ -37,7 +37,7 @@ describe('MockExamsPage', () => {
   beforeEach(() => {
     Object.values(mocks).forEach((mock) => mock.mockReset())
     mocks.useCertification.mockReturnValue({ currentCertification: { id: 'certification-1', code: 'az-900' } })
-    mocks.getActiveMockExamAttempt.mockResolvedValue(null)
+    mocks.getMockExamHistory.mockResolvedValue({ items: [], totalCount: 0 })
   })
 
   it('inicia uma única tentativa mesmo com clique repetido e abre o runner', async () => {
@@ -64,11 +64,29 @@ describe('MockExamsPage', () => {
   })
 
   it('oferece resume sem criar outra tentativa', async () => {
-    mocks.getActiveMockExamAttempt.mockResolvedValue(attempt)
+    mocks.getMockExamHistory.mockResolvedValue({ items: [{ attemptId: attempt.id, status: 'in_progress', answeredQuestions: 0, totalQuestions: 40, attemptNumber: 1, startedAt: '2026-08-30T12:00:00.000Z' }], totalCount: 1 })
     renderPage()
 
     await userEvent.click(await screen.findByRole('button', { name: 'Resume Mock' }))
     expect(await screen.findByText('Runner aberto')).toBeInTheDocument()
     expect(mocks.startMockExam).not.toHaveBeenCalled()
+  })
+
+  it('mostra histórico finalizado, score objetivo e CTA de novo Mock', async () => {
+    mocks.getMockExamHistory.mockResolvedValue({
+      totalCount: 1,
+      items: [{
+        attemptId: 'attempt-completed', attemptNumber: 3, status: 'completed',
+        totalQuestions: 40, answeredQuestions: 40, correctAnswers: 32, incorrectAnswers: 8,
+        unansweredQuestions: 0, practiceScorePercentage: 80,
+        startedAt: '2026-08-30T12:00:00.000Z', submittedAt: '2026-08-30T12:34:18.000Z',
+        expiresAt: '2026-08-30T13:00:00.000Z', timeLimitSeconds: 3600, elapsedSeconds: 2058,
+      }],
+    })
+    renderPage()
+    expect(await screen.findByRole('button', { name: 'Start New Mock' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Mock #3' })).toBeInTheDocument()
+    expect(screen.getByText('80% · 32 / 40 correct · 34m 18s')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Recent Practice Scores' })).toBeInTheDocument()
   })
 })

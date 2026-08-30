@@ -6,13 +6,14 @@ import { CertificationDataState } from '../components/certifications/Certificati
 import { MockQuestion } from '../components/mockExam/MockQuestion'
 import { MockQuestionNavigator } from '../components/mockExam/MockQuestionNavigator'
 import { MockSubmitDialog } from '../components/mockExam/MockSubmitDialog'
+import { MockExamTimer } from '../components/mockExam/MockExamTimer'
 import { useCertification } from '../hooks/useCertification'
 import { mockExamResultRoute } from '../lib/routes'
 import {
-  getMockExamAttempt,
   loadMockExamAttempt,
   saveMockExamAnswer,
   submitMockExam,
+  syncMockExamAttempt,
 } from '../services/mockExamService'
 import type {
   MockExamAnswerState,
@@ -38,6 +39,7 @@ export function MockExamExecutionPage() {
   const { currentCertification } = useCertification()
   const navigate = useNavigate()
   const submitInFlight = useRef(false)
+  const expirationInFlight = useRef(false)
   const [data, setData] = useState<MockExamAttemptData | null>(null)
   const [answers, setAnswers] = useState<Record<string, MockExamAnswerState>>({})
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -47,17 +49,19 @@ export function MockExamExecutionPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [serverNow, setServerNow] = useState<string | null>(null)
 
   const loadAttempt = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
-      const attempt = await getMockExamAttempt(attemptId)
+      const session = await syncMockExamAttempt(attemptId)
+      const attempt = session?.attempt ?? null
       if (!attempt || attempt.certificationId !== currentCertification.id) {
         setError(LOAD_ERROR)
         return
       }
-      if (attempt.status === 'completed') {
+      if (attempt.status === 'completed' || attempt.status === 'expired') {
         navigate(mockExamResultRoute(currentCertification.code, attempt.id), { replace: true })
         return
       }
@@ -65,8 +69,9 @@ export function MockExamExecutionPage() {
         setError('Este Mock Exam não está mais disponível para edição.')
         return
       }
+      setServerNow(session?.serverNow ?? null)
 
-      const loaded = await loadMockExamAttempt(attemptId)
+      const loaded = await loadMockExamAttempt(attemptId, attempt)
       if (!loaded || loaded.questions.length !== EXPECTED_QUESTIONS) {
         setError(LOAD_ERROR)
         return
@@ -88,6 +93,28 @@ export function MockExamExecutionPage() {
       setLoading(false)
     }
   }, [attemptId, currentCertification.code, currentCertification.id, navigate])
+
+  const handleExpiration = useCallback(async () => {
+    if (expirationInFlight.current) return
+    expirationInFlight.current = true
+    setSubmitting(true)
+    setDialogOpen(false)
+    try {
+      const session = await syncMockExamAttempt(attemptId)
+      if (session?.attempt.status === 'expired' || session?.attempt.status === 'completed') {
+        sessionStorage.removeItem(`mock-position:${attemptId}`)
+        navigate(mockExamResultRoute(currentCertification.code, attemptId), { replace: true })
+        return
+      }
+      await loadAttempt()
+    } catch (cause) {
+      console.error('Falha ao finalizar Mock Exam expirado.', cause)
+      setSubmitError('O tempo terminou. Recarregue para abrir o resultado finalizado com segurança.')
+    } finally {
+      setSubmitting(false)
+      expirationInFlight.current = false
+    }
+  }, [attemptId, currentCertification.code, loadAttempt, navigate])
 
   useEffect(() => {
     void loadAttempt()
@@ -183,7 +210,7 @@ export function MockExamExecutionPage() {
   return (
     <div className="mx-auto max-w-6xl">
       <header className="border-b border-slate-200 pb-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <div>
             <p className="text-sm font-bold text-blue-700">AZ-900 · Practice Mock</p>
             <h1 className="mt-1 text-2xl font-bold text-slate-950 sm:text-3xl">AZ-900 Practice Mock</h1>
@@ -192,6 +219,9 @@ export function MockExamExecutionPage() {
               {' · '}{answeredCount} respondidas
             </p>
           </div>
+          {data.attempt.expiresAt && serverNow && (
+            <MockExamTimer expiresAt={data.attempt.expiresAt} serverNow={serverNow} onExpire={handleExpiration} />
+          )}
           <button
             type="button"
             disabled={hasPendingSave}

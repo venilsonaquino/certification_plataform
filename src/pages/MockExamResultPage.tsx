@@ -1,4 +1,4 @@
-import { ArrowLeft, SearchCheck } from 'lucide-react'
+import { ArrowLeft, LoaderCircle, SearchCheck } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
@@ -7,7 +7,7 @@ import { MockExamBreakdownSection } from '../components/mockExam/MockExamBreakdo
 import { MockExamResultSummary } from '../components/mockExam/MockExamResultSummary'
 import { useCertification } from '../hooks/useCertification'
 import { certificationRoute, mockExamExecutionRoute, mockExamReviewRoute } from '../lib/routes'
-import { getMockExamAttempt, getMockExamResult } from '../services/mockExamService'
+import { getMockExamAttempt, getMockExamResult, startMockExam } from '../services/mockExamService'
 import type { MockExamResult } from '../types/mockExam'
 
 const RESULT_ERROR = 'Não foi possível carregar o resultado deste Mock Exam.'
@@ -19,6 +19,8 @@ export function MockExamResultPage() {
   const [result, setResult] = useState<MockExamResult | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [startingRetake, setStartingRetake] = useState(false)
+  const [retakeError, setRetakeError] = useState<string | null>(null)
 
   const loadResult = useCallback(async () => {
     setLoading(true)
@@ -33,7 +35,7 @@ export function MockExamResultPage() {
         navigate(mockExamExecutionRoute(currentCertification.code, attempt.id), { replace: true })
         return
       }
-      if (attempt.status !== 'completed') {
+      if (attempt.status !== 'completed' && attempt.status !== 'expired') {
         setError('Este Mock Exam não possui um resultado disponível.')
         return
       }
@@ -54,6 +56,20 @@ export function MockExamResultPage() {
   useEffect(() => {
     void loadResult()
   }, [loadResult])
+
+  const handleRetake = async () => {
+    if (startingRetake) return
+    setStartingRetake(true)
+    setRetakeError(null)
+    try {
+      const attempt = await startMockExam(currentCertification.id)
+      navigate(mockExamExecutionRoute(currentCertification.code, attempt.id))
+    } catch (cause) {
+      console.error('Falha ao iniciar novo Mock Exam.', cause)
+      setRetakeError('Não foi possível iniciar outro Mock agora. Tente novamente.')
+      setStartingRetake(false)
+    }
+  }
 
   if (loading) return <CertificationDataState title="Loading your Mock result..." loading />
   if (error || !result) return <CertificationDataState title="Resultado indisponível." description={error ?? RESULT_ERROR} onRetry={() => void loadResult()} />
@@ -90,6 +106,13 @@ export function MockExamResultPage() {
         <div><h2 className="text-xl font-bold">Review Questions</h2><p className="mt-1 text-sm leading-6 text-slate-300">Confira respostas, explicações e o contexto curricular deste Attempt concluído.</p></div>
         <Link to={mockExamReviewRoute(currentCertification.code, attemptId)} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-bold text-slate-950 hover:bg-blue-50 sm:mt-0"><SearchCheck className="h-4 w-4" aria-hidden="true" />Review Questions</Link>
       </section>
+      <div className="mt-5 text-center">
+        <button type="button" disabled={startingRetake} onClick={() => void handleRetake()} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">
+          {startingRetake && <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" />}
+          {startingRetake ? 'Preparing your mock exam...' : 'Take Another Mock'}
+        </button>
+        {retakeError && <p role="alert" className="mt-3 text-sm font-semibold text-rose-700">{retakeError}</p>}
+      </div>
     </div>
   )
 }

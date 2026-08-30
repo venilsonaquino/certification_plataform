@@ -635,3 +635,45 @@ Migrations:
 - Timer/expiration behavior, full History UI, Readiness Score, weak-topic recommendations, AI Tutor, achievements and leaderboards remain deferred.
 
 **Mock Results + Review: READY.**
+
+## Implementation Status — 11.6
+
+Stage 11.6 enables the persistent Practice Mock timer, deterministic timeout finalization, retakes and owner-only History without introducing Readiness or recommendation logic.
+
+### Timer and expiration
+
+- The centralized Certification Academy configuration is **40 Questions / 60 minutes**. This is labeled **Practice Mock Time Limit** and is not represented as an official Microsoft exam duration.
+- The database is authoritative: `started_at`, `time_limit_seconds = 3600` and immutable `expires_at` are persisted on the Attempt. The client synchronizes through `sync_mock_exam_attempt`, receives `server_now` and renders a countdown from that server delta. Refresh, closing the browser and changing the local wall clock do not grant more time.
+- The UI uses a monotonic local elapsed clock only between server synchronizations. Normal, Warning and Critical states include text and timer ARIA semantics instead of relying on color.
+- There is no pause. When the deadline passes, the server atomically evaluates saved answers, leaves missing answers unanswered, persists score/counts, caps `elapsed_seconds` at the configured limit and transitions the Attempt to `expired`.
+- Loading, saving, submitting, starting and listing History all reach a server-side expiration guard. A late answer is rejected even if the client is manipulated; an offline return finalizes before Resume is offered.
+- Both `completed` and timeout-finalized `expired` Attempts expose the existing snapshot-based Result and Review contracts. Historical snapshots remain immutable.
+
+### Retakes and History
+
+- `Start New Mock` invokes the same `start_mock_exam` RPC and private 11.3 selector. A valid `in_progress` Attempt is resumed; after completion/expiration a new Attempt ID, frozen 40-Question selection and new timer are created.
+- Rotation still applies unseen-first, previous-attempt penalty and least-recently-seen ordering after Domain, Topic and difficulty constraints. Production validation requires exact 11/15/14 Domain distribution, 12/20/8 difficulty distribution, 40 unique Questions and low immediate overlap without weakening curriculum balance.
+- `get_mock_exam_history(certification, limit, offset)` returns only Attempt metadata, scores, counts and timestamps. It does not load the 40 Question snapshots or options for each card.
+- History is newest-first, paginated by 10, and uses a stable oldest-first row number for friendly `Mock #N` labels. It supports In Progress, Completed, Expired and Abandoned without inventing scores for unfinished states.
+- Result/Review details remain lazy routes. The landing page shows up to five objective Recent Practice Scores and explicitly avoids a Readiness interpretation.
+- `elapsed_seconds` is server-derived and Result displays Time Used. Expired duration cannot exceed the configured limit.
+- History and synchronization RPCs derive ownership from `auth.uid()`. Existing Attempt RLS remains enabled, authenticated users cannot mutate curricular or result data directly, and production validation exercises user A/B isolation.
+
+Migrations:
+
+- `20260830072000_add_mock_timer_and_history.sql`
+- `20260830073000_allow_expired_mock_results_and_review.sql`
+- `20260830073500_disambiguate_mock_answer_upsert.sql`
+- `20260830074000_validate_mock_timer_retakes_history.sql`
+
+**Mock Timer + Retakes + History: READY.**
+
+## Implementation Status — 11.7
+
+The final architecture, Question Bank, selector, execution, timer, persistence, submission, scoring, Result, Review, retake, History, RLS, accessibility and regression audit is recorded in `docs/az900-mock-exam-validation.md`.
+
+The rollback-only production validator `20260830075000_validate_mock_exam_system_closure.sql` revalidated the current 512-Question bank, 439-item exclusive eligible pool, five integrated retakes, allocations, Topic balance, difficulty, answer-key secrecy, snapshot history, score invariants, idempotency and user A/B isolation. Typecheck, lint, 112 tests, production build, diff check and post-deploy dry-run passed.
+
+No P0, P1 or P2 blocker remains. Readiness Score, recommendations, AI Tutor, a new Certification Dashboard, achievements, leaderboard and additional certifications remain separate future scope.
+
+**AZ-900 Mock Exam System: CLOSED**

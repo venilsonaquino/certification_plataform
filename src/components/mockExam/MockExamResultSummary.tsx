@@ -1,5 +1,6 @@
 import { CheckCircle2, CircleMinus, XCircle } from 'lucide-react'
 
+import { formatElapsedTime } from '../../lib/mockExamTime'
 import type { MockExamResult } from '../../types/mockExam'
 
 export function MockExamResultSummary({ result }: { result: MockExamResult }) {
@@ -19,6 +20,7 @@ export function MockExamResultSummary({ result }: { result: MockExamResult }) {
           </h2>
           <p className="mt-1 text-lg font-semibold text-slate-600">Practice Score</p>
           <p className="mt-2 text-sm text-slate-500">{result.correctAnswers} / {result.totalQuestions} correct</p>
+          <p className="mt-1 text-sm font-semibold text-slate-700">Time used: {formatElapsedTime(result.elapsedSeconds)}</p>
         </div>
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {metrics.map(({ label, value, icon: Icon, tone }) => (

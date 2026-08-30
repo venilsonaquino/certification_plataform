@@ -1,11 +1,13 @@
 import { ArrowRight, BrainCircuit, LoaderCircle, RotateCcw } from 'lucide-react'
 
+import { AZ900_PRACTICE_MOCK_CONFIGURATION } from '../../types/mockExam'
 import type { MockExamAttempt } from '../../types/mockExam'
 
 interface MockExamStartProps {
-  activeAttempt: MockExamAttempt | null
+  activeAttempt: Pick<MockExamAttempt, 'id'> | null
   loading: boolean
   error: string | null
+  hasHistory: boolean
   onStart: () => void
   onResume: (attemptId: string) => void
   onRetry: () => void
@@ -15,6 +17,7 @@ export function MockExamStart({
   activeAttempt,
   loading,
   error,
+  hasHistory,
   onStart,
   onResume,
   onRetry,
@@ -36,6 +39,7 @@ export function MockExamStart({
         <div className="grid gap-4 sm:grid-cols-2">
           {[
             ['40 Questions', 'Selecionadas e congeladas quando você inicia.'],
+            [`${AZ900_PRACTICE_MOCK_CONFIGURATION.timeLimitMinutes} minutes`, 'Practice Mock Time Limit da plataforma; o tempo continua após fechar a página.'],
             ['Três Domains', 'Distribuição curricular e dificuldade balanceadas.'],
             ['Sem feedback imediato', 'O resultado aparece somente depois do envio.'],
             ['Respostas editáveis', 'Você pode voltar e alterar antes de finalizar.'],
@@ -65,7 +69,7 @@ export function MockExamStart({
           ) : (
             <button type="button" disabled={loading} onClick={onStart} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">
               {loading ? <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" /> : <BrainCircuit className="h-4 w-4" aria-hidden="true" />}
-              {loading ? 'Preparing your mock exam...' : 'Start Mock'}
+              {loading ? 'Preparing your mock exam...' : hasHistory ? 'Start New Mock' : 'Start Mock'}
             </button>
           )}
         </div>

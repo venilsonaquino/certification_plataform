@@ -5,9 +5,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { MockExamAttempt, MockExamResult } from '../types/mockExam'
 
-const mocks = vi.hoisted(() => ({ useCertification: vi.fn(), getMockExamAttempt: vi.fn(), getMockExamResult: vi.fn() }))
+const mocks = vi.hoisted(() => ({ useCertification: vi.fn(), getMockExamAttempt: vi.fn(), getMockExamResult: vi.fn(), startMockExam: vi.fn() }))
 vi.mock('../hooks/useCertification', () => ({ useCertification: mocks.useCertification }))
-vi.mock('../services/mockExamService', () => ({ getMockExamAttempt: mocks.getMockExamAttempt, getMockExamResult: mocks.getMockExamResult }))
+vi.mock('../services/mockExamService', () => ({ getMockExamAttempt: mocks.getMockExamAttempt, getMockExamResult: mocks.getMockExamResult, startMockExam: mocks.startMockExam }))
 
 import { MockExamResultPage } from './MockExamResultPage'
 
@@ -36,6 +36,14 @@ describe('MockExamResultPage', () => {
     mocks.useCertification.mockReturnValue({ currentCertification: { id: 'cert-1', code: 'az-900' } })
     mocks.getMockExamAttempt.mockResolvedValue(completedAttempt)
     mocks.getMockExamResult.mockResolvedValue(result)
+    mocks.startMockExam.mockResolvedValue({ id: 'attempt-2' })
+  })
+
+  it('cria retake pelo mesmo Start service e abre o novo Attempt', async () => {
+    renderPage()
+    await userEvent.click(await screen.findByRole('button', { name: 'Take Another Mock' }))
+    expect(mocks.startMockExam).toHaveBeenCalledWith('cert-1')
+    expect(await screen.findByText('Runner aberto')).toBeInTheDocument()
   })
 
   it('mostra Practice Score, totais e breakdowns sem benchmark oficial', async () => {

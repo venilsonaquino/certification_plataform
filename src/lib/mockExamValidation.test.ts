@@ -56,6 +56,20 @@ describe('Mock Exam validation', () => {
     expect(result.success).toBe(false)
   })
 
+  it('accepts an expired Attempt finalized with persisted result and bounded duration', () => {
+    const result = mockExamAttemptDatabaseRowSchema.safeParse({
+      id: id(1), user_id: id(2), certification_id: id(3), status: 'expired',
+      total_questions: 40, answered_questions: 35, correct_answers: 30,
+      incorrect_answers: 5, unanswered_questions: 5, practice_score_percentage: 75,
+      started_at: timestamp, submitted_at: '2026-08-29T13:00:00.000Z', abandoned_at: null,
+      expires_at: '2026-08-29T13:00:00.000Z', time_limit_seconds: 3600,
+      elapsed_seconds: 3600, last_activity_at: '2026-08-29T13:00:01.000Z',
+      selection_policy_version: 'mock-v1', domain_allocation: {}, difficulty_allocation: {},
+      created_at: timestamp, updated_at: '2026-08-29T13:00:01.000Z',
+    })
+    expect(result.success).toBe(true)
+  })
+
   it('rejects malformed answer input', () => {
     expect(saveMockExamAnswerInputSchema.safeParse({
       attemptId: 'not-a-uuid', attemptQuestionId: id(2), selectedOptionKey: '',
