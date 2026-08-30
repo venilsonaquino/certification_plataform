@@ -556,3 +556,39 @@ Stage 11.3 implements the exam-style eligibility dimension and the atomic server
 - Result, completed Review, history screen and Readiness Score.
 
 **Mock Question Bank: READY. Mock Selection Engine: READY. READY FOR MOCK UI.**
+
+## Implementation Status — 11.4
+
+Stage 11.4 implements the Mock execution experience on top of the persisted 11.2 Attempt and the 11.3 server-side selector.
+
+### Implemented
+
+- Routes under the existing certification tree: `/certifications/:certificationCode/exams`, `/exams/:attemptId` and `/exams/:attemptId/result`.
+- Explicit Start screen; opening the landing page never creates an Attempt. An existing `in_progress` Attempt is offered for resume instead.
+- Start calls the atomic `start_mock_exam` service. The React client never selects, weights or replaces Questions.
+- Batched execution load returns the persisted Attempt and its 40 frozen Questions in display order without N+1 requests.
+- Dedicated `MockExamQuestionForExecution` DTO containing only prompt, sanitized options, order and the user's saved selection. Correct keys, explanations, difficulty and curriculum/selection metadata are not returned.
+- Responsive execution layout with Question progress, Previous/Next, direct 1–40 navigator and current/answered/unanswered states conveyed through text and ARIA as well as color.
+- Single-choice radio semantics, large click targets, visible focus behavior, live save state and explicit disabled states.
+- Progressive answer upsert through `save_mock_exam_answer`; changing a selection updates the same authoritative answer. A failed save remains visibly unpersisted and can be retried.
+- Server-backed resume restores the same Attempt, snapshots and persisted answers. `sessionStorage` stores only the non-critical current index so position can be restored when possible.
+- Review Answers summary with answered/unanswered totals. Unanswered Questions remain unanswered and do not block an explicit Submit.
+- Accessible confirmation dialog, submission loading state and double-submit guards.
+- Minimal server-authoritative `submit_mock_exam` transition: the database locks the owned Attempt, evaluates frozen answer keys, records counts and closes it atomically. The browser never sends a score.
+- Completed Attempts redirect away from the editable runner to a minimal submitted state. Owner checks and RLS return a generic unavailable state for foreign Attempts.
+- Component/page tests cover start/resume/failure/double click, navigation, persisted changes, retry after save failure, position resume, unanswered summary, submit and completed redirects. SQL validation covers answer-key secrecy, immutable completion and user A/B load/save/submit isolation.
+
+Migrations:
+
+- `20260830066000_add_mock_execution_contract.sql`
+- `20260830067000_validate_mock_execution_contract.sql`
+- `20260830068000_validate_mock_execution_quiz_regression.sql`
+
+### Deliberately deferred
+
+- Detailed result analysis and Domain/Topic breakdowns.
+- Completed Question review, explanations and Lesson links.
+- Timer/expiration behavior, retake/history UI and Readiness Score.
+- AI Tutor or any automatic remediation.
+
+The `/result` route is intentionally a minimal completion acknowledgement. Stage 11.5 can consume the server-owned completed totals without trusting client-side scoring.

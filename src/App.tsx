@@ -11,6 +11,8 @@ import { DashboardPage } from './pages/DashboardPage'
 import { LabsPage } from './pages/LabsPage'
 import { MapPage } from './pages/MapPage'
 import { MockExamsPage } from './pages/MockExamsPage'
+import { MockExamExecutionPage } from './pages/MockExamExecutionPage'
+import { MockExamResultPlaceholderPage } from './pages/MockExamResultPlaceholderPage'
 import { ProgressPage } from './pages/ProgressPage'
 import { QuizPage } from './pages/QuizPage'
 import { RegisterPage } from './pages/RegisterPage'
@@ -58,6 +60,8 @@ function App() {
             <Route path="review/quiz" element={<ReviewQuizPage />} />
             <Route path="review/flashcards" element={<DailyFlashcardReviewPage />} />
             <Route path="exams" element={<MockExamsPage />} />
+            <Route path="exams/:attemptId" element={<MockExamExecutionPage />} />
+            <Route path="exams/:attemptId/result" element={<MockExamResultPlaceholderPage />} />
             <Route path="progress" element={<ProgressPage />} />
           </Route>
         </Route>

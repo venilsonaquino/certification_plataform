@@ -38,3 +38,15 @@ export function reviewQuizRoute(certificationCode: string, questionId?: string) 
 export function flashcardReviewRoute(certificationCode: string) {
   return `${certificationRoute(certificationCode, 'review')}/flashcards`
 }
+
+export function mockExamsRoute(certificationCode: string) {
+  return certificationRoute(certificationCode, 'exams')
+}
+
+export function mockExamExecutionRoute(certificationCode: string, attemptId: string) {
+  return `${mockExamsRoute(certificationCode)}/${attemptId}`
+}
+
+export function mockExamResultRoute(certificationCode: string, attemptId: string) {
+  return `${mockExamExecutionRoute(certificationCode, attemptId)}/result`
+}

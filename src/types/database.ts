@@ -361,15 +361,6 @@ type MockExamAttemptQuestionPublicRow = {
   attempt_id: string
   question_id: string
   display_order: number
-  domain_id: string
-  domain_title: string
-  topic_id: string
-  topic_title: string
-  lesson_id: string
-  lesson_title: string
-  lesson_slug: string
-  difficulty: QuestionDifficulty
-  question_type: QuestionType
   question_text: string
   options: Json
   selected_option_key: string | null
@@ -875,6 +866,10 @@ export interface Database {
       }
       start_mock_exam: {
         Args: { p_certification_id: string }
+        Returns: MockExamAttemptRow[]
+      }
+      submit_mock_exam: {
+        Args: { p_attempt_id: string }
         Returns: MockExamAttemptRow[]
       }
     }

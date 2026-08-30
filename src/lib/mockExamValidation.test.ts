@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import {
   mockExamAttemptDatabaseRowSchema,
+  mockExamAttemptQuestionDatabaseRowSchema,
   mockExamSnapshotSchema,
   saveMockExamAnswerInputSchema,
 } from './mockExamValidation'
@@ -57,5 +58,21 @@ describe('Mock Exam validation', () => {
     expect(saveMockExamAnswerInputSchema.safeParse({
       attemptId: 'not-a-uuid', attemptQuestionId: id(2), selectedOptionKey: '',
     }).success).toBe(false)
+  })
+
+  it('rejects answer keys and pedagogical metadata in the active execution DTO', () => {
+    const result = mockExamAttemptQuestionDatabaseRowSchema.safeParse({
+      id: id(1), attempt_id: id(2), question_id: id(3), display_order: 1,
+      question_text: 'Which option meets the requirement?',
+      options: [
+        { key: id(4), text: 'Option A', displayOrder: 1 },
+        { key: id(5), text: 'Option B', displayOrder: 2 },
+      ],
+      selected_option_key: null, answered_at: null,
+      correct_option_key: id(5), explanation: 'This must never reach an active attempt.',
+      difficulty: 'hard',
+    })
+
+    expect(result.success).toBe(false)
   })
 })

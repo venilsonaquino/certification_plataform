@@ -11,7 +11,7 @@ import type {
   MockExamAnswer,
   MockExamAttempt,
   MockExamAttemptData,
-  MockExamAttemptQuestion,
+  MockExamQuestionForExecution,
   SaveMockExamAnswerInput,
 } from '../types/mockExam'
 
@@ -69,22 +69,13 @@ function mapAttempt(input: unknown): MockExamAttempt {
   }
 }
 
-function mapQuestion(input: unknown): MockExamAttemptQuestion {
+function mapQuestion(input: unknown): MockExamQuestionForExecution {
   const row = parseExternal(mockExamAttemptQuestionDatabaseRowSchema, input)
   return {
     id: row.id,
     attemptId: row.attempt_id,
     questionId: row.question_id,
     displayOrder: row.display_order,
-    domainId: row.domain_id,
-    domainTitle: row.domain_title,
-    topicId: row.topic_id,
-    topicTitle: row.topic_title,
-    lessonId: row.lesson_id,
-    lessonTitle: row.lesson_title,
-    lessonSlug: row.lesson_slug,
-    difficulty: row.difficulty,
-    questionType: row.question_type,
     questionText: row.question_text,
     options: row.options,
     selectedOptionKey: row.selected_option_key,
@@ -195,5 +186,14 @@ export async function abandonMockExamAttempt(attemptId: string): Promise<MockExa
     .single()
   throwQueryError(error)
   if (!data) throw new MockExamDataError('A tentativa abandonada não foi retornada.')
+  return mapAttempt(data)
+}
+
+export async function submitMockExam(attemptId: string): Promise<MockExamAttempt> {
+  const { data, error } = await getClient()
+    .rpc('submit_mock_exam', { p_attempt_id: attemptId })
+    .single()
+  throwQueryError(error)
+  if (!data) throw new MockExamDataError('A confirmação do envio não foi retornada.')
   return mapAttempt(data)
 }

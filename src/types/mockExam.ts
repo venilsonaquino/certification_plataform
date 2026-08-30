@@ -77,20 +77,11 @@ export interface MockExamExecutionOption {
   readonly displayOrder: number
 }
 
-export interface MockExamAttemptQuestion {
+export interface MockExamQuestionForExecution {
   readonly id: string
   readonly attemptId: string
   readonly questionId: string
   readonly displayOrder: number
-  readonly domainId: string
-  readonly domainTitle: string
-  readonly topicId: string
-  readonly topicTitle: string
-  readonly lessonId: string
-  readonly lessonTitle: string
-  readonly lessonSlug: string
-  readonly difficulty: QuestionDifficulty
-  readonly questionType: QuestionType
   readonly questionText: string
   readonly options: readonly MockExamExecutionOption[]
   readonly selectedOptionKey: string | null
@@ -113,7 +104,23 @@ export interface SaveMockExamAnswerInput {
 
 export interface MockExamAttemptData {
   readonly attempt: MockExamAttempt
-  readonly questions: readonly MockExamAttemptQuestion[]
+  readonly questions: readonly MockExamQuestionForExecution[]
+}
+
+export type MockExamAnswerSaveStatus = 'idle' | 'saving' | 'saved' | 'error'
+
+export interface MockExamAnswerState {
+  readonly selectedOptionKey: string | null
+  readonly persistedOptionKey: string | null
+  readonly status: MockExamAnswerSaveStatus
+  readonly error: string | null
+}
+
+export interface MockExamProgress {
+  readonly currentQuestion: number
+  readonly totalQuestions: number
+  readonly answeredQuestions: number
+  readonly unansweredQuestions: number
 }
 
 export interface MockExamResult {
