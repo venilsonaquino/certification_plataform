@@ -18,9 +18,9 @@ interface ReadinessPriorityTopicsProps {
 export function ReadinessPriorityTopics({ topics }: ReadinessPriorityTopicsProps) {
   return (
     <section aria-labelledby="priority-topics-title" className="mt-10">
-      <p className="text-sm font-semibold text-blue-600">Priority Topics</p>
+      <p className="text-sm font-semibold text-blue-600">Topics prioritários</p>
       <h2 id="priority-topics-title" className="mt-1 text-2xl font-bold tracking-tight text-slate-950">O que merece atenção agora</h2>
-      <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">A ordem e as ações vêm do Recommendation Engine. Evidência insuficiente significa avaliar, não fraqueza.</p>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">A ordem e as ações vêm das recomendações determinísticas. Evidência insuficiente significa avaliar, não fraqueza.</p>
 
       {topics.length === 0 ? (
         <div className="mt-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-6">
@@ -34,29 +34,29 @@ export function ReadinessPriorityTopics({ topics }: ReadinessPriorityTopicsProps
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <h3 className="text-xl font-bold text-slate-950">{topic.topicTitle}</h3>
-                  <p className="mt-2 text-sm text-slate-500">Evidence: <strong className="text-slate-700">{evidenceLabels[topic.evidenceLevel]}</strong> · Trend: <strong className="text-slate-700">{trendLabels[topic.trend]}</strong></p>
+                  <p className="mt-2 text-sm text-slate-500">Evidência: <strong className="text-slate-700">{evidenceLabels[topic.evidenceLevel]}</strong> · Tendência: <strong className="text-slate-700">{trendLabels[topic.trend]}</strong></p>
                 </div>
                 <span className={`inline-flex w-fit rounded-full border px-3 py-1 text-xs font-bold ${priorityTone[topic.priority]}`}>
-                  Priority: {priorityLabels[topic.priority]}
+                  Prioridade: {priorityLabels[topic.priority]}
                 </span>
               </div>
 
               <div className="mt-5 grid gap-5 lg:grid-cols-2">
                 <div>
-                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900"><CircleHelp aria-hidden="true" className="h-4 w-4 text-blue-600" />Why this is recommended</h4>
+                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900"><CircleHelp aria-hidden="true" className="h-4 w-4 text-blue-600" />Por que isso foi recomendado</h4>
                   <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
                     {topic.reasonCodes.map((reason) => <li key={reason}>• {recommendationReasonLabels[reason]}</li>)}
                   </ul>
                   <dl className="mt-4 grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-4 text-xs">
                     <EvidenceMetric label="Mock" value={topic.evidence.mockPerformance} />
                     <EvidenceMetric label="Topic Quiz" value={topic.evidence.topicQuizPerformance} />
-                    <EvidenceMetric label="Recent errors" value={topic.evidence.recentIncorrectAnswers} suffix="" />
-                    <EvidenceMetric label="Recurring Questions" value={topic.evidence.recurringIncorrectQuestions} suffix="" />
+                    <EvidenceMetric label="Erros recentes" value={topic.evidence.recentIncorrectAnswers} suffix="" />
+                    <EvidenceMetric label="Questões recorrentes" value={topic.evidence.recurringIncorrectQuestions} suffix="" />
                   </dl>
                 </div>
 
                 <div>
-                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900"><BookOpenCheck aria-hidden="true" className="h-4 w-4 text-blue-600" />Recommended lessons</h4>
+                  <h4 className="flex items-center gap-2 text-sm font-bold text-slate-900"><BookOpenCheck aria-hidden="true" className="h-4 w-4 text-blue-600" />Aulas recomendadas</h4>
                   {topic.recommendedLessons.length > 0 ? (
                     <ul className="mt-3 space-y-2">
                       {topic.recommendedLessons.map((lesson) => (
@@ -68,7 +68,7 @@ export function ReadinessPriorityTopics({ topics }: ReadinessPriorityTopicsProps
                       ))}
                     </ul>
                   ) : (
-                    <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">Nenhuma Lesson específica foi associada aos erros; use a avaliação do Topic.</p>
+                    <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-600">Nenhuma aula específica foi associada aos erros; use a avaliação do Topic.</p>
                   )}
                 </div>
               </div>
@@ -89,5 +89,5 @@ export function ReadinessPriorityTopics({ topics }: ReadinessPriorityTopicsProps
 }
 
 function EvidenceMetric({ label, value, suffix = '%' }: { label: string; value: number | null; suffix?: string }) {
-  return <div><dt className="text-slate-500">{label}</dt><dd className="mt-1 font-bold text-slate-800">{value === null ? 'No data' : `${value}${suffix}`}</dd></div>
+  return <div><dt className="text-slate-500">{label}</dt><dd className="mt-1 font-bold text-slate-800">{value === null ? 'Sem dados' : `${value}${suffix}`}</dd></div>
 }

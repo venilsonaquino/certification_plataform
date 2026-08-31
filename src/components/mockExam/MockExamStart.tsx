@@ -38,8 +38,8 @@ export function MockExamStart({
       <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-card sm:p-8">
         <div className="grid gap-4 sm:grid-cols-2">
           {[
-            ['40 Questions', 'Selecionadas e congeladas quando você inicia.'],
-            [`${AZ900_PRACTICE_MOCK_CONFIGURATION.timeLimitMinutes} minutes`, 'Practice Mock Time Limit da plataforma; o tempo continua após fechar a página.'],
+            ['40 questões', 'Selecionadas e congeladas quando você inicia.'],
+            [`${AZ900_PRACTICE_MOCK_CONFIGURATION.timeLimitMinutes} minutos`, 'Tempo limite do Practice Mock da plataforma; a contagem continua após fechar a página.'],
             ['Três Domains', 'Distribuição curricular e dificuldade balanceadas.'],
             ['Sem feedback imediato', 'O resultado aparece somente depois do envio.'],
             ['Respostas editáveis', 'Você pode voltar e alterar antes de finalizar.'],
@@ -64,12 +64,12 @@ export function MockExamStart({
           {activeAttempt ? (
             <button type="button" disabled={loading} onClick={() => onResume(activeAttempt.id)} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">
               {loading ? <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
-              {loading ? 'Loading your mock exam...' : 'Resume Mock'}
+              {loading ? 'Carregando seu Mock...' : 'Continuar Mock'}
             </button>
           ) : (
             <button type="button" disabled={loading} onClick={onStart} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">
               {loading ? <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" /> : <BrainCircuit className="h-4 w-4" aria-hidden="true" />}
-              {loading ? 'Preparing your mock exam...' : hasHistory ? 'Start New Mock' : 'Start Mock'}
+              {loading ? 'Preparando seu Mock...' : hasHistory ? 'Iniciar novo Mock' : 'Iniciar Mock'}
             </button>
           )}
         </div>

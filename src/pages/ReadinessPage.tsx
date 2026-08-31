@@ -55,8 +55,8 @@ export function ReadinessPage() {
           {data.readiness.classification === 'not_enough_evidence' && (
             <section aria-labelledby="readiness-empty-title" className="mt-5 rounded-2xl border border-blue-200 bg-blue-50 p-5 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-6">
               <div>
-                <h2 id="readiness-empty-title" className="font-bold text-blue-950">Not enough evidence yet</h2>
-                <p className="mt-2 text-sm leading-6 text-blue-800">Conclua Quizzes ou um Mock Exam para construir seu perfil. Seu Learning Progress continua sendo reconhecido separadamente.</p>
+                <h2 id="readiness-empty-title" className="font-bold text-blue-950">Ainda não há evidência suficiente</h2>
+                <p className="mt-2 text-sm leading-6 text-blue-800">Conclua Quizzes ou um Mock Exam para construir seu perfil. Seu progresso de estudo continua sendo reconhecido separadamente.</p>
               </div>
               <Link to={certificationRoute(currentCertification.code, 'study')} className="mt-4 inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-700 px-5 text-sm font-bold text-white hover:bg-blue-800 sm:mt-0">
                 <BookOpen aria-hidden="true" className="h-4 w-4" /> Continuar estudando

@@ -20,9 +20,9 @@ export function ReadinessDomains({ certificationCode, domains, topics }: Readine
   return (
     <section aria-labelledby="domain-readiness-title" className="mt-10">
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold text-blue-600">Domain Readiness</p>
+        <p className="text-sm font-semibold text-blue-600">Readiness por Domain</p>
         <h2 id="domain-readiness-title" className="mt-1 text-2xl font-bold tracking-tight text-slate-950">Onde sua evidência é mais forte</h2>
-        <p className="mt-2 text-sm leading-6 text-slate-500">Os cards usam as classificações e a cobertura calculadas pela engine, sem transformar progresso em proficiência.</p>
+        <p className="mt-2 text-sm leading-6 text-slate-500">Os cards usam as classificações e a cobertura calculadas, sem transformar progresso em proficiência.</p>
       </div>
       <div className="mt-5 grid gap-5 xl:grid-cols-3">
         {domains.map((domain) => {
@@ -41,26 +41,26 @@ export function ReadinessDomains({ certificationCode, domains, topics }: Readine
               <h3 className="mt-5 text-lg font-bold leading-6 text-slate-950">{domain.title}</h3>
               <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <dt className="text-slate-500">Evidence</dt>
+                  <dt className="text-slate-500">Evidência</dt>
                   <dd className="mt-1 font-bold text-slate-800">{evidenceLabels[domain.evidenceLevel]}</dd>
                 </div>
                 <div>
-                  <dt className="text-slate-500">Trend</dt>
+                  <dt className="text-slate-500">Tendência</dt>
                   <dd className="mt-1 font-bold text-slate-800">{trendLabels[domain.trend]}</dd>
                 </div>
               </dl>
               <div className="mt-5">
                 <div className="flex items-center justify-between gap-4 text-xs">
-                  <span className="font-semibold text-slate-600">Assessment coverage</span>
+                  <span className="font-semibold text-slate-600">Cobertura avaliada</span>
                   <span className="font-bold text-slate-800">{coverage}% dos Topics</span>
                 </div>
-                <div role="progressbar" aria-label={`Assessment coverage de ${domain.title}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={coverage} className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                <div role="progressbar" aria-label={`Cobertura avaliada de ${domain.title}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={coverage} className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
                   <div className="h-full rounded-full bg-blue-600" style={{ width: `${coverage}%` }} />
                 </div>
               </div>
               <div className="mt-5 rounded-xl bg-slate-50 p-4">
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                  <BarChart3 aria-hidden="true" className="h-4 w-4" /> Topics needing attention
+                  <BarChart3 aria-hidden="true" className="h-4 w-4" /> Topics que precisam de atenção
                 </div>
                 <p className="mt-2 text-sm leading-6 text-slate-700">
                   {attention.length > 0

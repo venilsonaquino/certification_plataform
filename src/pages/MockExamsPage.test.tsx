@@ -44,7 +44,7 @@ describe('MockExamsPage', () => {
     let resolveStart: (value: typeof attempt) => void = () => undefined
     mocks.startMockExam.mockReturnValue(new Promise((resolve) => { resolveStart = resolve }))
     renderPage()
-    const start = await screen.findByRole('button', { name: 'Start Mock' })
+    const start = await screen.findByRole('button', { name: 'Iniciar Mock' })
 
     await userEvent.click(start)
     await userEvent.click(start)
@@ -58,7 +58,7 @@ describe('MockExamsPage', () => {
     mocks.startMockExam.mockRejectedValue(new Error('insufficient mock pool'))
     renderPage()
 
-    await userEvent.click(await screen.findByRole('button', { name: 'Start Mock' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Iniciar Mock' }))
     await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('capacidade suficiente'))
     expect(screen.queryByText('insufficient mock pool')).not.toBeInTheDocument()
   })
@@ -67,7 +67,7 @@ describe('MockExamsPage', () => {
     mocks.getMockExamHistory.mockResolvedValue({ items: [{ attemptId: attempt.id, status: 'in_progress', answeredQuestions: 0, totalQuestions: 40, attemptNumber: 1, startedAt: '2026-08-30T12:00:00.000Z' }], totalCount: 1 })
     renderPage()
 
-    await userEvent.click(await screen.findByRole('button', { name: 'Resume Mock' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Continuar Mock' }))
     expect(await screen.findByText('Runner aberto')).toBeInTheDocument()
     expect(mocks.startMockExam).not.toHaveBeenCalled()
   })
@@ -84,9 +84,9 @@ describe('MockExamsPage', () => {
       }],
     })
     renderPage()
-    expect(await screen.findByRole('button', { name: 'Start New Mock' })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Iniciar novo Mock' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Mock #3' })).toBeInTheDocument()
-    expect(screen.getByText('80% · 32 / 40 correct · 34m 18s')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Recent Practice Scores' })).toBeInTheDocument()
+    expect(screen.getByText('80% · 32 / 40 corretas · 34m 18s')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Practice Scores recentes' })).toBeInTheDocument()
   })
 })

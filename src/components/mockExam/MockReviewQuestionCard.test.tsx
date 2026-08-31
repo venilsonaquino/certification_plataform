@@ -22,18 +22,18 @@ const question: MockExamQuestionForReview = {
 describe('MockReviewQuestionCard', () => {
   it('identifica seleção, resposta correta, status e contexto sem depender só de cor', () => {
     render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><MockReviewQuestionCard question={question} certificationCode="az-900" /></MemoryRouter>)
-    expect(screen.getByLabelText('Answer status: Incorrect')).toBeInTheDocument()
+    expect(screen.getByLabelText('Status da resposta: Incorreta')).toBeInTheDocument()
     expect(screen.getByText('Opção selecionada').parentElement).toHaveTextContent('Sua resposta')
     expect(screen.getByText('Opção correta').parentElement).toHaveTextContent('Resposta correta')
-    expect(screen.getByLabelText('Explanation')).toHaveTextContent('A opção B atende')
+    expect(screen.getByLabelText('Explicação')).toHaveTextContent('A opção B atende')
     expect(screen.getByText(/Azure Networking Services/)).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Review Lesson' })).toHaveAttribute('href', '/certifications/az-900/study/virtual-networks')
+    expect(screen.getByRole('link', { name: 'Revisar aula' })).toHaveAttribute('href', '/certifications/az-900/study/virtual-networks')
     expect(screen.queryByRole('radio')).not.toBeInTheDocument()
   })
 
   it('anuncia unanswered separadamente', () => {
     render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><MockReviewQuestionCard question={{ ...question, selectedOptionKey: null, status: 'unanswered' }} certificationCode="az-900" /></MemoryRouter>)
-    expect(screen.getByLabelText('Answer status: Unanswered')).toBeInTheDocument()
-    expect(screen.getByText('Você não respondeu esta Question.')).toBeInTheDocument()
+    expect(screen.getByLabelText('Status da resposta: Não respondida')).toBeInTheDocument()
+    expect(screen.getByText('Você não respondeu esta questão.')).toBeInTheDocument()
   })
 })

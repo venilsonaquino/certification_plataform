@@ -8,21 +8,17 @@ import { AppLayout } from './layouts/AppLayout'
 import { AuthLayout } from './layouts/AuthLayout'
 import { CertificationsPage } from './pages/CertificationsPage'
 import { DashboardPage } from './pages/DashboardPage'
-import { LabsPage } from './pages/LabsPage'
-import { MapPage } from './pages/MapPage'
 import { MockExamsPage } from './pages/MockExamsPage'
 import { MockExamExecutionPage } from './pages/MockExamExecutionPage'
 import { MockExamResultPage } from './pages/MockExamResultPage'
 import { MockExamReviewPage } from './pages/MockExamReviewPage'
 import { ProgressPage } from './pages/ProgressPage'
 import { ReadinessPage } from './pages/ReadinessPage'
-import { QuizPage } from './pages/QuizPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ReviewPage } from './pages/ReviewPage'
 import { ReviewQuizPage } from './pages/ReviewQuizPage'
 import { LessonPage } from './pages/LessonPage'
 import { LessonQuizPage } from './pages/LessonQuizPage'
-import { StoryModePage } from './pages/StoryModePage'
 import { StudyPage } from './pages/StudyPage'
 import { StudyTodayPage } from './pages/StudyTodayPage'
 import { TopicQuizPage } from './pages/TopicQuizPage'
@@ -54,10 +50,6 @@ function App() {
             <Route path="study/:lessonSlug/flashcards" element={<FlashcardPage />} />
             <Route path="study/:lessonSlug" element={<LessonPage />} />
             <Route path="topics/:topicId/quiz" element={<TopicQuizPage />} />
-            <Route path="map" element={<MapPage />} />
-            <Route path="labs" element={<LabsPage />} />
-            <Route path="story" element={<StoryModePage />} />
-            <Route path="quiz" element={<QuizPage />} />
             <Route path="review" element={<ReviewPage />} />
             <Route path="review/quiz" element={<ReviewQuizPage />} />
             <Route path="review/flashcards" element={<DailyFlashcardReviewPage />} />

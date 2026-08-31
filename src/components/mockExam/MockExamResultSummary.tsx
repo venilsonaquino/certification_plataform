@@ -5,9 +5,9 @@ import type { MockExamResult } from '../../types/mockExam'
 
 export function MockExamResultSummary({ result }: { result: MockExamResult }) {
   const metrics = [
-    { label: 'Correct', value: result.correctAnswers, icon: CheckCircle2, tone: 'text-emerald-700 bg-emerald-50' },
-    { label: 'Incorrect', value: result.incorrectAnswers, icon: XCircle, tone: 'text-rose-700 bg-rose-50' },
-    { label: 'Unanswered', value: result.unansweredQuestions, icon: CircleMinus, tone: 'text-amber-700 bg-amber-50' },
+    { label: 'Corretas', value: result.correctAnswers, icon: CheckCircle2, tone: 'text-emerald-700 bg-emerald-50' },
+    { label: 'Incorretas', value: result.incorrectAnswers, icon: XCircle, tone: 'text-rose-700 bg-rose-50' },
+    { label: 'Não respondidas', value: result.unansweredQuestions, icon: CircleMinus, tone: 'text-amber-700 bg-amber-50' },
   ]
 
   return (
@@ -19,8 +19,8 @@ export function MockExamResultSummary({ result }: { result: MockExamResult }) {
             {result.practiceScorePercentage}%
           </h2>
           <p className="mt-1 text-lg font-semibold text-slate-600">Practice Score</p>
-          <p className="mt-2 text-sm text-slate-500">{result.correctAnswers} / {result.totalQuestions} correct</p>
-          <p className="mt-1 text-sm font-semibold text-slate-700">Time used: {formatElapsedTime(result.elapsedSeconds)}</p>
+          <p className="mt-2 text-sm text-slate-500">{result.correctAnswers} / {result.totalQuestions} corretas</p>
+          <p className="mt-1 text-sm font-semibold text-slate-700">Tempo utilizado: {formatElapsedTime(result.elapsedSeconds)}</p>
         </div>
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {metrics.map(({ label, value, icon: Icon, tone }) => (

@@ -128,10 +128,10 @@ describe('ReadinessPage', () => {
     renderPage(dashboardFor(emptyReadinessBundle()))
 
     expect(screen.getAllByText('Not Enough Evidence').length).toBeGreaterThan(0)
-    expect(screen.getByText('Not enough evidence yet')).toBeInTheDocument()
+    expect(screen.getByText('Ainda não há evidência suficiente')).toBeInTheDocument()
     expect(screen.getByText(/Precisamos de mais prática avaliada/)).toBeInTheDocument()
     expect(screen.queryByText('0% readiness', { exact: false })).not.toBeInTheDocument()
-    expect(screen.queryByText(/Priority: Critical/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Prioridade: Critical/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/\bweak\b/i)).not.toBeInTheDocument()
     expect(screen.queryByText(/passed|failed|chance of passing/i)).not.toBeInTheDocument()
   })
@@ -141,7 +141,7 @@ describe('ReadinessPage', () => {
 
     expect(screen.getAllByText('Not Enough Evidence').length).toBeGreaterThan(0)
     expect(screen.getByText('100%')).toBeInTheDocument()
-    expect(screen.getByText('Learning Progress')).toBeInTheDocument()
+    expect(screen.getByText('Progresso de estudo')).toBeInTheDocument()
     expect(screen.getByText(/Concluir aulas demonstra progresso de estudo, não domínio/)).toBeInTheDocument()
   })
 
@@ -150,7 +150,7 @@ describe('ReadinessPage', () => {
     renderPage(data)
 
     expect(screen.getByRole('heading', { name: 'Needs Review', level: 2 })).toBeInTheDocument()
-    expect(screen.getAllByText('Priority: Critical')).toHaveLength(3)
+    expect(screen.getAllByText('Prioridade: Critical')).toHaveLength(3)
     const firstReason = data.recommendations.topics[0].reasonCodes[0]
     expect(screen.getAllByText(new RegExp(recommendationReasonLabels[firstReason])).length)
       .toBeGreaterThan(0)
@@ -204,7 +204,7 @@ describe('ReadinessPage', () => {
     renderPage(dashboardFor(profileWithMocks([45, 45, 45], { stale: true })))
 
     expect(screen.getByRole('status')).toHaveTextContent('Sua evidência mais forte está antiga')
-    expect(screen.queryByText('Priority: Critical')).not.toBeInTheDocument()
+    expect(screen.queryByText('Prioridade: Critical')).not.toBeInTheDocument()
   })
 
   it('mantém Domain fraco visível e não sobrescreve a classificação da engine', () => {

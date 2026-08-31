@@ -1,15 +1,14 @@
-export type CertificationSection =
-  | 'dashboard'
-  | 'study-today'
-  | 'study'
-  | 'map'
-  | 'labs'
-  | 'story'
-  | 'quiz'
-  | 'review'
-  | 'exams'
-  | 'readiness'
-  | 'progress'
+export const CERTIFICATION_SECTIONS = [
+  'dashboard',
+  'study-today',
+  'study',
+  'review',
+  'exams',
+  'readiness',
+  'progress',
+] as const
+
+export type CertificationSection = typeof CERTIFICATION_SECTIONS[number]
 
 export function certificationRoute(certificationCode: string, section: CertificationSection) {
   return `/certifications/${certificationCode.toLowerCase()}/${section}`

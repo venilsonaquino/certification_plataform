@@ -18,6 +18,8 @@ export function StudyTodayPage() {
   const certificationCode = formatCertificationCode(currentCertification.code)
   const studyTodayRoute = certificationRoute(currentCertification.code, 'study-today')
   const studyRoute = certificationRoute(currentCertification.code, 'study')
+  const reviewRoute = certificationRoute(currentCertification.code, 'review')
+  const examsRoute = certificationRoute(currentCertification.code, 'exams')
   const plan = useMemo(
     () => buildDailyStudyPlan(domains, progressByLessonId),
     [domains, progressByLessonId],
@@ -72,12 +74,26 @@ export function StudyTodayPage() {
           <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-emerald-800 sm:text-base">
             Você concluiu todo o conteúdo publicado da {certificationCode}. Não há novas aulas para sugerir.
           </p>
-          <Link
-            to={studyRoute}
-            className="mt-6 inline-flex min-h-11 items-center justify-center rounded-xl bg-emerald-700 px-5 text-sm font-semibold text-white transition hover:bg-emerald-800"
-          >
-            Ver trilha concluída
-          </Link>
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              to={examsRoute}
+              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-emerald-700 px-5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+            >
+              Fazer Practice Mock
+            </Link>
+            <Link
+              to={reviewRoute}
+              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-emerald-300 bg-white px-5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100"
+            >
+              Revisar pontos de atenção
+            </Link>
+            <Link
+              to={studyRoute}
+              className="inline-flex min-h-11 items-center justify-center rounded-xl px-5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100"
+            >
+              Ver trilha concluída
+            </Link>
+          </div>
         </section>
       )}
 

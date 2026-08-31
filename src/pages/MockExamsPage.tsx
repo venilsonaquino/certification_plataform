@@ -14,7 +14,7 @@ import {
 import type { MockExamHistoryItem } from '../types/mockExam'
 
 const START_ERROR = 'Não foi possível preparar o Mock agora. Tente novamente em instantes.'
-const POOL_ERROR = 'O banco de Questions ainda não possui capacidade suficiente para iniciar este Mock.'
+const POOL_ERROR = 'O banco de questões ainda não possui capacidade suficiente para iniciar este Mock.'
 const PAGE_SIZE = 10
 
 function getStartError(error: unknown) {

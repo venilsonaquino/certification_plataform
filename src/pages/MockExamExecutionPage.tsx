@@ -193,7 +193,7 @@ export function MockExamExecutionPage() {
     }
   }
 
-  if (loading) return <CertificationDataState title="Loading your mock exam..." loading />
+  if (loading) return <CertificationDataState title="Carregando seu Mock Exam..." loading />
   if (error || !data) {
     return (
       <CertificationDataState
@@ -215,7 +215,7 @@ export function MockExamExecutionPage() {
             <p className="text-sm font-bold text-blue-700">AZ-900 · Practice Mock</p>
             <h1 className="mt-1 text-2xl font-bold text-slate-950 sm:text-3xl">AZ-900 Practice Mock</h1>
             <p aria-live="polite" className="mt-2 text-sm font-semibold text-slate-600">
-              {showSummary ? 'Review Answers' : `Question ${currentIndex + 1} of ${data.questions.length}`}
+              {showSummary ? 'Revisar respostas' : `Questão ${currentIndex + 1} de ${data.questions.length}`}
               {' · '}{answeredCount} respondidas
             </p>
           </div>
@@ -248,20 +248,20 @@ export function MockExamExecutionPage() {
           {showSummary ? (
             <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card sm:p-8">
               <CheckCircle2 className="h-9 w-9 text-blue-600" aria-hidden="true" />
-              <h2 className="mt-4 text-2xl font-bold text-slate-950">Review Answers</h2>
+              <h2 className="mt-4 text-2xl font-bold text-slate-950">Revisar respostas</h2>
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                <p className="rounded-xl bg-slate-50 p-4"><strong className="block text-2xl text-slate-950">{data.questions.length}</strong><span className="text-sm text-slate-600">Questions</span></p>
-                <p className="rounded-xl bg-blue-50 p-4"><strong className="block text-2xl text-blue-800">{answeredCount}</strong><span className="text-sm text-blue-700">Answered</span></p>
-                <p className="rounded-xl bg-amber-50 p-4"><strong className="block text-2xl text-amber-800">{data.questions.length - answeredCount}</strong><span className="text-sm text-amber-700">Unanswered</span></p>
+                <p className="rounded-xl bg-slate-50 p-4"><strong className="block text-2xl text-slate-950">{data.questions.length}</strong><span className="text-sm text-slate-600">Questões</span></p>
+                <p className="rounded-xl bg-blue-50 p-4"><strong className="block text-2xl text-blue-800">{answeredCount}</strong><span className="text-sm text-blue-700">Respondidas</span></p>
+                <p className="rounded-xl bg-amber-50 p-4"><strong className="block text-2xl text-amber-800">{data.questions.length - answeredCount}</strong><span className="text-sm text-amber-700">Não respondidas</span></p>
               </div>
               {answeredCount < data.questions.length && (
                 <p className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm font-semibold text-amber-800">
-                  Questions não respondidas serão registradas como unanswered. Você ainda pode enviar.
+                  Questões não respondidas serão registradas separadamente. Você ainda pode enviar.
                 </p>
               )}
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <button type="button" onClick={() => setShowSummary(false)} className="min-h-11 rounded-xl border border-slate-300 px-5 text-sm font-bold text-slate-700 hover:bg-slate-50">Voltar ao Mock</button>
-                <button type="button" disabled={hasPendingSave} onClick={() => setDialogOpen(true)} className="min-h-11 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">Submit Mock</button>
+                <button type="button" disabled={hasPendingSave} onClick={() => setDialogOpen(true)} className="min-h-11 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white hover:bg-blue-700 disabled:cursor-wait disabled:opacity-60">Enviar Mock</button>
               </div>
             </section>
           ) : (
@@ -275,8 +275,8 @@ export function MockExamExecutionPage() {
                 }}
               />
               <div className="mt-5 flex items-center justify-between gap-3">
-                <button type="button" disabled={currentIndex === 0} onClick={() => navigateTo(currentIndex - 1)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 px-4 text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"><ArrowLeft className="h-4 w-4" aria-hidden="true" />Previous</button>
-                <button type="button" onClick={() => currentIndex === data.questions.length - 1 ? setShowSummary(true) : navigateTo(currentIndex + 1)} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">{currentIndex === data.questions.length - 1 ? 'Review Answers' : 'Next'}<ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
+                <button type="button" disabled={currentIndex === 0} onClick={() => navigateTo(currentIndex - 1)} className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-300 px-4 text-sm font-bold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"><ArrowLeft className="h-4 w-4" aria-hidden="true" />Anterior</button>
+                <button type="button" onClick={() => currentIndex === data.questions.length - 1 ? setShowSummary(true) : navigateTo(currentIndex + 1)} className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white hover:bg-blue-700">{currentIndex === data.questions.length - 1 ? 'Revisar respostas' : 'Próxima'}<ArrowRight className="h-4 w-4" aria-hidden="true" /></button>
               </div>
             </>
           )}

@@ -16,10 +16,10 @@ export function ProgressPage() {
       <header className="max-w-3xl">
         <p className="text-sm font-semibold text-blue-600">{certificationCode}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
-          Progresso
+          Progresso de estudo
         </h1>
         <p className="mt-3 text-base leading-7 text-slate-500">
-          Visão geral do seu avanço em {currentCertification.name}.
+          Acompanhe as aulas concluídas e o avanço curricular em {currentCertification.name}.
         </p>
       </header>
 
@@ -41,7 +41,7 @@ export function ProgressPage() {
       {!loading && !error && (
         <>
           <section className="mt-8 overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-700 to-sky-600 p-6 text-white shadow-lg shadow-blue-900/10 sm:p-8 lg:mt-10">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-100">Overall</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-100">Visão geral</p>
             <div className="mt-3 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-5xl font-bold tracking-tight sm:text-6xl">
@@ -60,7 +60,7 @@ export function ProgressPage() {
                 </div>
               )}
             </div>
-            <div className="mt-6 h-2.5 overflow-hidden rounded-full bg-white/20">
+            <div role="progressbar" aria-label="Progresso total de estudo" aria-valuemin={0} aria-valuemax={100} aria-valuenow={summary.percentage} className="mt-6 h-2.5 overflow-hidden rounded-full bg-white/20">
               <div
                 className="h-full rounded-full bg-white transition-[width]"
                 style={{ width: `${summary.percentage}%` }}
@@ -110,7 +110,7 @@ export function ProgressPage() {
                       {domain.percentage}%
                     </p>
                   </div>
-                  <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div role="progressbar" aria-label={`Progresso em ${domain.title}`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={domain.percentage} className="mt-4 h-2 overflow-hidden rounded-full bg-slate-100">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-blue-600 to-sky-400 transition-[width]"
                       style={{ width: `${domain.percentage}%` }}

@@ -25,8 +25,8 @@ export function MockExamBreakdownSection({ title, description, items }: MockExam
               <h3 className="font-bold leading-6 text-slate-900">{item.label}</h3>
               <strong className="text-lg text-blue-700">{item.percentage}%</strong>
             </div>
-            <p className="mt-2 text-sm text-slate-600">{item.correct} / {item.total} correct</p>
-            {item.unanswered > 0 && <p className="mt-1 text-xs font-semibold text-amber-700">{item.unanswered} unanswered</p>}
+            <p className="mt-2 text-sm text-slate-600">{item.correct} / {item.total} corretas</p>
+            {item.unanswered > 0 && <p className="mt-1 text-xs font-semibold text-amber-700">{item.unanswered} não respondidas</p>}
             <div role="progressbar" aria-label={`${item.label}: ${item.percentage}%`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={item.percentage} className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
               <div className="h-full rounded-full bg-blue-600" style={{ width: `${item.percentage}%` }} />
             </div>

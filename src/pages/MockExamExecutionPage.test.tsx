@@ -115,16 +115,16 @@ describe('MockExamExecutionPage', () => {
     expect(await screen.findByText('Resposta salva.')).toBeInTheDocument()
     expect(screen.queryByText(/correct|incorrect|explanation/i)).not.toBeInTheDocument()
 
-    await userEvent.click(screen.getByRole('button', { name: 'Next' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Próxima' }))
     expect(screen.getByText('Enunciado seguro 2')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('radio', { name: 'Opção B da 2' }))
     await waitFor(() => expect(mocks.saveMockExamAnswer).toHaveBeenLastCalledWith(expect.objectContaining({ selectedOptionKey: 'B' })))
     await userEvent.click(screen.getByRole('radio', { name: 'Opção A da 2' }))
     await waitFor(() => expect(mocks.saveMockExamAnswer).toHaveBeenLastCalledWith(expect.objectContaining({ selectedOptionKey: 'A' })))
 
-    await userEvent.click(screen.getByRole('button', { name: 'Question 7, não respondida' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Questão 7, não respondida' }))
     expect(screen.getByText('Enunciado seguro 7')).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('button', { name: 'Previous' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Anterior' }))
     expect(screen.getByText('Enunciado seguro 6')).toBeInTheDocument()
   })
 
@@ -133,7 +133,7 @@ describe('MockExamExecutionPage', () => {
     renderPage()
     expect(await screen.findByText('Enunciado seguro 6')).toBeInTheDocument()
     expect(mocks.loadMockExamAttempt).toHaveBeenCalledWith(attempt.id, attempt)
-    expect(screen.getByRole('button', { name: 'Question 2, respondida' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Questão 2, respondida' })).toBeInTheDocument()
   })
 
   it('não finge persistência em falha e oferece retry', async () => {
@@ -151,9 +151,9 @@ describe('MockExamExecutionPage', () => {
   it('resume o resumo, confirma submit uma vez e abre o estado mínimo', async () => {
     renderPage()
     await userEvent.click(await screen.findByRole('button', { name: 'Finalizar' }))
-    expect(screen.getByText('Unanswered').parentElement).toHaveTextContent('39')
+    expect(screen.getByText('Não respondidas').parentElement).toHaveTextContent('39')
 
-    await userEvent.click(screen.getByRole('button', { name: 'Submit Mock' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Enviar Mock' }))
     expect(screen.getByRole('dialog')).toHaveTextContent('39 não respondidas')
     await userEvent.click(screen.getByRole('button', { name: 'Confirmar envio' }))
     expect(mocks.submitMockExam).toHaveBeenCalledOnce()
@@ -211,12 +211,12 @@ describe('MockExamExecutionPage', () => {
     )
 
     await userEvent.click(await screen.findByRole('button', { name: 'Finalizar' }))
-    await userEvent.click(screen.getByRole('button', { name: 'Submit Mock' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Enviar Mock' }))
     await userEvent.click(screen.getByRole('button', { name: 'Confirmar envio' }))
-    expect(await screen.findByRole('heading', { name: 'AZ-900 Practice Mock Result' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Resultado do AZ-900 Practice Mock' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: '2.5%' })).toBeInTheDocument()
-    await userEvent.click(screen.getByRole('link', { name: 'Review Questions' }))
-    expect(await screen.findByRole('heading', { name: 'Review Questions' })).toBeInTheDocument()
-    expect(screen.getByText('39 de 40 Questions exibidas')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('link', { name: 'Revisar questões' }))
+    expect(await screen.findByRole('heading', { name: 'Revisão das questões' })).toBeInTheDocument()
+    expect(screen.getByText('39 de 40 questões exibidas')).toBeInTheDocument()
   })
 })

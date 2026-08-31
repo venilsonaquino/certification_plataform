@@ -41,7 +41,7 @@ describe('MockExamResultPage', () => {
 
   it('cria retake pelo mesmo Start service e abre o novo Attempt', async () => {
     renderPage()
-    await userEvent.click(await screen.findByRole('button', { name: 'Take Another Mock' }))
+    await userEvent.click(await screen.findByRole('button', { name: 'Fazer outro Mock' }))
     expect(mocks.startMockExam).toHaveBeenCalledWith('cert-1')
     expect(await screen.findByText('Runner aberto')).toBeInTheDocument()
   })
@@ -49,9 +49,9 @@ describe('MockExamResultPage', () => {
   it('mostra Practice Score, totais e breakdowns sem benchmark oficial', async () => {
     renderPage()
     expect(await screen.findByRole('heading', { name: '75%' })).toBeInTheDocument()
-    expect(screen.getAllByText('30 / 40 correct')).toHaveLength(4)
-    expect(screen.getByText('Incorrect').parentElement).toHaveTextContent('5')
-    expect(screen.getByText('Unanswered').parentElement).toHaveTextContent('5')
+    expect(screen.getAllByText('30 / 40 corretas')).toHaveLength(4)
+    expect(screen.getByText('Incorretas').parentElement).toHaveTextContent('5')
+    expect(screen.getByText('Não respondidas').parentElement).toHaveTextContent('5')
     expect(screen.getByText('Cloud Concepts')).toBeInTheDocument()
     expect(screen.getByText('Cloud Benefits')).toBeInTheDocument()
     expect(screen.getByText('Medium')).toBeInTheDocument()
@@ -61,7 +61,7 @@ describe('MockExamResultPage', () => {
 
   it('abre Review e redireciona Attempts em andamento para execução', async () => {
     const { unmount } = renderPage()
-    await userEvent.click(await screen.findByRole('link', { name: 'Review Questions' }))
+    await userEvent.click(await screen.findByRole('link', { name: 'Revisar questões' }))
     expect(screen.getByText('Review aberto')).toBeInTheDocument()
     unmount()
 
