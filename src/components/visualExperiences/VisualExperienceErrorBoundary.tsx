@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { reportError } from '../../lib/reportError'
 
 interface VisualExperienceErrorBoundaryProps {
   children: ReactNode
@@ -21,7 +22,7 @@ export class VisualExperienceErrorBoundary extends Component<
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     if (import.meta.env.DEV) {
-      console.error('Falha ao renderizar experiência visual.', error, errorInfo)
+      reportError('Falha ao renderizar experiência visual.', { error, errorInfo })
     }
   }
 

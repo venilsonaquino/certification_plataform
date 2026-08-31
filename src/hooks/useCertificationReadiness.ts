@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { getAz900ReadinessDashboard } from '../services/readinessDashboardService'
+import { reportError } from '../lib/reportError'
 import type { Az900ReadinessDashboardData } from '../types/readinessUi'
 import { useAuth } from './useAuth'
 
@@ -32,7 +33,7 @@ export function useCertificationReadiness(certificationId: string, certification
         if (active) setState({ key: requestKey, data, error: null, loading: false })
       })
       .catch((cause) => {
-        console.error('Falha ao carregar Readiness.', cause)
+        reportError('Falha ao carregar Readiness.', cause)
         if (active) {
           setState({
             key: requestKey,

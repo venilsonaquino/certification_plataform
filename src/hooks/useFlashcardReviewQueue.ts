@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { getFlashcardReviewOverview, getFlashcardStudyQueue } from '../services/flashcardService'
 import type { FlashcardReviewOverview, FlashcardStudyQueueItem } from '../types/flashcard'
@@ -8,9 +8,13 @@ export function useFlashcardReviewQueue(certificationId: string | null) {
   const [overview, setOverview] = useState<FlashcardReviewOverview | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const requestVersion = useRef(0)
 
   const load = useCallback(async () => {
+    const version = ++requestVersion.current
     if (!certificationId) {
+      setCards([])
+      setOverview(null)
       setLoading(false)
       return
     }
@@ -21,12 +25,18 @@ export function useFlashcardReviewQueue(certificationId: string | null) {
         getFlashcardStudyQueue(certificationId),
         getFlashcardReviewOverview(certificationId),
       ])
-      setCards(queue)
-      setOverview(nextOverview)
-    } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : 'Não foi possível carregar a fila de flashcards.')
+      if (requestVersion.current === version) {
+        setCards(queue)
+        setOverview(nextOverview)
+      }
+    } catch {
+      if (requestVersion.current === version) {
+        setCards([])
+        setOverview(null)
+        setError('Não foi possível carregar a fila de flashcards.')
+      }
     } finally {
-      setLoading(false)
+      if (requestVersion.current === version) setLoading(false)
     }
   }, [certificationId])
 

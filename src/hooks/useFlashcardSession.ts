@@ -83,12 +83,8 @@ export function useFlashcardSession(
         setIsRevealed(false)
         setIsHintVisible(false)
       }
-    } catch (caught: unknown) {
-      setSubmitError(
-        caught instanceof Error && caught.message.trim()
-          ? caught.message
-          : 'Não foi possível salvar sua resposta.',
-      )
+    } catch {
+      setSubmitError('Não foi possível salvar sua resposta.')
     } finally {
       submittingRef.current = false
       setIsSubmitting(false)

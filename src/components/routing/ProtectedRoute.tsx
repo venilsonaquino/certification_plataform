@@ -16,5 +16,6 @@ export function ProtectedRoute() {
     return <Navigate to="/login" replace state={{ from: requestedPath }} />
   }
 
-  return <Outlet />
+  // Force every private provider/page to remount when the authenticated owner changes.
+  return <Outlet key={user.id} />
 }

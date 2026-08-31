@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { getActiveReviewQuiz } from '../services/quizService'
 import { countAttemptAnswers, getQuestionReviewStats } from '../services/reviewService'
@@ -9,9 +9,16 @@ export function useQuestionReview(certificationId: string | null) {
   const [summary, setSummary] = useState<ReviewSummary | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const requestVersion = useRef(0)
 
   const load = useCallback(async () => {
-    if (!certificationId) { setLoading(false); return }
+    const version = ++requestVersion.current
+    if (!certificationId) {
+      setQuestions([])
+      setSummary(null)
+      setLoading(false)
+      return
+    }
     setLoading(true); setError(null)
     try {
       const [stats, activeAttempt] = await Promise.all([
@@ -21,19 +28,27 @@ export function useQuestionReview(certificationId: string | null) {
       const activeAnsweredCount = activeAttempt ? await countAttemptAnswers(activeAttempt.id) : 0
       const totalAnswers = stats.reduce((sum, question) => sum + question.totalAttempts, 0)
       const correctAnswers = stats.reduce((sum, question) => sum + question.correctCount, 0)
-      setQuestions(stats)
-      setSummary({
-        totalQuestions: stats.length,
-        highPriorityCount: stats.filter((question) => question.priority === 'high').length,
-        mediumPriorityCount: stats.filter((question) => question.priority === 'medium').length,
-        lowPriorityCount: stats.filter((question) => question.priority === 'low').length,
-        overallAccuracy: totalAnswers === 0 ? 0 : Math.round((correctAnswers / totalAnswers) * 100),
-        activeAttempt,
-        activeAnsweredCount,
-      })
-    } catch (caughtError) {
-      setError(caughtError instanceof Error ? caughtError.message : 'Não foi possível carregar seu histórico de erros.')
-    } finally { setLoading(false) }
+      if (requestVersion.current === version) {
+        setQuestions(stats)
+        setSummary({
+          totalQuestions: stats.length,
+          highPriorityCount: stats.filter((question) => question.priority === 'high').length,
+          mediumPriorityCount: stats.filter((question) => question.priority === 'medium').length,
+          lowPriorityCount: stats.filter((question) => question.priority === 'low').length,
+          overallAccuracy: totalAnswers === 0 ? 0 : Math.round((correctAnswers / totalAnswers) * 100),
+          activeAttempt,
+          activeAnsweredCount,
+        })
+      }
+    } catch {
+      if (requestVersion.current === version) {
+        setQuestions([])
+        setSummary(null)
+        setError('Não foi possível carregar seu histórico de erros.')
+      }
+    } finally {
+      if (requestVersion.current === version) setLoading(false)
+    }
   }, [certificationId])
 
   useEffect(() => { void load() }, [load])

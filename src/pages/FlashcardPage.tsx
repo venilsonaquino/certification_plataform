@@ -44,9 +44,9 @@ export function FlashcardPage() {
       .then((value) => {
         if (active) setCards(value)
       })
-      .catch((caught: unknown) => {
+      .catch(() => {
         if (active) {
-          setError(caught instanceof Error ? caught.message : 'Não foi possível carregar os flashcards.')
+          setError('Não foi possível carregar os flashcards.')
         }
       })
       .finally(() => {

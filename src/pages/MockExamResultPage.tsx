@@ -1,5 +1,5 @@
 import { ArrowLeft, LoaderCircle, SearchCheck } from 'lucide-react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { CertificationDataState } from '../components/certifications/CertificationDataState'
@@ -7,6 +7,7 @@ import { MockExamBreakdownSection } from '../components/mockExam/MockExamBreakdo
 import { MockExamResultSummary } from '../components/mockExam/MockExamResultSummary'
 import { useCertification } from '../hooks/useCertification'
 import { certificationRoute, mockExamExecutionRoute, mockExamReviewRoute } from '../lib/routes'
+import { reportError } from '../lib/reportError'
 import { getMockExamAttempt, getMockExamResult, startMockExam } from '../services/mockExamService'
 import type { MockExamResult } from '../types/mockExam'
 
@@ -16,6 +17,8 @@ export function MockExamResultPage() {
   const { attemptId = '' } = useParams<{ attemptId: string }>()
   const { currentCertification } = useCertification()
   const navigate = useNavigate()
+  const loadRequestVersion = useRef(0)
+  const retakeInFlight = useRef(false)
   const [result, setResult] = useState<MockExamResult | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -23,10 +26,12 @@ export function MockExamResultPage() {
   const [retakeError, setRetakeError] = useState<string | null>(null)
 
   const loadResult = useCallback(async () => {
+    const version = ++loadRequestVersion.current
     setLoading(true)
     setError(null)
     try {
       const attempt = await getMockExamAttempt(attemptId)
+      if (loadRequestVersion.current !== version) return
       if (!attempt || attempt.certificationId !== currentCertification.id) {
         setError(RESULT_ERROR)
         return
@@ -40,16 +45,17 @@ export function MockExamResultPage() {
         return
       }
       const loaded = await getMockExamResult(attemptId)
+      if (loadRequestVersion.current !== version) return
       if (!loaded) {
         setError(RESULT_ERROR)
         return
       }
       setResult(loaded)
     } catch (cause) {
-      console.error('Falha ao carregar resultado do Mock Exam.', cause)
-      setError(RESULT_ERROR)
+      reportError('Falha ao carregar resultado do Mock Exam.', cause)
+      if (loadRequestVersion.current === version) setError(RESULT_ERROR)
     } finally {
-      setLoading(false)
+      if (loadRequestVersion.current === version) setLoading(false)
     }
   }, [attemptId, currentCertification.code, currentCertification.id, navigate])
 
@@ -58,16 +64,19 @@ export function MockExamResultPage() {
   }, [loadResult])
 
   const handleRetake = async () => {
-    if (startingRetake) return
+    if (retakeInFlight.current) return
+    retakeInFlight.current = true
     setStartingRetake(true)
     setRetakeError(null)
     try {
       const attempt = await startMockExam(currentCertification.id)
       navigate(mockExamExecutionRoute(currentCertification.code, attempt.id))
     } catch (cause) {
-      console.error('Falha ao iniciar novo Mock Exam.', cause)
+      reportError('Falha ao iniciar novo Mock Exam.', cause)
       setRetakeError('Não foi possível iniciar outro Mock agora. Tente novamente.')
       setStartingRetake(false)
+    } finally {
+      retakeInFlight.current = false
     }
   }
 

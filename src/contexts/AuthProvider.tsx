@@ -9,6 +9,14 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
+function clearUserScopedUiState() {
+  if (typeof window === 'undefined') return
+  for (let index = sessionStorage.length - 1; index >= 0; index -= 1) {
+    const key = sessionStorage.key(index)
+    if (key?.startsWith('mock-position:')) sessionStorage.removeItem(key)
+  }
+}
+
 function getErrorCode(error: unknown) {
   if (typeof error === 'object' && error !== null && 'code' in error) {
     const code = error.code
@@ -49,8 +57,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    } = supabase.auth.onAuthStateChange((event, nextSession) => {
       if (isMounted) {
+        if (event === 'SIGNED_OUT') clearUserScopedUiState()
         setSession(nextSession)
         setLoading(false)
       }
@@ -157,6 +166,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return { error: getFriendlyAuthError(error, 'Não foi possível sair. Tente novamente.') }
       }
 
+      clearUserScopedUiState()
       setSession(null)
       return { error: null }
     } catch (error) {

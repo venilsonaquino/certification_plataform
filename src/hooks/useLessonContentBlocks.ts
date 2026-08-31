@@ -22,13 +22,9 @@ export function useLessonContentBlocks(lessonId: string) {
           setBlocks(nextBlocks)
         }
       })
-      .catch((caughtError: unknown) => {
+      .catch(() => {
         if (active) {
-          setError(
-            caughtError instanceof Error
-              ? caughtError.message
-              : 'Não foi possível carregar o conteúdo desta aula.',
-          )
+          setError('Não foi possível carregar o conteúdo desta aula.')
         }
       })
       .finally(() => {

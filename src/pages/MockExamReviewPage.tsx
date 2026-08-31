@@ -6,6 +6,7 @@ import { CertificationDataState } from '../components/certifications/Certificati
 import { MockReviewQuestionCard } from '../components/mockExam/MockReviewQuestionCard'
 import { useCertification } from '../hooks/useCertification'
 import { mockExamExecutionRoute, mockExamResultRoute } from '../lib/routes'
+import { reportError } from '../lib/reportError'
 import { getMockExamAttempt, getMockExamReview } from '../services/mockExamService'
 import type { MockExamQuestionForReview, MockExamReviewStatus } from '../types/mockExam'
 
@@ -26,16 +27,19 @@ export function MockExamReviewPage() {
   const { currentCertification } = useCertification()
   const navigate = useNavigate()
   const resultHeadingRef = useRef<HTMLHeadingElement>(null)
+  const loadRequestVersion = useRef(0)
   const [questions, setQuestions] = useState<MockExamQuestionForReview[]>([])
   const [filter, setFilter] = useState<ReviewFilter>('needs_review')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   const loadReview = useCallback(async () => {
+    const version = ++loadRequestVersion.current
     setLoading(true)
     setError(null)
     try {
       const attempt = await getMockExamAttempt(attemptId)
+      if (loadRequestVersion.current !== version) return
       if (!attempt || attempt.certificationId !== currentCertification.id) {
         setError(REVIEW_ERROR)
         return
@@ -49,16 +53,17 @@ export function MockExamReviewPage() {
         return
       }
       const loaded = await getMockExamReview(attemptId)
+      if (loadRequestVersion.current !== version) return
       if (loaded.length !== attempt.totalQuestions) {
         setError(REVIEW_ERROR)
         return
       }
       setQuestions(loaded)
     } catch (cause) {
-      console.error('Falha ao carregar Review do Mock Exam.', cause)
-      setError(REVIEW_ERROR)
+      reportError('Falha ao carregar Review do Mock Exam.', cause)
+      if (loadRequestVersion.current === version) setError(REVIEW_ERROR)
     } finally {
-      setLoading(false)
+      if (loadRequestVersion.current === version) setLoading(false)
     }
   }, [attemptId, currentCertification.code, currentCertification.id, navigate])
 

@@ -14,8 +14,8 @@ export function LessonQuizCard({ certificationCode, lessonId, lessonSlug }: Less
 
   useEffect(() => {
     let active = true
-    getLessonQuizSummary(lessonId).then((value) => { if (active) setSummary(value) }).catch((caught) => {
-      if (active) setError(caught instanceof Error ? caught.message : 'Não foi possível carregar o Quiz.')
+    getLessonQuizSummary(lessonId).then((value) => { if (active) setSummary(value) }).catch(() => {
+      if (active) setError('Não foi possível carregar o Quiz.')
     })
     return () => { active = false }
   }, [lessonId])

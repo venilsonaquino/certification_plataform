@@ -9,6 +9,7 @@ import { MockSubmitDialog } from '../components/mockExam/MockSubmitDialog'
 import { MockExamTimer } from '../components/mockExam/MockExamTimer'
 import { useCertification } from '../hooks/useCertification'
 import { mockExamResultRoute } from '../lib/routes'
+import { reportError } from '../lib/reportError'
 import {
   loadMockExamAttempt,
   saveMockExamAnswer,
@@ -40,6 +41,7 @@ export function MockExamExecutionPage() {
   const navigate = useNavigate()
   const submitInFlight = useRef(false)
   const expirationInFlight = useRef(false)
+  const loadRequestVersion = useRef(0)
   const [data, setData] = useState<MockExamAttemptData | null>(null)
   const [answers, setAnswers] = useState<Record<string, MockExamAnswerState>>({})
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -52,11 +54,13 @@ export function MockExamExecutionPage() {
   const [serverNow, setServerNow] = useState<string | null>(null)
 
   const loadAttempt = useCallback(async () => {
+    const version = ++loadRequestVersion.current
     setLoading(true)
     setError(null)
     try {
       const session = await syncMockExamAttempt(attemptId)
       const attempt = session?.attempt ?? null
+      if (loadRequestVersion.current !== version) return
       if (!attempt || attempt.certificationId !== currentCertification.id) {
         setError(LOAD_ERROR)
         return
@@ -72,6 +76,7 @@ export function MockExamExecutionPage() {
       setServerNow(session?.serverNow ?? null)
 
       const loaded = await loadMockExamAttempt(attemptId, attempt)
+      if (loadRequestVersion.current !== version) return
       if (!loaded || loaded.questions.length !== EXPECTED_QUESTIONS) {
         setError(LOAD_ERROR)
         return
@@ -87,10 +92,10 @@ export function MockExamExecutionPage() {
           : 0,
       )
     } catch (cause) {
-      console.error('Falha ao carregar Mock Exam.', cause)
-      setError(LOAD_ERROR)
+      reportError('Falha ao carregar Mock Exam.', cause)
+      if (loadRequestVersion.current === version) setError(LOAD_ERROR)
     } finally {
-      setLoading(false)
+      if (loadRequestVersion.current === version) setLoading(false)
     }
   }, [attemptId, currentCertification.code, currentCertification.id, navigate])
 
@@ -108,7 +113,7 @@ export function MockExamExecutionPage() {
       }
       await loadAttempt()
     } catch (cause) {
-      console.error('Falha ao finalizar Mock Exam expirado.', cause)
+      reportError('Falha ao finalizar Mock Exam expirado.', cause)
       setSubmitError('O tempo terminou. Recarregue para abrir o resultado finalizado com segurança.')
     } finally {
       setSubmitting(false)
@@ -152,7 +157,7 @@ export function MockExamExecutionPage() {
         },
       }))
     } catch (cause) {
-      console.error('Falha ao salvar resposta do Mock Exam.', cause)
+      reportError('Falha ao salvar resposta do Mock Exam.', cause)
       setAnswers((current) => ({
         ...current,
         [question.id]: {
@@ -185,7 +190,7 @@ export function MockExamExecutionPage() {
       sessionStorage.removeItem(`mock-position:${attemptId}`)
       navigate(mockExamResultRoute(currentCertification.code, attemptId), { replace: true })
     } catch (cause) {
-      console.error('Falha ao enviar Mock Exam.', cause)
+      reportError('Falha ao enviar Mock Exam.', cause)
       setSubmitError('Não foi possível enviar o Mock. Suas respostas salvas continuam seguras.')
       setSubmitting(false)
     } finally {

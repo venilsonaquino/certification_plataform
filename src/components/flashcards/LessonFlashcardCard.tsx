@@ -28,9 +28,9 @@ export function LessonFlashcardCard({
       .then((value) => {
         if (active) setCount(value)
       })
-      .catch((caught: unknown) => {
+      .catch(() => {
         if (active) {
-          setError(caught instanceof Error ? caught.message : 'Não foi possível carregar os flashcards.')
+          setError('Não foi possível carregar os flashcards.')
         }
       })
 

@@ -31,13 +31,9 @@ export function useVisualExperiences(lessonId: string | null) {
           setExperiences(nextExperiences)
         }
       })
-      .catch((caughtError: unknown) => {
+      .catch(() => {
         if (active) {
-          setError(
-            caughtError instanceof Error
-              ? caughtError.message
-              : 'Não foi possível carregar as visualizações desta aula.',
-          )
+          setError('Não foi possível carregar as visualizações desta aula.')
         }
       })
       .finally(() => {

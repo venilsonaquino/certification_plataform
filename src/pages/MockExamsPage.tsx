@@ -7,6 +7,7 @@ import { MockExamHistory } from '../components/mockExam/MockExamHistory'
 import { MockExamScoreHistory } from '../components/mockExam/MockExamScoreHistory'
 import { useCertification } from '../hooks/useCertification'
 import { mockExamExecutionRoute, mockExamResultRoute } from '../lib/routes'
+import { reportError } from '../lib/reportError'
 import {
   getMockExamHistory,
   startMockExam,
@@ -28,6 +29,7 @@ export function MockExamsPage() {
   const { currentCertification } = useCertification()
   const navigate = useNavigate()
   const requestInFlight = useRef(false)
+  const historyRequestVersion = useRef(0)
   const [activeAttempt, setActiveAttempt] = useState<{ id: string } | null>(null)
   const [history, setHistory] = useState<readonly MockExamHistoryItem[]>([])
   const [recentHistory, setRecentHistory] = useState<readonly MockExamHistoryItem[]>([])
@@ -37,23 +39,26 @@ export function MockExamsPage() {
   const [error, setError] = useState<string | null>(null)
 
   const loadHistory = useCallback(async (targetPage = 0) => {
+    const version = ++historyRequestVersion.current
     setLoading(true)
     setError(null)
     try {
       const loaded = await getMockExamHistory(currentCertification.id, PAGE_SIZE, targetPage * PAGE_SIZE)
-      setHistory(loaded.items)
-      setHistoryTotal(loaded.totalCount)
-      setPage(targetPage)
-      if (targetPage === 0) {
-        setRecentHistory(loaded.items)
-        const active = loaded.items.find((item) => item.status === 'in_progress')
-        setActiveAttempt(active ? { id: active.attemptId } : null)
+      if (historyRequestVersion.current === version) {
+        setHistory(loaded.items)
+        setHistoryTotal(loaded.totalCount)
+        setPage(targetPage)
+        if (targetPage === 0) {
+          setRecentHistory(loaded.items)
+          const active = loaded.items.find((item) => item.status === 'in_progress')
+          setActiveAttempt(active ? { id: active.attemptId } : null)
+        }
       }
     } catch (cause) {
-      console.error('Falha ao localizar Mock Exam em andamento.', cause)
-      setError(START_ERROR)
+      reportError('Falha ao localizar Mock Exam em andamento.', cause)
+      if (historyRequestVersion.current === version) setError(START_ERROR)
     } finally {
-      setLoading(false)
+      if (historyRequestVersion.current === version) setLoading(false)
     }
   }, [currentCertification.id])
 
@@ -68,7 +73,7 @@ export function MockExamsPage() {
       const attempt = await startMockExam(currentCertification.id)
       navigate(mockExamExecutionRoute(currentCertification.code, attempt.id))
     } catch (cause) {
-      console.error('Falha ao iniciar Mock Exam.', cause)
+      reportError('Falha ao iniciar Mock Exam.', cause)
       setError(getStartError(cause))
       setLoading(false)
     } finally {

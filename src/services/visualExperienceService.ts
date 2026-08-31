@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { reportError } from '../lib/reportError'
 import { parseVisualExperience } from '../lib/visualExperienceValidation'
 import type { VisualExperienceDatabaseRow } from '../types/database'
 import type { RenderableVisualExperience } from '../types/visualExperience'
@@ -37,7 +38,7 @@ function parseDatabaseRow(row: VisualExperienceDatabaseRow): RenderableVisualExp
   const result = parseVisualExperience(toValidationCandidate(row))
 
   if (!result.success && import.meta.env.DEV) {
-    console.error('Configuração de visual experience inválida.', {
+    reportError('Configuração de visual experience inválida.', {
       id: row.id,
       type: row.type,
       issues: result.issues,

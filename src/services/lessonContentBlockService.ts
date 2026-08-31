@@ -1,5 +1,6 @@
 import { parseLessonContentBlock } from '../lib/lessonContentBlockValidation'
 import { supabase } from '../lib/supabase'
+import { reportError } from '../lib/reportError'
 import type { LessonContentBlockDatabaseRow } from '../types/database'
 import type {
   RenderableLessonContentBlock,
@@ -42,7 +43,7 @@ function parseDatabaseRow(row: LessonContentBlockDatabaseRow): RenderableLessonC
   const result = parseLessonContentBlock(toValidationCandidate(row))
 
   if (!result.success && import.meta.env.DEV) {
-    console.error('Configuração de lesson content block inválida.', {
+    reportError('Configuração de lesson content block inválida.', {
       id: row.id,
       type: row.type,
       issues: result.issues,
