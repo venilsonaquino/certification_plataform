@@ -8,6 +8,7 @@ export type CertificationSection =
   | 'quiz'
   | 'review'
   | 'exams'
+  | 'readiness'
   | 'progress'
 
 export function certificationRoute(certificationCode: string, section: CertificationSection) {

@@ -4,6 +4,7 @@ import {
   CalendarCheck2,
   FlaskConical,
   Gauge,
+  HeartPulse,
   Map,
   MapPinned,
   RefreshCcw,
@@ -23,5 +24,6 @@ export const navigationItems: NavigationItem[] = [
   { label: 'Quiz', segment: 'quiz', icon: BrainCircuit },
   { label: 'Revisão', segment: 'review', icon: RefreshCcw },
   { label: 'Simulados', segment: 'exams', icon: MapPinned },
+  { label: 'Readiness', segment: 'readiness', icon: HeartPulse },
   { label: 'Progresso', segment: 'progress', icon: Trophy },
 ]

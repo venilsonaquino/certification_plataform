@@ -15,6 +15,7 @@ import { MockExamExecutionPage } from './pages/MockExamExecutionPage'
 import { MockExamResultPage } from './pages/MockExamResultPage'
 import { MockExamReviewPage } from './pages/MockExamReviewPage'
 import { ProgressPage } from './pages/ProgressPage'
+import { ReadinessPage } from './pages/ReadinessPage'
 import { QuizPage } from './pages/QuizPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ReviewPage } from './pages/ReviewPage'
@@ -64,6 +65,7 @@ function App() {
             <Route path="exams/:attemptId" element={<MockExamExecutionPage />} />
             <Route path="exams/:attemptId/result" element={<MockExamResultPage />} />
             <Route path="exams/:attemptId/review" element={<MockExamReviewPage />} />
+            <Route path="readiness" element={<ReadinessPage />} />
             <Route path="progress" element={<ProgressPage />} />
           </Route>
         </Route>

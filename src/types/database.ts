@@ -432,6 +432,34 @@ type MockExamHistoryRow = {
   total_count: number
 }
 
+type ReadinessEvidenceRow = {
+  evidence_id: string
+  evidence_kind: 'assessment' | 'learning'
+  source:
+    | 'mock_exam'
+    | 'topic_quiz'
+    | 'lesson_quiz'
+    | 'review_quiz'
+    | 'lesson_progress'
+    | 'flashcard_review'
+    | 'flashcard_progress'
+  attempt_id: string | null
+  question_id: string | null
+  domain_id: string
+  topic_id: string
+  lesson_id: string | null
+  outcome: 'correct' | 'incorrect' | 'unanswered' | null
+  occurred_at: string | null
+  difficulty: QuestionDifficulty | null
+  attempt_status: 'completed' | 'expired' | null
+  duration_seconds: number | null
+  lesson_status: LessonProgressStatus | null
+  flashcard_rating: FlashcardReviewRating | null
+  review_count: number | null
+  successful_review_count: number | null
+  due_at: string | null
+}
+
 type DatabaseRelationship = {
   foreignKeyName: string
   columns: string[]
@@ -948,6 +976,10 @@ export interface Database {
         Args: { p_certification_id: string; p_limit?: number; p_offset?: number }
         Returns: MockExamHistoryRow[]
       }
+      get_readiness_evidence: {
+        Args: { p_certification_id: string }
+        Returns: ReadinessEvidenceRow[]
+      }
     }
     Enums: Record<string, never>
     CompositeTypes: Record<string, never>
@@ -987,3 +1019,4 @@ export type MockExamResultDatabaseRow = MockExamResultRow
 export type MockExamReviewDatabaseRow = MockExamReviewRow
 export type MockExamSessionDatabaseRow = MockExamSessionRow
 export type MockExamHistoryDatabaseRow = MockExamHistoryRow
+export type ReadinessEvidenceDatabaseRow = ReadinessEvidenceRow
