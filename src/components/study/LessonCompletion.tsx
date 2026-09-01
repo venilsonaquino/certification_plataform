@@ -1,23 +1,24 @@
 import { ArrowRight, Check, CheckCircle2, LoaderCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import { lessonRoute } from '../../lib/routes'
-import type { StudyPathLesson } from '../../lib/studyPath'
 import type { LessonProgressStatus } from '../../types/progress'
 
+export interface LessonNextAction {
+  readonly to: string
+  readonly label: string
+}
+
 interface LessonCompletionProps {
-  certificationCode: string
   status: LessonProgressStatus
-  next: StudyPathLesson | null
+  nextAction: LessonNextAction | null
   completing: boolean
   error: string | null
   onComplete: () => void
 }
 
 export function LessonCompletion({
-  certificationCode,
   status,
-  next,
+  nextAction,
   completing,
   error,
   onComplete,
@@ -32,12 +33,12 @@ export function LessonCompletion({
             <p className="mt-0.5 text-sm text-emerald-700">Seu progresso está salvo.</p>
           </div>
         </div>
-        {next && (
+        {nextAction && (
           <Link
-            to={lessonRoute(certificationCode, next.lesson.slug)}
+            to={nextAction.to}
             className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 sm:mt-0 sm:w-auto"
           >
-            Próxima aula
+            {nextAction.label}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </Link>
         )}

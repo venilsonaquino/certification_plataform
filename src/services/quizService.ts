@@ -353,6 +353,7 @@ function mapTopicSummary(row: TopicQuizSummaryDatabaseRow): TopicQuizSummary {
   return {
     topicId: row.topic_id,
     questionCount: Number(row.question_count),
+    targetQuestionCount: Number(row.target_question_count),
     activeAttemptId: row.active_attempt_id,
     activeTotalQuestions: row.active_total_questions,
     activeAnsweredCount: Number(row.active_answered_count),

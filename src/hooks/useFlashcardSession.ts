@@ -28,6 +28,7 @@ export interface FlashcardSessionSummary {
 export function useFlashcardSession(
   cards: readonly Flashcard[],
   submitReview: FlashcardReviewSubmitter = submitFlashcardReview,
+  mode: 'study' | 'review' = 'review',
 ) {
   const [sessionCards, setSessionCards] = useState<readonly Flashcard[]>(cards)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -39,6 +40,7 @@ export function useFlashcardSession(
   const [pendingRating, setPendingRating] = useState<FlashcardReviewRating | null>(null)
   const [sessionRatings, setSessionRatings] = useState<readonly FlashcardSessionRating[]>([])
   const [lastScheduledProgress, setLastScheduledProgress] = useState<UserFlashcardProgress | null>(null)
+  const [studiedCount, setStudiedCount] = useState(0)
   const submittingRef = useRef(false)
   const currentCard = sessionCards[currentIndex] ?? null
 
@@ -54,6 +56,7 @@ export function useFlashcardSession(
     setPendingRating(null)
     setSessionRatings([])
     setLastScheduledProgress(null)
+    setStudiedCount(0)
   }, [])
 
   const submitRating = useCallback(async (rating: FlashcardReviewRating) => {
@@ -91,6 +94,18 @@ export function useFlashcardSession(
     }
   }, [currentCard, currentIndex, isFinished, isRevealed, sessionCards.length, submitReview])
 
+  const advanceCard = useCallback(() => {
+    if (!currentCard || !isRevealed || isFinished || isSubmitting) return
+    setStudiedCount((current) => current + 1)
+    if (currentIndex === sessionCards.length - 1) {
+      setIsFinished(true)
+    } else {
+      setCurrentIndex((index) => index + 1)
+      setIsRevealed(false)
+      setIsHintVisible(false)
+    }
+  }, [currentCard, currentIndex, isFinished, isRevealed, isSubmitting, sessionCards.length])
+
   const summary = useMemo<FlashcardSessionSummary>(() => {
     const count = (rating: FlashcardReviewRating) =>
       sessionRatings.filter((item) => item.rating === rating).length
@@ -106,7 +121,7 @@ export function useFlashcardSession(
     }, null)
 
     return {
-      total: sessionRatings.length,
+      total: mode === 'study' ? studiedCount : sessionRatings.length,
       remembered: count('good') + count('easy'),
       again: count('again'),
       hard: count('hard'),
@@ -115,7 +130,7 @@ export function useFlashcardSession(
       difficultCards,
       nextReviewAt,
     }
-  }, [sessionRatings])
+  }, [mode, sessionRatings, studiedCount])
 
   return {
     sessionCards,
@@ -134,6 +149,7 @@ export function useFlashcardSession(
     revealHint: () => setIsHintVisible(true),
     rateCard: submitRating,
     retryRating: () => pendingRating ? submitRating(pendingRating) : Promise.resolve(),
+    advanceCard,
     restart: () => beginSession(cards),
     reviewDifficultCards: () => beginSession(summary.difficultCards),
   }

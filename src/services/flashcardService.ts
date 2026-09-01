@@ -2,11 +2,15 @@ import { supabase } from '../lib/supabase'
 import type {
   FlashcardDatabaseRow,
   FlashcardReviewOverviewDatabaseRow,
+  FlashcardCatalogOverviewDatabaseRow,
+  AvailableFlashcardDatabaseRow,
   FlashcardStudyQueueDatabaseRow,
   SubmitFlashcardReviewDatabaseRow,
 } from '../types/database'
 import type {
   Flashcard,
+  AvailableFlashcard,
+  FlashcardDomainOverview,
   FlashcardReviewOverview,
   FlashcardReviewRating,
   FlashcardReviewResult,
@@ -84,8 +88,19 @@ function mapStudyQueueItem(row: FlashcardStudyQueueDatabaseRow): FlashcardStudyQ
 function mapReviewOverview(row: FlashcardReviewOverviewDatabaseRow): FlashcardReviewOverview {
   return {
     queueCount: Number(row.queue_count),
+    dueCount: Number(row.due_count),
+    newCount: Number(row.new_count),
     nextReviewAt: row.next_review_at,
     availableFlashcardCount: Number(row.available_flashcard_count),
+    totalFlashcardCount: Number(row.total_flashcard_count),
+  }
+}
+
+function mapAvailableFlashcard(row: AvailableFlashcardDatabaseRow): AvailableFlashcard {
+  return {
+    ...mapFlashcard(row),
+    lessonTitle: row.lesson_title,
+    lessonSlug: row.lesson_slug,
   }
 }
 
@@ -162,4 +177,68 @@ export async function getFlashcardReviewOverview(
   throwQueryError(error)
   if (!data) throw new FlashcardDataError('O resumo da revisão não foi retornado pelo Supabase.')
   return mapReviewOverview(data)
+}
+
+export async function getFlashcardCatalogOverview(
+  certificationId: string,
+): Promise<FlashcardDomainOverview[]> {
+  const { data, error } = await getClient().rpc('get_flashcard_catalog_overview', {
+    p_certification_id: certificationId,
+  })
+  throwQueryError(error)
+  const rows = (data ?? []) as FlashcardCatalogOverviewDatabaseRow[]
+  const domains = new Map<string, FlashcardDomainOverview>()
+
+  for (const row of rows) {
+    const topic = {
+      topicId: row.topic_id,
+      title: row.topic_title,
+      displayOrder: row.topic_display_order,
+      availableCount: Number(row.available_flashcard_count),
+      totalCount: Number(row.total_flashcard_count),
+      studiedCount: Number(row.studied_flashcard_count),
+    }
+    const current = domains.get(row.domain_id)
+    if (current) {
+      domains.set(row.domain_id, {
+        ...current,
+        availableCount: current.availableCount + topic.availableCount,
+        totalCount: current.totalCount + topic.totalCount,
+        studiedCount: current.studiedCount + topic.studiedCount,
+        topics: [...current.topics, topic],
+      })
+    } else {
+      domains.set(row.domain_id, {
+        domainId: row.domain_id,
+        title: row.domain_title,
+        displayOrder: row.domain_display_order,
+        availableCount: topic.availableCount,
+        totalCount: topic.totalCount,
+        studiedCount: topic.studiedCount,
+        topics: [topic],
+      })
+    }
+  }
+
+  return [...domains.values()]
+}
+
+interface AvailableFlashcardScope {
+  certificationId: string
+  topicId?: string
+  lessonId?: string
+}
+
+export async function getAvailableFlashcards({
+  certificationId,
+  topicId,
+  lessonId,
+}: AvailableFlashcardScope): Promise<AvailableFlashcard[]> {
+  const { data, error } = await getClient().rpc('get_available_flashcards', {
+    p_certification_id: certificationId,
+    p_topic_id: topicId ?? null,
+    p_lesson_id: lessonId ?? null,
+  })
+  throwQueryError(error)
+  return ((data ?? []) as AvailableFlashcardDatabaseRow[]).map(mapAvailableFlashcard)
 }

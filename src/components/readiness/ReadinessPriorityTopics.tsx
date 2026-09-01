@@ -18,7 +18,7 @@ interface ReadinessPriorityTopicsProps {
 export function ReadinessPriorityTopics({ topics }: ReadinessPriorityTopicsProps) {
   return (
     <section aria-labelledby="priority-topics-title" className="mt-10">
-      <p className="text-sm font-semibold text-blue-600">Topics prioritários</p>
+      <p className="text-sm font-semibold text-blue-600">Tópicos prioritários</p>
       <h2 id="priority-topics-title" className="mt-1 text-2xl font-bold tracking-tight text-slate-950">O que merece atenção agora</h2>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">A ordem e as ações vêm das recomendações determinísticas. Evidência insuficiente significa avaliar, não fraqueza.</p>
 
@@ -49,7 +49,7 @@ export function ReadinessPriorityTopics({ topics }: ReadinessPriorityTopicsProps
                   </ul>
                   <dl className="mt-4 grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-4 text-xs">
                     <EvidenceMetric label="Mock" value={topic.evidence.mockPerformance} />
-                    <EvidenceMetric label="Topic Quiz" value={topic.evidence.topicQuizPerformance} />
+                    <EvidenceMetric label="Checkpoint" value={topic.evidence.topicQuizPerformance} />
                     <EvidenceMetric label="Erros recentes" value={topic.evidence.recentIncorrectAnswers} suffix="" />
                     <EvidenceMetric label="Questões recorrentes" value={topic.evidence.recurringIncorrectQuestions} suffix="" />
                   </dl>

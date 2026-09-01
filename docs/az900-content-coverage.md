@@ -1302,3 +1302,9 @@ Existe uma única Visual Experience associada a `azure-monitor`, com oito nós e
 O Domain 3 possui 20 Lessons publicadas, 226 Content Blocks, 2 Visual Experiences, 130 Flashcards, 140 Questions (49 easy / 63 medium / 28 hard) e 224 minutos estimados. Nenhum dos quatro blocos possui objetivo `Partial` ou `Missing`.
 
 **Domain 3 — Describe Azure Management and Governance: CLOSED**
+
+## Checkpoint — Etapa 13.5.4
+
+A consistência Lesson ↔ Flashcard foi auditada sobre os três Domains: 397 Flashcards publicados em 76 Lessons. A classificação inicial encontrou 386 `SUPPORTED`, 6 `PARTIALLY_SUPPORTED`, 5 `NOT_SUPPORTED` e 0 `AMBIGUOUS`. Dois gaps legítimos foram fechados em Content Blocks existentes (`choosing-a-cloud-model` e `virtual-networks-and-subnets`) e nove Flashcards foram reescritos nos mesmos UUIDs. O resultado final é 397 `SUPPORTED`, sem cards movidos, removidos ou despublicados e sem Lesson publicada sem Flashcards.
+
+**AZ-900 Content ↔ Flashcard Consistency: READY**

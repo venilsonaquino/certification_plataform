@@ -51,8 +51,35 @@ export interface FlashcardStudyQueueItem extends Flashcard {
 
 export interface FlashcardReviewOverview {
   readonly queueCount: number
+  readonly dueCount: number
+  readonly newCount: number
   readonly nextReviewAt: string | null
   readonly availableFlashcardCount: number
+  readonly totalFlashcardCount: number
+}
+
+export interface FlashcardTopicOverview {
+  readonly topicId: string
+  readonly title: string
+  readonly displayOrder: number
+  readonly availableCount: number
+  readonly totalCount: number
+  readonly studiedCount: number
+}
+
+export interface FlashcardDomainOverview {
+  readonly domainId: string
+  readonly title: string
+  readonly displayOrder: number
+  readonly availableCount: number
+  readonly totalCount: number
+  readonly studiedCount: number
+  readonly topics: readonly FlashcardTopicOverview[]
+}
+
+export interface AvailableFlashcard extends Flashcard {
+  readonly lessonTitle: string
+  readonly lessonSlug: string
 }
 
 export interface FlashcardSessionRating {

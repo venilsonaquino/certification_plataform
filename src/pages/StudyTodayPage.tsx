@@ -1,4 +1,4 @@
-import { CalendarCheck2, CheckCircle2, Clock3, Sparkles } from 'lucide-react'
+import { BrainCircuit, CalendarCheck2, CheckCircle2, Clock3, Sparkles } from 'lucide-react'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -8,8 +8,9 @@ import { DEFAULT_DAILY_STUDY_MINUTES } from '../features/studyToday/constants'
 import { buildDailyStudyPlan } from '../features/studyToday/studyTodayUtils'
 import { useCertification } from '../hooks/useCertification'
 import { useCertificationProgress } from '../hooks/useCertificationProgress'
+import { useStudyProgression } from '../hooks/useStudyProgression'
 import { formatCertificationCode } from '../lib/certificationVisuals'
-import { certificationRoute } from '../lib/routes'
+import { certificationRoute, topicQuizRoute } from '../lib/routes'
 
 export function StudyTodayPage() {
   const { currentCertification } = useCertification()
@@ -20,10 +21,20 @@ export function StudyTodayPage() {
   const studyRoute = certificationRoute(currentCertification.code, 'study')
   const reviewRoute = certificationRoute(currentCertification.code, 'review')
   const examsRoute = certificationRoute(currentCertification.code, 'exams')
-  const plan = useMemo(
-    () => buildDailyStudyPlan(domains, progressByLessonId),
-    [domains, progressByLessonId],
+  const studyProgression = useStudyProgression(
+    currentCertification.id,
+    domains,
+    progressByLessonId,
   )
+  const plan = useMemo(
+    () => buildDailyStudyPlan(domains, progressByLessonId, studyProgression.progression),
+    [domains, progressByLessonId, studyProgression.progression],
+  )
+  const pageLoading = loading || studyProgression.loading
+  const pageError = error ?? studyProgression.error
+  const nextCheckpoint = studyProgression.progression.nextAction?.kind === 'checkpoint'
+    ? studyProgression.progression.nextAction.checkpoint
+    : null
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -51,23 +62,23 @@ export function StudyTodayPage() {
         </div>
       </header>
 
-      {loading && (
+      {pageLoading && (
         <div className="mt-8">
           <CertificationDataState title="Preparando seu estudo de hoje..." loading />
         </div>
       )}
 
-      {!loading && error && (
+      {!pageLoading && pageError && (
         <div className="mt-8">
           <CertificationDataState
             title="Não foi possível preparar o estudo de hoje."
-            description={error}
-            onRetry={retry}
+            description={pageError}
+            onRetry={() => { retry(); void studyProgression.retry() }}
           />
         </div>
       )}
 
-      {!loading && !error && summary.isCompleted && (
+      {!pageLoading && !pageError && studyProgression.progression.journeyCompleted && (
         <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-7 text-center sm:p-10">
           <CheckCircle2 aria-hidden="true" className="mx-auto h-12 w-12 text-emerald-600" />
           <h2 className="mt-4 text-2xl font-bold text-emerald-950">Parabéns!</h2>
@@ -97,7 +108,21 @@ export function StudyTodayPage() {
         </section>
       )}
 
-      {!loading && !error && !summary.isCompleted && plan.lessons.length > 0 && (
+      {!pageLoading && !pageError && !studyProgression.progression.journeyCompleted && nextCheckpoint && (
+        <section className="mt-8 rounded-2xl border border-violet-200 bg-violet-50 p-6 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-7">
+          <div className="flex items-start gap-4">
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-100 text-violet-700"><BrainCircuit aria-hidden="true" className="h-5 w-5" /></div>
+            <div>
+              <p className="text-sm font-bold text-violet-700">Próxima etapa da trilha</p>
+              <h2 className="mt-1 text-xl font-bold text-slate-950">Checkpoint: {nextCheckpoint.topic.title}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{nextCheckpoint.status === 'in_progress' ? `${nextCheckpoint.activeAnsweredCount} de ${nextCheckpoint.activeTotalQuestions ?? nextCheckpoint.targetQuestionCount} questões respondidas.` : `As aulas deste tópico foram concluídas. Responda ${nextCheckpoint.targetQuestionCount} questões para liberar o próximo tópico.`}</p>
+            </div>
+          </div>
+          <Link to={topicQuizRoute(currentCertification.code, nextCheckpoint.topic.id)} className="mt-5 inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-violet-700 px-5 text-sm font-bold text-white hover:bg-violet-800 sm:mt-0">{nextCheckpoint.status === 'in_progress' ? 'Continuar Checkpoint' : 'Fazer Checkpoint'}</Link>
+        </section>
+      )}
+
+      {!pageLoading && !pageError && !studyProgression.progression.journeyCompleted && !nextCheckpoint && plan.lessons.length > 0 && (
         <section className="mt-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -134,7 +159,7 @@ export function StudyTodayPage() {
         </section>
       )}
 
-      {!loading && !error && !summary.isCompleted && plan.lessons.length === 0 && (
+      {!pageLoading && !pageError && !studyProgression.progression.journeyCompleted && !nextCheckpoint && plan.lessons.length === 0 && (
         <div className="mt-8">
           <CertificationDataState
             title="Nenhuma aula disponível."

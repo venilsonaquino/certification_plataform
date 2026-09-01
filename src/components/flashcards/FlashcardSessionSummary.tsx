@@ -12,6 +12,7 @@ interface FlashcardSessionSummaryProps {
   allowDifficultReview?: boolean
   onRestart: () => void
   onReviewDifficult: () => void
+  mode?: 'study' | 'review'
 }
 
 export function FlashcardSessionSummary({
@@ -22,22 +23,23 @@ export function FlashcardSessionSummary({
   allowDifficultReview = true,
   onRestart,
   onReviewDifficult,
+  mode = 'review',
 }: FlashcardSessionSummaryProps) {
   return (
     <section className="mt-8 rounded-3xl border border-emerald-200 bg-emerald-50 px-6 py-10 text-center shadow-sm sm:px-10">
       <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-2xl" aria-hidden="true">✓</div>
       <h2 className="mt-5 text-2xl font-bold text-slate-950">{title}</h2>
-      <p className="mt-2 text-sm font-semibold text-emerald-800">{summary.total} {summary.total === 1 ? 'flashcard avaliado' : 'flashcards avaliados'}</p>
-      <p className="mt-1 text-sm text-slate-600">{summary.remembered} de {summary.total} cards lembrados nesta sessão.</p>
+      <p className="mt-2 text-sm font-semibold text-emerald-800">{summary.total} {summary.total === 1 ? 'flashcard estudado' : 'flashcards estudados'}</p>
+      {mode === 'review' && <p className="mt-1 text-sm text-slate-600">{summary.remembered} de {summary.total} cards lembrados nesta sessão.</p>}
 
-      <dl className="mx-auto mt-7 grid max-w-xl grid-cols-2 gap-3 text-left sm:grid-cols-4">
+      {mode === 'review' && <dl className="mx-auto mt-7 grid max-w-xl grid-cols-2 gap-3 text-left sm:grid-cols-4">
         <div className="rounded-xl bg-white p-3"><dt className="text-xs font-semibold text-slate-500">Não sabia</dt><dd className="mt-1 text-xl font-bold text-rose-700">{summary.again}</dd></div>
         <div className="rounded-xl bg-white p-3"><dt className="text-xs font-semibold text-slate-500">Difícil</dt><dd className="mt-1 text-xl font-bold text-amber-700">{summary.hard}</dd></div>
         <div className="rounded-xl bg-white p-3"><dt className="text-xs font-semibold text-slate-500">Sabia</dt><dd className="mt-1 text-xl font-bold text-emerald-700">{summary.good}</dd></div>
         <div className="rounded-xl bg-white p-3"><dt className="text-xs font-semibold text-slate-500">Muito fácil</dt><dd className="mt-1 text-xl font-bold text-blue-700">{summary.easy}</dd></div>
-      </dl>
+      </dl>}
 
-      {allowDifficultReview && summary.difficultCards.length > 0 && (
+      {mode === 'review' && allowDifficultReview && summary.difficultCards.length > 0 && (
         <div className="mx-auto mt-7 max-w-xl rounded-2xl border border-amber-200 bg-amber-50 p-5 text-left">
           <h3 className="font-bold text-amber-950">Precisa revisar</h3>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-amber-900">
@@ -57,10 +59,10 @@ export function FlashcardSessionSummary({
           <RotateCcw aria-hidden="true" className="h-4 w-4" />Revisar novamente
         </button>
       </div>
-      {summary.nextReviewAt && (
+      {mode === 'review' && summary.nextReviewAt && (
         <p className="mt-5 text-sm font-semibold text-emerald-800">Próxima revisão agendada: {formatReviewDate(summary.nextReviewAt)}</p>
       )}
-      <p className="mt-5 text-xs text-slate-500">Este resultado representa apenas esta sessão e não altera o progresso da certificação.</p>
+      <p className="mt-5 text-xs text-slate-500">{mode === 'study' ? 'O estudo livre não altera a agenda de repetição espaçada.' : 'Este resultado representa apenas esta sessão e não altera o progresso da certificação.'}</p>
     </section>
   )
 }

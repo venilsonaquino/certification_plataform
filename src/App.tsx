@@ -28,6 +28,8 @@ const TopicQuizPage = lazy(() => import('./pages/TopicQuizPage').then((module) =
 const LoginPage = lazy(() => import('./pages/LoginPage').then((module) => ({ default: module.LoginPage })))
 const FlashcardPage = lazy(() => import('./pages/FlashcardPage').then((module) => ({ default: module.FlashcardPage })))
 const DailyFlashcardReviewPage = lazy(() => import('./pages/DailyFlashcardReviewPage').then((module) => ({ default: module.DailyFlashcardReviewPage })))
+const FlashcardsPage = lazy(() => import('./pages/FlashcardsPage').then((module) => ({ default: module.FlashcardsPage })))
+const TopicFlashcardsPage = lazy(() => import('./pages/TopicFlashcardsPage').then((module) => ({ default: module.TopicFlashcardsPage })))
 
 function lazyRoute(element: ReactNode) {
   return <Suspense fallback={<RouteLoadingState />}>{element}</Suspense>
@@ -56,6 +58,9 @@ function App() {
             <Route path="study/:lessonSlug/quiz" element={lazyRoute(<LessonQuizPage />)} />
             <Route path="study/:lessonSlug/flashcards" element={lazyRoute(<FlashcardPage />)} />
             <Route path="study/:lessonSlug" element={lazyRoute(<LessonPage />)} />
+            <Route path="flashcards" element={lazyRoute(<FlashcardsPage />)} />
+            <Route path="flashcards/review" element={lazyRoute(<DailyFlashcardReviewPage />)} />
+            <Route path="flashcards/topics/:topicId" element={lazyRoute(<TopicFlashcardsPage />)} />
             <Route path="topics/:topicId/quiz" element={lazyRoute(<TopicQuizPage />)} />
             <Route path="review" element={lazyRoute(<ReviewPage />)} />
             <Route path="review/quiz" element={lazyRoute(<ReviewQuizPage />)} />

@@ -19,7 +19,7 @@ function deferred<T>() {
 }
 
 function overview(queueCount: number): FlashcardReviewOverview {
-  return { queueCount, nextReviewAt: null, availableFlashcardCount: queueCount }
+  return { queueCount, dueCount: queueCount, newCount: 0, nextReviewAt: null, availableFlashcardCount: queueCount, totalFlashcardCount: queueCount }
 }
 
 describe('useFlashcardReviewOverview', () => {

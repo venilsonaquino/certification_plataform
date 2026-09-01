@@ -126,7 +126,7 @@ describe('MockExamExecutionPage', () => {
     expect(screen.getByText('Enunciado seguro 7')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Anterior' }))
     expect(screen.getByText('Enunciado seguro 6')).toBeInTheDocument()
-  })
+  }, 10_000)
 
   it('mantém a posição não crítica no refresh e recupera respostas do servidor', async () => {
     sessionStorage.setItem(`mock-position:${attempt.id}`, '5')

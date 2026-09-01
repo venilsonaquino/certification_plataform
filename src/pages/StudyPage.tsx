@@ -4,7 +4,7 @@ import { CertificationDataState } from '../components/certifications/Certificati
 import { StudyPath } from '../components/study/StudyPath'
 import { useCertification } from '../hooks/useCertification'
 import { useCertificationProgress } from '../hooks/useCertificationProgress'
-import { useTopicQuizSummaries } from '../hooks/useTopicQuizSummaries'
+import { useStudyProgression } from '../hooks/useStudyProgression'
 import { formatCertificationCode } from '../lib/certificationVisuals'
 
 export function StudyPage() {
@@ -17,8 +17,13 @@ export function StudyPage() {
     error,
     retry,
   } = useCertificationProgress()
-  const { summaries: topicQuizSummaries } = useTopicQuizSummaries(currentCertification.id)
-  const topicQuizSummaryById = new Map(topicQuizSummaries.map((summary) => [summary.topicId, summary]))
+  const progression = useStudyProgression(
+    currentCertification.id,
+    domains,
+    progressByLessonId,
+  )
+  const pageLoading = loading || progression.loading
+  const pageError = error ?? progression.error
 
   return (
     <div>
@@ -44,7 +49,7 @@ export function StudyPage() {
               <h2 id="study-path-title" className="text-xl font-bold tracking-tight text-slate-950">
                 Conteúdo da certificação
               </h2>
-              {!loading && !error && domains.length > 0 && (
+              {!pageLoading && !pageError && domains.length > 0 && (
                 <p className="mt-0.5 flex items-center gap-1.5 text-sm text-slate-400">
                   <LibraryBig aria-hidden="true" className="h-4 w-4" />
                   {domains.length} domínios · {summary.totalCount} aulas
@@ -54,26 +59,26 @@ export function StudyPage() {
           </div>
         </div>
 
-        {loading && <CertificationDataState title="Carregando trilha de estudos..." loading />}
-        {!loading && error && (
+        {pageLoading && <CertificationDataState title="Carregando trilha de estudos..." loading />}
+        {!pageLoading && pageError && (
           <CertificationDataState
             title="Não foi possível carregar a trilha."
             description="Confira sua conexão e tente novamente."
-            onRetry={retry}
+            onRetry={() => { retry(); void progression.retry() }}
           />
         )}
-        {!loading && !error && domains.length === 0 && (
+        {!pageLoading && !pageError && domains.length === 0 && (
           <CertificationDataState
             title="Conteúdo ainda não disponível."
             description="Esta certificação não possui uma trilha de estudos publicada."
           />
         )}
-        {!loading && !error && domains.length > 0 && (
+        {!pageLoading && !pageError && domains.length > 0 && (
           <StudyPath
             certificationCode={currentCertification.code}
             domains={domains}
             progressByLessonId={progressByLessonId}
-            topicQuizSummaryById={topicQuizSummaryById}
+            progression={progression.progression}
           />
         )}
       </section>

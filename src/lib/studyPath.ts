@@ -40,3 +40,15 @@ export function findLessonStudyContext(
     next: orderedLessons[currentIndex + 1] ?? null,
   }
 }
+
+export function findNextLessonAfterTopic(
+  domains: readonly DomainWithTopics[],
+  topicId: string,
+): StudyPathLesson | null {
+  const orderedLessons = flattenStudyPath(domains)
+  const lastLessonIndex = orderedLessons.map((item) => item.topic.id).lastIndexOf(topicId)
+
+  if (lastLessonIndex === -1) return null
+
+  return orderedLessons.slice(lastLessonIndex + 1).find((item) => item.topic.id !== topicId) ?? null
+}

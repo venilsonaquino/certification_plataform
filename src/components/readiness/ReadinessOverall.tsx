@@ -49,7 +49,7 @@ export function ReadinessOverall({ readiness, summaryActions }: ReadinessOverall
         <div className="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <OverallFact icon={ClipboardCheck} label="Evidência" value={evidenceLabels[readiness.evidenceLevel]} />
           <OverallFact icon={Activity} label="Tendência" value={trendLabels[readiness.trend]} />
-          <OverallFact icon={Layers3} label="Atividade avaliada" value={`${mockAttempts} Mocks · ${topicAttempts} Topic Quizzes`} />
+          <OverallFact icon={Layers3} label="Atividade avaliada" value={`${mockAttempts} simulados · ${topicAttempts} Checkpoints`} />
           <OverallFact icon={CalendarClock} label="Última avaliação" value={formatReadinessDate(readiness.trace.latestEvidenceAt)} />
         </div>
 

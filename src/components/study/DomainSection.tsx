@@ -2,7 +2,7 @@ import { ChevronDown, Layers3 } from 'lucide-react'
 
 import type { DomainWithTopics } from '../../types/content'
 import type { UserLessonProgress } from '../../types/progress'
-import type { TopicQuizSummary } from '../../types/quiz'
+import type { StudyProgression } from '../../lib/studyProgression'
 import { TopicSection } from './TopicSection'
 
 interface DomainSectionProps {
@@ -10,7 +10,7 @@ interface DomainSectionProps {
   domain: DomainWithTopics
   domainNumber: number
   progressByLessonId: ReadonlyMap<string, UserLessonProgress>
-  topicQuizSummaryById: ReadonlyMap<string, TopicQuizSummary>
+  progression: StudyProgression
 }
 
 export function DomainSection({
@@ -18,7 +18,7 @@ export function DomainSection({
   domain,
   domainNumber,
   progressByLessonId,
-  topicQuizSummaryById,
+  progression,
 }: DomainSectionProps) {
   const lessons = domain.topics.flatMap((topic) => topic.lessons)
   const completedLessons = lessons.filter(
@@ -78,7 +78,8 @@ export function DomainSection({
               topic={topic}
               topicNumber={topicIndex + 1}
               progressByLessonId={progressByLessonId}
-              quizSummary={topicQuizSummaryById.get(topic.id)}
+              checkpoint={progression.checkpointByTopicId.get(topic.id)}
+              lessonStateById={progression.lessonById}
             />
           ))
         )}

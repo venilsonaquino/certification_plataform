@@ -1,16 +1,16 @@
 import type { DomainWithTopics } from '../../types/content'
 import type { UserLessonProgress } from '../../types/progress'
-import type { TopicQuizSummary } from '../../types/quiz'
+import type { StudyProgression } from '../../lib/studyProgression'
 import { DomainSection } from './DomainSection'
 
 interface StudyPathProps {
   certificationCode: string
   domains: readonly DomainWithTopics[]
   progressByLessonId: ReadonlyMap<string, UserLessonProgress>
-  topicQuizSummaryById: ReadonlyMap<string, TopicQuizSummary>
+  progression: StudyProgression
 }
 
-export function StudyPath({ certificationCode, domains, progressByLessonId, topicQuizSummaryById }: StudyPathProps) {
+export function StudyPath({ certificationCode, domains, progressByLessonId, progression }: StudyPathProps) {
   return (
     <ol className="space-y-5 lg:space-y-6">
       {domains.map((domain, domainIndex) => (
@@ -20,7 +20,7 @@ export function StudyPath({ certificationCode, domains, progressByLessonId, topi
             domain={domain}
             domainNumber={domainIndex + 1}
             progressByLessonId={progressByLessonId}
-            topicQuizSummaryById={topicQuizSummaryById}
+            progression={progression}
           />
         </li>
       ))}

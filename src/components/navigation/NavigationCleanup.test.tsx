@@ -28,6 +28,7 @@ const expectedLabels = [
   'Dashboard',
   'Estudo do Dia',
   'Trilha de estudos',
+  'Flashcards',
   'Revisão',
   'Simulados',
   'Readiness',
@@ -35,7 +36,7 @@ const expectedLabels = [
 ]
 
 describe('responsive product navigation', () => {
-  it('renderiza sete links claros, acessíveis e com estado ativo', () => {
+  it('renderiza oito links claros, acessíveis e com estado ativo', () => {
     render(
       <MemoryRouter
         initialEntries={['/certifications/az-900/readiness']}

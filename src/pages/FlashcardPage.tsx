@@ -1,5 +1,4 @@
 import { ArrowLeft, Layers3 } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import { CertificationDataState } from '../components/certifications/CertificationDataState'
@@ -7,11 +6,10 @@ import { FlashcardViewer } from '../components/flashcards/FlashcardViewer'
 import { Breadcrumbs } from '../components/study/Breadcrumbs'
 import { useCertification } from '../hooks/useCertification'
 import { useCertificationProgress } from '../hooks/useCertificationProgress'
+import { useAvailableFlashcards } from '../hooks/useAvailableFlashcards'
 import { formatCertificationCode } from '../lib/certificationVisuals'
 import { certificationRoute, lessonRoute } from '../lib/routes'
 import { findLessonStudyContext } from '../lib/studyPath'
-import { getFlashcardsByLesson } from '../services/flashcardService'
-import type { Flashcard } from '../types/flashcard'
 
 export function FlashcardPage() {
   const { lessonSlug = '' } = useParams<{ lessonSlug: string }>()
@@ -19,44 +17,9 @@ export function FlashcardPage() {
   const { domains, loading: contentLoading, error: contentError, retry: retryContent } = useCertificationProgress()
   const context = findLessonStudyContext(domains, lessonSlug)
   const lessonId = context?.lesson.id ?? null
-  const [cards, setCards] = useState<readonly Flashcard[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [requestVersion, setRequestVersion] = useState(0)
+  const session = useAvailableFlashcards({ certificationId: currentCertification.id, lessonId })
   const studyRoute = certificationRoute(currentCertification.code, 'study')
   const backRoute = lessonRoute(currentCertification.code, lessonSlug)
-
-  useEffect(() => {
-    let active = true
-
-    if (!lessonId) {
-      setCards([])
-      setLoading(false)
-      setError(null)
-      return () => {
-        active = false
-      }
-    }
-
-    setLoading(true)
-    setError(null)
-    getFlashcardsByLesson(lessonId)
-      .then((value) => {
-        if (active) setCards(value)
-      })
-      .catch(() => {
-        if (active) {
-          setError('Não foi possível carregar os flashcards.')
-        }
-      })
-      .finally(() => {
-        if (active) setLoading(false)
-      })
-
-    return () => {
-      active = false
-    }
-  }, [lessonId, requestVersion])
 
   if (contentLoading) {
     return <CertificationDataState title="Carregando aula..." loading />
@@ -77,20 +40,20 @@ export function FlashcardPage() {
     )
   }
 
-  if (loading) {
+  if (session.loading) {
     return <CertificationDataState title="Carregando flashcards..." loading />
   }
 
-  if (error) {
-    return <CertificationDataState title="Não foi possível carregar os flashcards." description={error} onRetry={() => setRequestVersion((value) => value + 1)} />
+  if (session.error) {
+    return <CertificationDataState title="Não foi possível carregar os flashcards." description={session.error} onRetry={session.retry} />
   }
 
   const { domain, topic, lesson } = context
 
-  if (cards.length === 0) {
+  if (session.cards.length === 0) {
     return (
       <div className="mx-auto max-w-3xl">
-        <CertificationDataState title="Flashcards ainda não disponíveis para esta aula." />
+        <CertificationDataState title="Flashcards ainda não disponíveis para esta aula." description="Conclua a aula para liberar os cards. Flashcards já revisados anteriormente continuam acessíveis." />
         <Link to={backRoute} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
           <ArrowLeft aria-hidden="true" className="h-4 w-4" />Voltar para a aula
         </Link>
@@ -117,7 +80,7 @@ export function FlashcardPage() {
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">{lesson.title}</h1>
         <p className="mt-2 text-sm text-slate-500">Tente lembrar antes de revelar a resposta.</p>
       </header>
-      <FlashcardViewer key={lesson.id} cards={cards} returnRoute={backRoute} />
+      <FlashcardViewer key={lesson.id} cards={session.cards} mode="study" returnRoute={backRoute} completionTitle="Estudo livre concluído" allowDifficultReview={false} />
     </main>
   )
 }

@@ -38,7 +38,7 @@ export function ReadinessPage() {
       <header className="max-w-3xl">
         <p className="text-sm font-semibold text-blue-600">{certificationCode}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Readiness</h1>
-        <p className="mt-3 text-base leading-7 text-slate-500">Entenda a força da sua evidência de prática, os Domains que pedem atenção e as próximas ações de estudo.</p>
+        <p className="mt-3 text-base leading-7 text-slate-500">Entenda a força da sua evidência de prática, os domínios que pedem atenção e as próximas ações de estudo.</p>
       </header>
 
       {loading && <ReadinessLoading />}
@@ -76,8 +76,8 @@ export function ReadinessPage() {
             <div className="mt-4 border-t border-slate-100 pt-4 text-sm leading-6 text-slate-600">
               <ul className="space-y-2">
                 <li>• Mock Exams finalizados possuem a influência mais forte.</li>
-                <li>• Topic Quizzes fornecem evidência direcionada para cada Topic.</li>
-                <li>• Lesson Quizzes ajudam a localizar lacunas específicas.</li>
+                <li>• Checkpoints do Tópico fornecem evidência direcionada para cada tópico.</li>
+                <li>• Quizzes de aula anteriores permanecem como evidência histórica de lacunas específicas.</li>
                 <li>• Conclusão de aulas representa progresso de estudo, não domínio comprovado.</li>
                 <li>• Evidências recentes recebem mais relevância do que evidências antigas.</li>
               </ul>

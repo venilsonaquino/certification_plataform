@@ -12,6 +12,7 @@ const mocks = vi.hoisted(() => ({
   useUserProgress: vi.fn(),
   completeProgress: vi.fn(),
   recordCertificationProgress: vi.fn(),
+  useStudyProgression: vi.fn(),
 }))
 
 vi.mock('../hooks/useCertification', () => ({
@@ -24,6 +25,10 @@ vi.mock('../hooks/useCertificationProgress', () => ({
 
 vi.mock('../hooks/useUserProgress', () => ({
   useUserProgress: mocks.useUserProgress,
+}))
+
+vi.mock('../hooks/useStudyProgression', () => ({
+  useStudyProgression: mocks.useStudyProgression,
 }))
 
 vi.mock('../components/study/LessonContentRenderer', () => ({
@@ -48,14 +53,6 @@ vi.mock('../components/study/LessonCompletion', () => ({
       </button>
     </section>
   ),
-}))
-
-vi.mock('../components/flashcards/LessonFlashcardCard', () => ({
-  LessonFlashcardCard: () => <section data-stage="flashcards">Flashcards</section>,
-}))
-
-vi.mock('../components/quiz/LessonQuizCard', () => ({
-  LessonQuizCard: () => <section data-stage="quiz">Quiz</section>,
 }))
 
 vi.mock('../components/study/LessonNavigation', () => ({
@@ -142,10 +139,11 @@ describe('LessonPage', () => {
   beforeEach(() => {
     Object.values(mocks).forEach((mock) => mock.mockReset())
     mocks.useCertification.mockReturnValue({
-      currentCertification: { code: 'az-900' },
+      currentCertification: { id: '20000000-0000-4000-8000-000000000001', code: 'az-900' },
     })
     mocks.useCertificationProgress.mockReturnValue({
       domains,
+      progressByLessonId: new Map([[lessonId, progress]]),
       loading: false,
       error: null,
       retry: vi.fn(),
@@ -160,9 +158,21 @@ describe('LessonPage', () => {
       completingLessonId: null,
       mutationError: null,
     })
+    mocks.useStudyProgression.mockReturnValue({
+      progression: {
+        lessonById: new Map([
+          [lessonId, { lesson: currentLesson, topic, domain: domains[0], status: 'in_progress', available: true, grandfathered: false, prerequisiteLesson: null, prerequisiteTopic: null }],
+          [topic.lessons[2].id, { lesson: topic.lessons[2], topic, domain: domains[0], status: 'locked', available: false, grandfathered: false, prerequisiteLesson: null, prerequisiteTopic: null }],
+        ]),
+        checkpointByTopicId: new Map(),
+      },
+      loading: false,
+      error: null,
+      retry: vi.fn(),
+    })
   })
 
-  it('preserva conteúdo, conclusão, flashcards, quiz e navegação nessa ordem', async () => {
+  it('preserva conteúdo, conclusão e navegação, sem ações secundárias no fluxo primário', async () => {
     const user = userEvent.setup()
     const { container } = render(
       <MemoryRouter
@@ -182,7 +192,7 @@ describe('LessonPage', () => {
       [...container.querySelectorAll('[data-stage]')].map((element) =>
         element.getAttribute('data-stage'),
       ),
-    ).toEqual(['content', 'completion', 'flashcards', 'quiz', 'navigation'])
+    ).toEqual(['content', 'completion', 'navigation'])
     expect(screen.getByTestId('lesson-content')).toHaveTextContent('Conteúdo legado preservado.')
 
     await user.click(screen.getByRole('button', { name: 'Concluir aula' }))
@@ -193,5 +203,27 @@ describe('LessonPage', () => {
       startLessonId: lessonId,
     })
     await waitFor(() => expect(mocks.recordCertificationProgress).toHaveBeenCalledWith(progress))
+  })
+
+  it('intercepta deep link bloqueado sem registrar início', () => {
+    mocks.useStudyProgression.mockReturnValue({
+      progression: {
+        lessonById: new Map([[lessonId, { lesson: currentLesson, topic, domain: domains[0], status: 'locked', available: false, grandfathered: false, prerequisiteLesson: { lesson: topic.lessons[0], topic, domain: domains[0] }, prerequisiteTopic: null }]]),
+        checkpointByTopicId: new Map(),
+      },
+      loading: false,
+      error: null,
+      retry: vi.fn(),
+    })
+
+    render(
+      <MemoryRouter initialEntries={['/certifications/az-900/study/shared-responsibility-model']} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Routes><Route path="/certifications/:certificationCode/study/:lessonSlug" element={<LessonPage />} /></Routes>
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByText('Esta aula ainda está bloqueada.')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Concluir “Aula anterior”' })).toHaveAttribute('href', '/certifications/az-900/study/previous-lesson')
+    expect(mocks.useUserProgress).toHaveBeenCalledWith({ lessonIds: [lessonId], startLessonId: null })
   })
 })

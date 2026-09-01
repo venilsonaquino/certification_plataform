@@ -154,8 +154,28 @@ type FlashcardStudyQueueRow = FlashcardRow & {
 
 type FlashcardReviewOverviewRow = {
   queue_count: number
+  due_count: number
+  new_count: number
   next_review_at: string | null
   available_flashcard_count: number
+  total_flashcard_count: number
+}
+
+type FlashcardCatalogOverviewRow = {
+  domain_id: string
+  domain_title: string
+  domain_display_order: number
+  topic_id: string
+  topic_title: string
+  topic_display_order: number
+  available_flashcard_count: number
+  total_flashcard_count: number
+  studied_flashcard_count: number
+}
+
+type AvailableFlashcardRow = FlashcardRow & {
+  lesson_title: string
+  lesson_slug: string
 }
 
 type UserLessonProgressRow = {
@@ -272,6 +292,7 @@ type TopicQuizPerformanceRow = {
 type TopicQuizSummaryRow = {
   topic_id: string
   question_count: number
+  target_question_count: number
   active_attempt_id: string | null
   active_total_questions: number | null
   active_answered_count: number
@@ -936,6 +957,18 @@ export interface Database {
         Args: { p_certification_id: string }
         Returns: FlashcardReviewOverviewRow[]
       }
+      get_flashcard_catalog_overview: {
+        Args: { p_certification_id: string }
+        Returns: FlashcardCatalogOverviewRow[]
+      }
+      get_available_flashcards: {
+        Args: {
+          p_certification_id: string
+          p_topic_id?: string | null
+          p_lesson_id?: string | null
+        }
+        Returns: AvailableFlashcardRow[]
+      }
       get_mock_exam_attempt_questions: {
         Args: { p_attempt_id: string }
         Returns: MockExamAttemptQuestionPublicRow[]
@@ -998,6 +1031,8 @@ export type UserFlashcardProgressDatabaseRow = UserFlashcardProgressRow
 export type SubmitFlashcardReviewDatabaseRow = SubmitFlashcardReviewRow
 export type FlashcardStudyQueueDatabaseRow = FlashcardStudyQueueRow
 export type FlashcardReviewOverviewDatabaseRow = FlashcardReviewOverviewRow
+export type FlashcardCatalogOverviewDatabaseRow = FlashcardCatalogOverviewRow
+export type AvailableFlashcardDatabaseRow = AvailableFlashcardRow
 export type UserLessonProgressDatabaseRow = UserLessonProgressRow
 export type QuestionDatabaseRow = QuestionRow
 export type QuestionOptionDatabaseRow = QuestionOptionRow

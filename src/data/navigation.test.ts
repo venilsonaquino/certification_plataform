@@ -9,6 +9,7 @@ describe('product navigation cleanup', () => {
       'Dashboard',
       'Estudo do Dia',
       'Trilha de estudos',
+      'Flashcards',
       'Revisão',
       'Simulados',
       'Readiness',

@@ -88,6 +88,7 @@ export interface LessonQuizSummary {
 export interface TopicQuizSummary {
   readonly topicId: string
   readonly questionCount: number
+  readonly targetQuestionCount: number
   readonly activeAttemptId: string | null
   readonly activeTotalQuestions: number | null
   readonly activeAnsweredCount: number

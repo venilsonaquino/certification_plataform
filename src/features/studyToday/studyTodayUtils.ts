@@ -1,6 +1,7 @@
 import { flattenStudyPath, type StudyPathLesson } from '../../lib/studyPath'
 import type { DomainWithTopics } from '../../types/content'
 import type { UserLessonProgress } from '../../types/progress'
+import type { StudyProgression } from '../../lib/studyProgression'
 import { DEFAULT_DAILY_STUDY_MINUTES, MAX_DAILY_STUDY_LESSONS } from './constants'
 
 export interface DailyStudyPlan {
@@ -12,17 +13,20 @@ export interface DailyStudyPlan {
 export function buildDailyStudyPlan(
   domains: readonly DomainWithTopics[],
   progressByLessonId: ReadonlyMap<string, UserLessonProgress>,
+  progression?: StudyProgression,
   targetMinutes = DEFAULT_DAILY_STUDY_MINUTES,
 ): DailyStudyPlan {
   const orderedLessons = flattenStudyPath(domains)
   const inProgressIndex = orderedLessons.findIndex(
-    ({ lesson }) => progressByLessonId.get(lesson.id)?.status === 'in_progress',
+    ({ lesson }) => progressByLessonId.get(lesson.id)?.status === 'in_progress'
+      && (progression?.lessonById.get(lesson.id)?.available ?? true),
   )
   const startIndex =
     inProgressIndex >= 0
       ? inProgressIndex
       : orderedLessons.findIndex(
-          ({ lesson }) => progressByLessonId.get(lesson.id)?.status !== 'completed',
+          ({ lesson }) => progressByLessonId.get(lesson.id)?.status !== 'completed'
+            && (progression?.lessonById.get(lesson.id)?.available ?? true),
         )
 
   if (startIndex < 0) {
@@ -35,7 +39,8 @@ export function buildDailyStudyPlan(
 
   const candidates = orderedLessons
     .slice(startIndex)
-    .filter(({ lesson }) => progressByLessonId.get(lesson.id)?.status !== 'completed')
+    .filter(({ lesson }) => progressByLessonId.get(lesson.id)?.status !== 'completed'
+      && (progression?.lessonById.get(lesson.id)?.available ?? true))
   const lessons: StudyPathLesson[] = []
   let totalMinutes = 0
 

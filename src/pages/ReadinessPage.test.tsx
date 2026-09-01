@@ -143,6 +143,9 @@ describe('ReadinessPage', () => {
     expect(screen.getByText('100%')).toBeInTheDocument()
     expect(screen.getByText('Progresso de estudo')).toBeInTheDocument()
     expect(screen.getByText(/Concluir aulas demonstra progresso de estudo, não domínio/)).toBeInTheDocument()
+    expect(screen.getByText(/Checkpoints do Tópico fornecem evidência/)).toBeInTheDocument()
+    expect(screen.getByText(/Quizzes de aula anteriores permanecem como evidência histórica/)).toBeInTheDocument()
+    expect(screen.queryByText(/Topic Quizzes|Lesson Quizzes/)).not.toBeInTheDocument()
   })
 
   it('renderiza Weak Topics na ordem da engine, reasons amigáveis e CTAs existentes', () => {

@@ -3,8 +3,6 @@ import { useEffect } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 
 import { CertificationDataState } from '../components/certifications/CertificationDataState'
-import { LessonQuizCard } from '../components/quiz/LessonQuizCard'
-import { LessonFlashcardCard } from '../components/flashcards/LessonFlashcardCard'
 import { Breadcrumbs } from '../components/study/Breadcrumbs'
 import { LessonContentRenderer } from '../components/study/LessonContentRenderer'
 import { LessonCompletion } from '../components/study/LessonCompletion'
@@ -13,8 +11,9 @@ import { ProgressStatus } from '../components/study/ProgressStatus'
 import { useCertification } from '../hooks/useCertification'
 import { useCertificationProgress } from '../hooks/useCertificationProgress'
 import { useUserProgress } from '../hooks/useUserProgress'
+import { useStudyProgression } from '../hooks/useStudyProgression'
 import { formatCertificationCode } from '../lib/certificationVisuals'
-import { certificationRoute } from '../lib/routes'
+import { certificationRoute, lessonRoute, topicQuizRoute } from '../lib/routes'
 import { findLessonStudyContext } from '../lib/studyPath'
 
 export function LessonPage() {
@@ -23,6 +22,7 @@ export function LessonPage() {
   const { currentCertification } = useCertification()
   const {
     domains,
+    progressByLessonId: certificationProgressByLessonId,
     loading,
     error,
     retry,
@@ -45,6 +45,14 @@ export function LessonPage() {
       : `Voltar para a trilha ${formatCertificationCode(currentCertification.code)}`
   const context = findLessonStudyContext(domains, lessonSlug)
   const currentLessonId = context?.lesson.id ?? null
+  const studyProgression = useStudyProgression(
+    currentCertification.id,
+    domains,
+    certificationProgressByLessonId,
+  )
+  const progressionState = currentLessonId
+    ? studyProgression.progression.lessonById.get(currentLessonId)
+    : undefined
   const {
     progressByLessonId,
     loading: progressLoading,
@@ -55,7 +63,9 @@ export function LessonPage() {
     mutationError,
   } = useUserProgress({
     lessonIds: currentLessonId ? [currentLessonId] : [],
-    startLessonId: currentLessonId,
+    startLessonId: progressionState?.available && !studyProgression.loading
+      ? currentLessonId
+      : null,
   })
   const currentLessonProgress = currentLessonId
     ? progressByLessonId.get(currentLessonId)
@@ -111,23 +121,65 @@ export function LessonPage() {
     )
   }
 
-  if (progressLoading) {
+  if (studyProgression.loading || progressLoading) {
     return <CertificationDataState title="Registrando acesso à aula..." loading />
   }
 
-  if (progressError) {
+  if (studyProgression.error || progressError) {
     return (
       <CertificationDataState
         title="Não foi possível carregar o progresso da aula."
-        description={progressError}
-        onRetry={retryProgress}
+        description={studyProgression.error ?? progressError ?? undefined}
+        onRetry={() => { retryProgress(); void studyProgression.retry() }}
       />
     )
   }
 
   const { domain, topic, lesson, previous, next } = context
+  if (!progressionState?.available) {
+    const prerequisiteLesson = progressionState?.prerequisiteLesson
+    const prerequisiteTopic = progressionState?.prerequisiteTopic
+    const prerequisiteRoute = prerequisiteLesson
+      ? lessonRoute(currentCertification.code, prerequisiteLesson.lesson.slug)
+      : prerequisiteTopic
+        ? topicQuizRoute(currentCertification.code, prerequisiteTopic.id)
+        : studyRoute
+    const prerequisiteLabel = prerequisiteLesson
+      ? `Concluir “${prerequisiteLesson.lesson.title}”`
+      : prerequisiteTopic
+        ? `Concluir o Checkpoint de “${prerequisiteTopic.title}”`
+        : 'Voltar para a trilha'
+
+    return (
+      <div className="mx-auto max-w-3xl">
+        <CertificationDataState
+          title="Esta aula ainda está bloqueada."
+          description={prerequisiteLesson
+            ? `Conclua “${prerequisiteLesson.lesson.title}” primeiro para seguir a sequência de aprendizagem.`
+            : prerequisiteTopic
+              ? `Conclua o Checkpoint de “${prerequisiteTopic.title}” primeiro para liberar este tópico.`
+              : 'Conclua a etapa anterior da trilha para liberar esta aula.'}
+        />
+        <div className="mt-5 flex flex-wrap gap-3">
+          <Link to={prerequisiteRoute} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white hover:bg-blue-700">{prerequisiteLabel}</Link>
+          <Link to={studyRoute} className="inline-flex min-h-11 items-center justify-center rounded-xl px-5 text-sm font-semibold text-blue-700 hover:bg-blue-50">Ver trilha</Link>
+        </div>
+      </div>
+    )
+  }
+
   const lessonProgress = progressByLessonId.get(lesson.id)
-  const lessonStatus = lessonProgress?.status ?? 'in_progress'
+  const lessonStatus = currentLessonProgress?.status ?? lessonProgress?.status ?? 'in_progress'
+  const nextProgressionState = next
+    ? studyProgression.progression.lessonById.get(next.lesson.id)
+    : undefined
+  const checkpoint = studyProgression.progression.checkpointByTopicId.get(topic.id)
+  const isLastLessonInTopic = next?.topic.id !== topic.id
+  const nextAction = nextProgressionState?.available
+    ? { to: lessonRoute(currentCertification.code, next!.lesson.slug), label: 'Próxima aula' }
+    : isLastLessonInTopic && checkpoint?.available && checkpoint.status !== 'completed'
+      ? { to: topicQuizRoute(currentCertification.code, topic.id), label: 'Ir para o Checkpoint' }
+      : null
 
   return (
     <article className="mx-auto max-w-4xl">
@@ -166,29 +218,18 @@ export function LessonPage() {
 
       <LessonContentRenderer lessonId={lesson.id} legacyContent={lesson.content} />
       <LessonCompletion
-        certificationCode={currentCertification.code}
         status={lessonStatus}
-        next={next}
+        nextAction={nextAction}
         completing={completingLessonId === lesson.id}
         error={mutationError}
         onComplete={() => {
           void completeProgress(lesson.id)
         }}
       />
-      <LessonFlashcardCard
-        certificationCode={currentCertification.code}
-        lessonId={lesson.id}
-        lessonSlug={lesson.slug}
-      />
-      <LessonQuizCard
-        certificationCode={currentCertification.code}
-        lessonId={lesson.id}
-        lessonSlug={lesson.slug}
-      />
       <LessonNavigation
         certificationCode={currentCertification.code}
         previous={previous}
-        next={next}
+        nextAction={lessonStatus === 'completed' ? nextAction : null}
       />
     </article>
   )

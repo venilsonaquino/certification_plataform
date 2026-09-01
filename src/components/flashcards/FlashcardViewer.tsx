@@ -14,6 +14,7 @@ interface FlashcardViewerProps {
   completionTitle?: string
   allowDifficultReview?: boolean
   submitReview?: FlashcardReviewSubmitter
+  mode?: 'study' | 'review'
 }
 
 function isInteractiveTarget(target: EventTarget | null) {
@@ -27,8 +28,9 @@ export function FlashcardViewer({
   completionTitle,
   allowDifficultReview,
   submitReview,
+  mode = 'review',
 }: FlashcardViewerProps) {
-  const session = useFlashcardSession(cards, submitReview)
+  const session = useFlashcardSession(cards, submitReview, mode)
   const card = session.currentCard
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export function FlashcardViewer({
         returnLabel={returnLabel}
         title={completionTitle}
         allowDifficultReview={allowDifficultReview}
+        mode={mode}
         onRestart={session.restart}
         onReviewDifficult={session.reviewDifficultCards}
       />
@@ -103,6 +106,10 @@ export function FlashcardViewer({
               Ver resposta
             </button>
           </div>
+        ) : mode === 'study' ? (
+          <button type="button" onClick={session.advanceCard} className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-blue-700 px-7 text-sm font-bold text-white hover:bg-blue-800 sm:w-auto">
+            {session.currentIndex === session.sessionCards.length - 1 ? 'Concluir estudo' : 'Próximo card'}
+          </button>
         ) : (
           <FlashcardRatingButtons
             submitting={session.isSubmitting}
@@ -113,7 +120,7 @@ export function FlashcardViewer({
           />
         )}
       </article>
-      <p className="mt-5 text-center text-xs text-slate-400">Espaço ou Enter revela a resposta. Avalie o card para continuar.</p>
+      <p className="mt-5 text-center text-xs text-slate-400">Espaço ou Enter revela a resposta. {mode === 'study' ? 'O estudo livre não altera sua agenda de revisão.' : 'Avalie o card para continuar.'}</p>
     </section>
   )
 }

@@ -27,7 +27,7 @@ export const scopedStatusLabels: Record<ScopedReadinessClassification, string> =
 export const statusDescriptions: Record<GlobalReadinessClassification, string> = {
   not_enough_evidence: 'Precisamos de mais prática avaliada antes de estimar seu preparo com confiança.',
   needs_review: 'A evidência recente aponta áreas importantes para revisar antes de avançar.',
-  developing: 'Você está progredindo, mas alguns Topics ainda precisam de prática e confirmação.',
+  developing: 'Você está progredindo, mas alguns tópicos ainda precisam de prática e confirmação.',
   strong: 'Sua prática recente mostra desempenho consistente na maior parte do AZ-900.',
 }
 
@@ -56,13 +56,13 @@ export const recommendationReasonLabels: Record<StudyRecommendationReasonCode, s
   confirmed_weak_topic: 'A lacuna foi confirmada por evidências concordantes',
   low_mock_performance: 'Baixo desempenho nos simulados recentes',
   repeated_mock_errors: 'Erros repetidos em simulados',
-  low_topic_quiz_performance: 'Baixo desempenho em Topic Quizzes',
-  repeated_topic_quiz_errors: 'Erros repetidos em Topic Quizzes',
+  low_topic_quiz_performance: 'Baixo desempenho em Checkpoints de Tópico',
+  repeated_topic_quiz_errors: 'Erros repetidos em Checkpoints de Tópico',
   declining_trend: 'A performance recente está diminuindo',
   inconsistent_performance: 'A performance ainda está inconsistente',
-  insufficient_evidence: 'É necessário praticar mais para avaliar este Topic',
+  insufficient_evidence: 'É necessário praticar mais para avaliar este tópico',
   stale_evidence: 'A evidência disponível está antiga',
-  domain_weakness: 'Este Topic pertence a um Domain que precisa de revisão',
+  domain_weakness: 'Este tópico pertence a um domínio que precisa de revisão',
   developing_performance: 'A performance ainda está em desenvolvimento',
   improving_performance: 'A performance recente está melhorando',
 }
@@ -70,8 +70,8 @@ export const recommendationReasonLabels: Record<StudyRecommendationReasonCode, s
 export const actionLabels: Record<StudyRecommendationActionType, string> = {
   review_lesson: 'Revisar aula',
   review_flashcards: 'Revisar Flashcards',
-  retake_topic_quiz: 'Refazer Topic Quiz',
-  assess_topic: 'Avaliar este Topic',
+  retake_topic_quiz: 'Refazer Checkpoint',
+  assess_topic: 'Fazer Checkpoint',
   take_another_mock: 'Fazer Mock Exam',
 }
 

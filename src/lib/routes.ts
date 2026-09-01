@@ -2,6 +2,7 @@ export const CERTIFICATION_SECTIONS = [
   'dashboard',
   'study-today',
   'study',
+  'flashcards',
   'review',
   'exams',
   'readiness',
@@ -36,7 +37,11 @@ export function reviewQuizRoute(certificationCode: string, questionId?: string) 
 }
 
 export function flashcardReviewRoute(certificationCode: string) {
-  return `${certificationRoute(certificationCode, 'review')}/flashcards`
+  return `${certificationRoute(certificationCode, 'flashcards')}/review`
+}
+
+export function flashcardTopicRoute(certificationCode: string, topicId: string) {
+  return `${certificationRoute(certificationCode, 'flashcards')}/topics/${topicId}`
 }
 
 export function mockExamsRoute(certificationCode: string) {

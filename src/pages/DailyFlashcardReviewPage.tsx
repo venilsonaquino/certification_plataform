@@ -12,13 +12,14 @@ import { certificationRoute } from '../lib/routes'
 export function DailyFlashcardReviewPage() {
   const { currentCertification } = useCertification()
   const queue = useFlashcardReviewQueue(currentCertification.id)
-  const reviewRoute = certificationRoute(currentCertification.code, 'review')
+  const flashcardsRoute = certificationRoute(currentCertification.code, 'flashcards')
 
   if (queue.loading) return <CertificationDataState title="Montando sua revisão de flashcards..." loading />
   if (queue.error) return <CertificationDataState title="Não foi possível carregar a revisão de flashcards." description={queue.error} onRetry={queue.retry} />
 
   if (queue.cards.length === 0) {
     const hasAvailableCards = (queue.overview?.availableFlashcardCount ?? 0) > 0
+    const hasPublishedCards = (queue.overview?.totalFlashcardCount ?? 0) > 0
     return (
       <div className="mx-auto max-w-3xl">
         <CertificationDataState
@@ -27,10 +28,12 @@ export function DailyFlashcardReviewPage() {
             ? queue.overview?.nextReviewAt
               ? `Sua próxima revisão está agendada para ${formatReviewDate(queue.overview.nextReviewAt)}.`
               : 'Você não possui Flashcards para revisar agora.'
-            : 'Esta certificação ainda não possui Flashcards publicados.'}
+            : hasPublishedCards
+              ? 'Conclua aulas da trilha para liberar os Flashcards associados.'
+              : 'Esta certificação ainda não possui Flashcards publicados.'}
         />
-        <Link to={reviewRoute} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
-          <ArrowLeft aria-hidden="true" className="h-4 w-4" />Voltar para Revisão
+        <Link to={flashcardsRoute} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
+          <ArrowLeft aria-hidden="true" className="h-4 w-4" />Voltar para Flashcards
         </Link>
       </div>
     )
@@ -41,8 +44,8 @@ export function DailyFlashcardReviewPage() {
 
   return (
     <main className="mx-auto max-w-3xl">
-      <Link to={reviewRoute} className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800">
-        <ArrowLeft aria-hidden="true" className="h-4 w-4" />Voltar para Revisão
+      <Link to={flashcardsRoute} className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-800">
+        <ArrowLeft aria-hidden="true" className="h-4 w-4" />Voltar para Flashcards
       </Link>
       <header className="mt-5 border-b border-slate-200 pb-6">
         <p className="flex items-center gap-2 text-sm font-bold text-blue-700">
@@ -56,8 +59,8 @@ export function DailyFlashcardReviewPage() {
       </header>
       <FlashcardViewer
         cards={queue.cards}
-        returnRoute={reviewRoute}
-        returnLabel="Voltar para Revisão"
+        returnRoute={flashcardsRoute}
+        returnLabel="Voltar para Flashcards"
         completionTitle="Revisão concluída"
         allowDifficultReview={false}
       />

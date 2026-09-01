@@ -1,4 +1,4 @@
-import { CheckCircle2, RotateCcw, XCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle2, RotateCcw, XCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 import { lessonRoute } from '../../lib/routes'
@@ -14,9 +14,14 @@ interface QuizResultProps {
   resultLabel?: string
   scoreDescription?: string
   restartLabel?: string
+  feedbackMessage?: string
+  completionAction?: {
+    readonly to: string
+    readonly label: string
+  }
 }
 
-export function QuizResult({ data, restarting, onRestart, performance, certificationCode, resultLabel = 'Quiz concluído', scoreDescription, restartLabel = 'Refazer Quiz' }: QuizResultProps) {
+export function QuizResult({ data, restarting, onRestart, performance, certificationCode, resultLabel = 'Quiz concluído', scoreDescription, restartLabel = 'Refazer Quiz', feedbackMessage, completionAction }: QuizResultProps) {
   const { attempt, questions } = data
   const message = attempt.scorePercentage >= 90
     ? 'Excelente!'
@@ -32,7 +37,7 @@ export function QuizResult({ data, restarting, onRestart, performance, certifica
         <p className="pb-1 text-2xl font-bold text-blue-700">{Math.round(attempt.scorePercentage)}%</p>
       </div>
       {scoreDescription && <p className="mt-2 text-sm font-semibold text-slate-500">{scoreDescription}</p>}
-      <p className="mt-3 text-base text-slate-600">{message}</p>
+      <p className="mt-3 text-base text-slate-600">{feedbackMessage ?? message}</p>
       <div className="mt-6 flex flex-wrap gap-4 text-sm font-semibold">
         <span className="flex items-center gap-2 text-emerald-700"><CheckCircle2 className="h-5 w-5" />{attempt.correctAnswers} corretas</span>
         <span className="flex items-center gap-2 text-rose-700"><XCircle className="h-5 w-5" />{attempt.totalQuestions - attempt.correctAnswers} incorretas</span>
@@ -92,15 +97,22 @@ export function QuizResult({ data, restarting, onRestart, performance, certifica
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={onRestart}
-        disabled={restarting}
-        className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white transition hover:bg-blue-700 disabled:opacity-60 sm:w-auto"
-      >
-        <RotateCcw className={`h-4 w-4 ${restarting ? 'animate-spin' : ''}`} />
-        {restarting ? 'Criando tentativa...' : restartLabel}
-      </button>
+      <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+        {completionAction && (
+          <Link to={completionAction.to} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-bold text-white transition hover:bg-blue-700 sm:w-auto">
+            {completionAction.label}<ArrowRight className="h-4 w-4" />
+          </Link>
+        )}
+        <button
+          type="button"
+          onClick={onRestart}
+          disabled={restarting}
+          className={`inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold transition disabled:opacity-60 sm:w-auto ${completionAction ? 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+        >
+          <RotateCcw className={`h-4 w-4 ${restarting ? 'animate-spin' : ''}`} />
+          {restarting ? 'Criando tentativa...' : restartLabel}
+        </button>
+      </div>
     </section>
   )
 }

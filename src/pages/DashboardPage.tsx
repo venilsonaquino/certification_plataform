@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   BookOpen,
+  BrainCircuit,
   CalendarCheck2,
   ChartNoAxesColumnIncreasing,
   Clock3,
@@ -14,16 +15,20 @@ import { DashboardCard } from '../components/dashboard/DashboardCard'
 import { useCertification } from '../hooks/useCertification'
 import { useCertificationProgress } from '../hooks/useCertificationProgress'
 import { useFlashcardReviewOverview } from '../hooks/useFlashcardReviewOverview'
+import { useStudyProgression } from '../hooks/useStudyProgression'
 import { formatCertificationCode } from '../lib/certificationVisuals'
 import { formatEstimatedMinutes, formatLastActivityDate } from '../lib/progressUtils'
-import { certificationRoute, flashcardReviewRoute, lessonRoute } from '../lib/routes'
+import { certificationRoute, flashcardReviewRoute, lessonRoute, topicQuizRoute } from '../lib/routes'
 
 export function DashboardPage() {
   const { currentCertification } = useCertification()
-  const { summary, loading, error, retry } = useCertificationProgress()
+  const { domains, progressByLessonId, summary, loading, error, retry } = useCertificationProgress()
   const flashcardReview = useFlashcardReviewOverview(currentCertification.id)
   const certificationCode = formatCertificationCode(currentCertification.code)
-  const nextLesson = summary.nextLesson
+  const studyProgression = useStudyProgression(currentCertification.id, domains, progressByLessonId)
+  const nextAction = studyProgression.progression.nextAction
+  const nextLesson = nextAction?.kind === 'lesson' ? nextAction.lesson : null
+  const nextCheckpoint = nextAction?.kind === 'checkpoint' ? nextAction.checkpoint : null
   const lastActivity = summary.lastActivity
   const studyTodayRoute = certificationRoute(currentCertification.code, 'study-today')
 
@@ -39,24 +44,24 @@ export function DashboardPage() {
         </p>
       </header>
 
-      {loading && (
+      {(loading || studyProgression.loading) && (
         <div className="mt-8 lg:mt-10">
           <CertificationDataState title="Carregando seu progresso..." loading />
         </div>
       )}
-      {!loading && error && (
+      {!loading && !studyProgression.loading && (error || studyProgression.error) && (
         <div className="mt-8 lg:mt-10">
           <CertificationDataState
             title="Não foi possível carregar o Dashboard."
-            description={error}
-            onRetry={retry}
+            description={error ?? studyProgression.error ?? undefined}
+            onRetry={() => { retry(); void studyProgression.retry() }}
           />
         </div>
       )}
 
-      {!loading && !error && (
+      {!loading && !studyProgression.loading && !error && !studyProgression.error && (
         <>
-          {summary.isCompleted && (
+          {studyProgression.progression.journeyCompleted && (
             <section className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-6 sm:p-7 lg:mt-10">
               <p className="text-sm font-bold uppercase tracking-[0.14em] text-emerald-700">
                 100% concluído
@@ -68,7 +73,7 @@ export function DashboardPage() {
             </section>
           )}
 
-          {!summary.isCompleted && (
+          {!studyProgression.progression.journeyCompleted && (
             <section className="mt-8 overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-700 to-sky-600 p-6 text-white shadow-lg shadow-blue-200/50 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:p-7 lg:mt-10">
               <div className="flex items-start gap-4">
                 <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/15 ring-1 ring-inset ring-white/20">
@@ -125,14 +130,16 @@ export function DashboardPage() {
             />
 
             <DashboardCard
-              title="Próxima aula"
-              value={nextLesson?.lesson.title ?? 'Conteúdo concluído'}
+              title={nextCheckpoint ? 'Próxima etapa' : 'Próxima aula'}
+              value={nextLesson?.lesson.title ?? nextCheckpoint?.topic.title ?? 'Trilha concluída'}
               description={
                 nextLesson
                   ? `${nextLesson.topic.title} · ${nextLesson.lesson.estimatedMinutes ?? 0} min`
-                  : `Você finalizou todas as aulas publicadas da ${certificationCode}.`
+                  : nextCheckpoint
+                    ? `Checkpoint do Tópico · ${nextCheckpoint.status === 'in_progress' ? 'em andamento' : 'disponível'}`
+                    : `Você finalizou a trilha publicada da ${certificationCode}.`
               }
-              icon={BookOpen}
+              icon={nextCheckpoint ? BrainCircuit : BookOpen}
               tone="cyan"
               footer={
                 nextLesson ? (
@@ -141,6 +148,13 @@ export function DashboardPage() {
                     className="inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700"
                   >
                     Continuar estudando
+                  </Link>
+                ) : nextCheckpoint ? (
+                  <Link
+                    to={topicQuizRoute(currentCertification.code, nextCheckpoint.topic.id)}
+                    className="inline-flex min-h-11 items-center justify-center rounded-xl bg-violet-700 px-5 text-sm font-semibold text-white transition hover:bg-violet-800"
+                  >
+                    {nextCheckpoint.status === 'in_progress' ? 'Continuar Checkpoint' : 'Fazer Checkpoint'}
                   </Link>
                 ) : undefined
               }
