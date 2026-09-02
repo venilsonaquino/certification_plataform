@@ -100,4 +100,6 @@ Os testes de interface cobrem a exibição do alvo calculado, a preservação do
 - Tentativas históricas ou ativas não mudam de tamanho.
 - Não há alteração de escopo em Mock Exam ou Readiness.
 
-Status condicionado à aplicação e à execução bem-sucedida dos gates: `AZ-900 Topic Checkpoint Coverage + Sizing: READY`.
+Deployment confirmado em 1º de setembro de 2026: migration aplicada, validator transacional aprovado e banco remoto alinhado sem pendências.
+
+**AZ-900 Topic Checkpoint Coverage + Sizing: READY**

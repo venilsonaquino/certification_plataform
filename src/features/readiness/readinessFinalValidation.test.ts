@@ -123,6 +123,27 @@ describe('Final evidence profiles', () => {
     expect(result.trace.reasons).toContain('no_finalized_mock')
   })
 
+  it('um único Checkpoint de 20 questões não domina o Readiness', () => {
+    const topic = readinessTopics[0]
+    const firstHalf = evidenceForTopic(topic.id, 'topic_quiz', [90])
+    const secondHalf = firstHalf.map((event, index) => ({
+      ...event,
+      id: `${event.id}:extra`,
+      questionId: `${event.questionId}:extra:${index}`,
+    }))
+    const result = calculateAz900Readiness({
+      ...emptyReadinessBundle(),
+      assessments: [...firstHalf, ...secondHalf],
+    })
+
+    expect(result.topics[0].trace.answeredQuestions).toBe(20)
+    expect(result.topics[0].trace.assessmentSessions).toBe(1)
+    expect(result.topics[0].classification).toBe('insufficient_evidence')
+    expect(result.classification).toBe('developing')
+    expect(result.classification).not.toBe('strong')
+    expect(result.trace.reasons).toContain('no_finalized_mock')
+  })
+
   it('um único Mock de 95% não produz Strong nem consistency artificial', () => {
     const result = calculateAz900Readiness(profileWithMocks([95]))
 

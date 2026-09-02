@@ -45,7 +45,7 @@ O Checkpoint usa as tabelas, RPCs, attempts, answers, scoring, retake e rotation
 | `completed` | existe attempt concluído, independentemente do score |
 | `unavailable` | Topic sem Lesson publicada ou sem Questions publicadas |
 
-A UI mostra no máximo dez questões por tentativa, não o tamanho bruto do pool. Attempt ativo exibe `Continuar Checkpoint`; concluído preserva resultado e retake.
+Após a ETAPA 13.5.2.1, a UI mostra o alvo server-owned de 12, 15 ou 20 questões, limitado pelo pool elegível. Attempt ativo exibe seu tamanho persistido — inclusive 10 em attempts legados — e `Continuar Checkpoint`; concluído preserva resultado e retake.
 
 ## Next Topic Rule
 

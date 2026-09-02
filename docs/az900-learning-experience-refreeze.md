@@ -1,5 +1,7 @@
 # AZ-900 Learning Experience V2 — Final Validation + Re-Freeze
 
+> Registro histórico da validação de 1º de setembro de 2026. A baseline canônica atual, que incorpora Checkpoint sizing 12/15/20, o reparo do overview de Flashcards, o commit da Fase 13.5 e os gates reexecutados, está em `docs/az900-learning-experience-v2-release.md`.
+
 ## Contexto
 
 Validação final executada em 1º de setembro de 2026 após as ETAPAS 13.5.1–13.5.5. O objetivo desta closure é congelar a experiência pedagógica AZ-900 V2 antes da refatoração multi-certificação, sem iniciar a Fase 14 e sem generalizar código, dados ou configuração.
