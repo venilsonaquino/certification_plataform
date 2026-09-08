@@ -230,6 +230,7 @@ type QuizAttemptRow = {
   quiz_type: QuizType
   lesson_id: string | null
   topic_id: string | null
+  checkpoint_policy_version: string | null
   status: QuizAttemptStatus
   total_questions: number
   correct_answers: number
@@ -791,6 +792,7 @@ export interface Database {
           id?: string
           lesson_id?: string | null
           topic_id?: string | null
+          checkpoint_policy_version?: string | null
           status?: QuizAttemptStatus
           correct_answers?: number
           score_percentage?: number

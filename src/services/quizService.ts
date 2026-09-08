@@ -60,6 +60,7 @@ function mapAttempt(row: QuizAttemptDatabaseRow): QuizAttempt {
     quizType: row.quiz_type,
     lessonId: row.lesson_id,
     topicId: row.topic_id,
+    checkpointPolicyVersion: row.checkpoint_policy_version,
     status: row.status,
     totalQuestions: row.total_questions,
     correctAnswers: row.correct_answers,

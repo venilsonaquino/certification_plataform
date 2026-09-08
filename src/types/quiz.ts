@@ -18,6 +18,7 @@ export interface QuizAttempt {
   readonly quizType: QuizType
   readonly lessonId: string | null
   readonly topicId: string | null
+  readonly checkpointPolicyVersion: string | null
   readonly status: QuizAttemptStatus
   readonly totalQuestions: number
   readonly correctAnswers: number

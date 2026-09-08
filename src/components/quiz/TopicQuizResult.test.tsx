@@ -14,7 +14,8 @@ vi.mock('../../services/quizService', () => ({
 const data: LessonQuizAttemptData = {
   attempt: {
     id: 'attempt-1', userId: 'user-1', certificationId: 'cert-1', quizType: 'topic',
-    lessonId: null, topicId: 'topic-1', status: 'completed', totalQuestions: 20,
+    lessonId: null, topicId: 'topic-1', checkpointPolicyVersion: 'az900-checkpoint-v1',
+    status: 'completed', totalQuestions: 20,
     correctAnswers: 16, scorePercentage: 80, startedAt: '2026-09-01T12:00:00.000Z',
     completedAt: '2026-09-01T12:10:00.000Z', createdAt: '2026-09-01T12:00:00.000Z',
     updatedAt: '2026-09-01T12:10:00.000Z',

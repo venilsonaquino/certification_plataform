@@ -73,8 +73,23 @@ function parseRows(source) {
 function scanUntilSemicolon(sql, start) {
   let cursor = start
   let quoted = false
+  let lineComment = false
+  let blockComment = false
   while (cursor < sql.length) {
-    if (quoted && sql[cursor] === "'" && sql[cursor + 1] === "'") cursor += 2
+    if (lineComment && /[\r\n]/.test(sql[cursor])) {
+      lineComment = false
+      cursor += 1
+    } else if (blockComment && sql[cursor] === '*' && sql[cursor + 1] === '/') {
+      blockComment = false
+      cursor += 2
+    } else if (lineComment || blockComment) cursor += 1
+    else if (!quoted && sql[cursor] === '-' && sql[cursor + 1] === '-') {
+      lineComment = true
+      cursor += 2
+    } else if (!quoted && sql[cursor] === '/' && sql[cursor + 1] === '*') {
+      blockComment = true
+      cursor += 2
+    } else if (quoted && sql[cursor] === "'" && sql[cursor + 1] === "'") cursor += 2
     else if (sql[cursor] === "'") {
       quoted = !quoted
       cursor += 1
@@ -146,6 +161,12 @@ function normalize(value) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
 }
 
+const absoluteLanguagePattern = /\b(?:sempre|nunca|imediatamente|inevitavelmente|obrigatoriamente|exclusivamente|somente|ignorar|nenhuma|todos|sem qualquer|em qualquer situa[cç][aã]o|[uú]nica solu[cç][aã]o|remover completamente)\b/iu
+
+function sentenceLike(value) {
+  return /[.!?]$/.test(value.trim()) || value.trim().split(/\s+/u).length >= 9
+}
+
 function countEditorialIssues(value) {
   if (value == null) return 0
   let result = value
@@ -162,11 +183,27 @@ function countEditorialIssues(value) {
   return count
 }
 
+function editorialIssueSources(value) {
+  if (value == null) return []
+  let result = value
+  const issues = []
+  for (const [source, replacement] of [...editorialTerms].sort((left, right) => right[0].length - left[0].length)) {
+    const capitalized = source[0].toUpperCase() + source.slice(1)
+    const capitalPattern = new RegExp(`(?<![\\p{L}\\p{N}_])${capitalized}(?![\\p{L}\\p{N}_])`, 'gu')
+    const lowerPattern = new RegExp(`(?<![\\p{L}\\p{N}_])${source}(?![\\p{L}\\p{N}_])`, 'gu')
+    if (capitalPattern.test(result) || lowerPattern.test(result)) issues.push({ source, replacement })
+    result = result.replace(capitalPattern, replacement[0].toUpperCase() + replacement.slice(1))
+    result = result.replace(lowerPattern, replacement)
+  }
+  return issues
+}
+
 const questions = new Map()
 const options = new Map()
 const editorialTerms = new Map()
 const lessonDomains = new Map()
 let beforeEditorial = null
+let beforeRemediation = null
 const migrations = readdirSync(migrationsDirectory).filter((file) => file.endsWith('.sql')).sort()
   .filter((file) => !through || file.slice(0, 14) <= through)
 
@@ -237,6 +274,10 @@ for (const file of migrations) {
     questions: new Map([...questions].map(([id, value]) => [id, { ...value }])),
     options: new Map([...options].map(([id, value]) => [id, { ...value }])),
   }
+  if (file.startsWith('20260908010000')) beforeRemediation = {
+    questions: new Map([...questions].map(([id, value]) => [id, { ...value }])),
+    options: new Map([...options].map(([id, value]) => [id, { ...value }])),
+  }
   const schemas = tableSchemas(sql)
   for (const statement of [...insertStatements(sql), ...cteSeeds(sql)]) {
     const columns = statement.columns ?? schemas.get(statement.table)
@@ -254,17 +295,33 @@ for (const file of migrations) {
   for (const inline of sql.matchAll(/from\s*\(\s*values([\s\S]*?)\)\s*values_seed\s*\(([^)]*)\)/gi)) {
     const columns = inline[2].split(',').map(identifier)
     if (!columns.includes('question_id') || !columns.includes('option_text')) continue
+    const inlinePreamble = sql.slice(Math.max(0, inline.index - 500), inline.index)
+    const inlineIdFormula = inlinePreamble.match(/\('([0-9a-f-]+)'\s*\|\|\s*lpad\(\((\d+)\+row_number\(\)/i)
     let rowIndex = 0
     for (const values of parseRows(inline[1])) {
       rowIndex += 1
       const row = Object.fromEntries(columns.map((column, index) => [column, values[index]]))
+      const optionId = inlineIdFormula
+        ? `${inlineIdFormula[1]}${String(Number(inlineIdFormula[2]) + rowIndex).padStart(12, '0')}`
+        : `${file}:inline:${rowIndex}`
       applyRow(['id', ...columns], [`${file}:inline:${rowIndex}`, ...values], file)
+      if (optionId !== `${file}:inline:${rowIndex}`) {
+        const generated = options.get(`${file}:inline:${rowIndex}`)
+        if (generated) {
+          options.delete(`${file}:inline:${rowIndex}`)
+          options.set(optionId, { ...generated, id: optionId })
+        }
+      }
     }
   }
 
   // Monitoring uses generate_series plus one four-option array per Question.
   const generatedRange = sql.match(/from\s+generate_series\((\d+),(\d+)\)\s+q\(n\)\s+cross\s+join\s+generate_series\(1,4\)/i)
   if (generatedRange) {
+    const generatedIdFormula = sql.match(/select\s+\('([0-9a-f-]+)'\s*\|\|\s*lpad\(\(\(q\.n-(\d+)\)\*4\+o\.n\)::text,12,'0'\)\)::uuid/i)
+    const generatedOptionId = (questionNumber, optionNumber) => generatedIdFormula
+      ? `${generatedIdFormula[1]}${String((questionNumber - Number(generatedIdFormula[2])) * 4 + optionNumber).padStart(12, '0')}`
+      : `${file}:generated:${questionNumber}:${optionNumber}`
     const correctCase = sql.match(/o\.n=case\s+q\.n([\s\S]*?)\s+else\s+(\d+)\s+end/i)
     const correctByQuestion = new Map()
     for (const item of correctCase?.[1].matchAll(/when\s+(\d+)\s+then\s+(\d+)/gi) ?? []) correctByQuestion.set(Number(item[1]), Number(item[2]))
@@ -274,7 +331,7 @@ for (const file of migrations) {
       const texts = parseRows(`(${item[2]})`)[0] ?? []
       texts.forEach((optionText, index) => applyRow(
         ['id', 'question_id', 'option_text', 'is_correct', 'explanation', 'display_order'],
-        [`${file}:generated:${questionNumber}:${index + 1}`, `68000000-0000-4000-8000-${String(questionNumber).padStart(12, '0')}`, optionText,
+        [generatedOptionId(questionNumber, index + 1), `68000000-0000-4000-8000-${String(questionNumber).padStart(12, '0')}`, optionText,
           index + 1 === (correctByQuestion.get(questionNumber) ?? fallbackCorrect), null, index + 1], file,
       ))
     }
@@ -288,7 +345,7 @@ for (const file of migrations) {
         const texts = parseRows(`(${elseArray[1]})`)[0] ?? []
         texts.forEach((optionText, index) => applyRow(
           ['id', 'question_id', 'option_text', 'is_correct', 'explanation', 'display_order'],
-          [`${file}:generated:${questionNumber}:${index + 1}`, `68000000-0000-4000-8000-${String(questionNumber).padStart(12, '0')}`, optionText,
+          [generatedOptionId(questionNumber, index + 1), `68000000-0000-4000-8000-${String(questionNumber).padStart(12, '0')}`, optionText,
             index + 1 === (correctByQuestion.get(questionNumber) ?? fallbackCorrect), null, index + 1], file,
         ))
       }
@@ -431,10 +488,12 @@ for (const question of published) {
 
 const structuralErrors = []
 const candidates = []
+const automaticFlagCounts = new Map()
 const distribution = { A: 0, B: 0, C: 0, D: 0 }
 let correctLongest = 0
 let correctOverRatio = 0
 for (const question of published) {
+  question.automaticFlags = []
   const correct = question.options.filter((option) => option.isCorrect)
   const distinct = new Set(question.options.map((option) => normalize(option.optionText)))
   if (question.options.length !== 4) structuralErrors.push({ id: question.id, kind: 'option_count', count: question.options.length })
@@ -442,8 +501,19 @@ for (const question of published) {
   if (distinct.size !== question.options.length) structuralErrors.push({ id: question.id, kind: 'duplicate_options' })
   if (question.options.some((option) => !option.optionText?.trim())) structuralErrors.push({ id: question.id, kind: 'empty_option' })
   if (!question.explanation?.trim()) structuralErrors.push({ id: question.id, kind: 'empty_explanation' })
-  if (question.questionText.length < 35) candidates.push({ id: question.id, kind: 'short_stem', length: question.questionText.length })
-  if ((question.explanation?.length ?? 0) < 80) candidates.push({ id: question.id, kind: 'short_explanation', length: question.explanation?.length ?? 0 })
+  if (question.questionText.length < 35) {
+    candidates.push({ id: question.id, kind: 'short_stem', length: question.questionText.length })
+    question.automaticFlags.push('SHORT_STEM_CANDIDATE')
+  }
+  if ((question.explanation?.length ?? 0) < 80) {
+    candidates.push({ id: question.id, kind: 'short_explanation', length: question.explanation?.length ?? 0 })
+    question.automaticFlags.push('WEAK_EXPLANATION_CANDIDATE')
+  }
+  const absoluteDistractors = question.options.filter((option) => !option.isCorrect && absoluteLanguagePattern.test(option.optionText))
+  if (absoluteDistractors.length > 0) {
+    question.automaticFlags.push('ABSOLUTE_LANGUAGE_CANDIDATE')
+    candidates.push({ id: question.id, kind: 'absolute_language', optionIds: absoluteDistractors.map((option) => option.id) })
+  }
   if (correct.length !== 1 || question.options.length < 2) continue
   const correctOption = correct[0]
   const distractors = question.options.filter((option) => !option.isCorrect)
@@ -456,7 +526,15 @@ for (const question of published) {
   if (isLongest) correctLongest += 1
   if (ratio > 1.5) correctOverRatio += 1
   if (isLongest) candidates.push({ id: question.id, kind: 'correct_longest', ratio: Number(ratio.toFixed(2)) })
-  if (ratio > 1.5) candidates.push({ id: question.id, kind: 'correct_over_1_5x', ratio: Number(ratio.toFixed(2)) })
+  if (ratio > 1.5) {
+    candidates.push({ id: question.id, kind: 'correct_over_1_5x', ratio: Number(ratio.toFixed(2)) })
+    question.automaticFlags.push('LENGTH_BIAS_CANDIDATE')
+  }
+  const sentenceDistractors = distractors.filter((option) => sentenceLike(option.optionText)).length
+  if (sentenceLike(correctOption.optionText) && sentenceDistractors === 0) {
+    candidates.push({ id: question.id, kind: 'structural_mismatch' })
+    question.automaticFlags.push('STRUCTURAL_BIAS_CANDIDATE')
+  }
   distribution[['A', 'B', 'C', 'D'][Math.max(0, correctOption.displayOrder - 1)] ?? 'A'] += 1
   question.lengthAnalysis = {
     correctCharacters: correctOption.optionText.length,
@@ -468,6 +546,7 @@ for (const question of published) {
     ratio: Number(ratio.toFixed(2)),
     correctIsLongest: isLongest,
   }
+  for (const flag of question.automaticFlags) automaticFlagCounts.set(flag, (automaticFlagCounts.get(flag) ?? 0) + 1)
 }
 
 const mockEligible = published.filter((question) => question.mockEligible)
@@ -519,6 +598,37 @@ const changed = beforeEditorial ? {
     + [...options].filter(([id, option]) => beforeEditorial.options.get(id)?.explanation !== option.explanation).length,
 } : null
 
+function contentChangesSince(snapshot) {
+  if (!snapshot) return null
+  return {
+    questions: [...questions].filter(([id, question]) => {
+      const before = snapshot.questions.get(id)
+      return before && (before.questionText !== question.questionText || before.explanation !== question.explanation)
+    }).length,
+    questionTexts: [...questions].filter(([id, question]) => snapshot.questions.get(id)?.questionText !== question.questionText).length,
+    options: [...options].filter(([id, option]) => {
+      const before = snapshot.options.get(id)
+      return before && (before.optionText !== option.optionText || before.explanation !== option.explanation)
+    }).length,
+    optionTexts: [...options].filter(([id, option]) => snapshot.options.get(id)?.optionText !== option.optionText).length,
+    answerKeys: [...options].filter(([id, option]) => snapshot.options.get(id)?.isCorrect !== option.isCorrect).length,
+    optionOrders: [...options].filter(([id, option]) => snapshot.options.get(id)?.displayOrder !== option.displayOrder).length,
+  }
+}
+const remediationChanged = contentChangesSince(beforeRemediation)
+
+const portugueseIssueDetails = []
+for (const question of published) {
+  for (const [field, value] of [['question_text', question.questionText], ['explanation', question.explanation]]) {
+    for (const issue of editorialIssueSources(value)) portugueseIssueDetails.push({ questionId: question.id, field, ...issue })
+  }
+  for (const option of question.options) {
+    for (const [field, value] of [['option_text', option.optionText], ['option_explanation', option.explanation]]) {
+      for (const issue of editorialIssueSources(value)) portugueseIssueDetails.push({ questionId: question.id, optionId: option.id, field, ...issue })
+    }
+  }
+}
+
 const result = {
   through: through ?? migrations.at(-1)?.slice(0, 14),
   totalQuestions: published.length,
@@ -536,15 +646,26 @@ const result = {
   },
   structuralErrors,
   editorialCandidates: candidates,
+  automaticTriage: {
+    warning: 'Candidate flags are mechanical triage only and are not an A/B/C/D semantic verdict.',
+    flagCounts: Object.fromEntries([...automaticFlagCounts].sort(([left], [right]) => left.localeCompare(right))),
+    questionsWithFlags: published.filter((question) => question.automaticFlags.length > 0).length,
+  },
   portugueseIssueOccurrences: published.reduce((questionTotal, question) => questionTotal
     + countEditorialIssues(question.questionText)
     + countEditorialIssues(question.explanation)
     + question.options.reduce((optionTotal, option) => optionTotal
       + countEditorialIssues(option.optionText)
       + countEditorialIssues(option.explanation), 0), 0),
+  portugueseIssueDetails,
   classification,
+  legacyEligibilityHeuristic: {
+    ...classification,
+    warning: 'Legacy compatibility metric only: A/B/C/D here is not a semantic quality classification.',
+  },
   pools: { topicCheckpoint: poolMetrics(published), mockEligible: poolMetrics(mockEligible), domains: domainMetrics },
   changed,
+  remediationChanged,
   questions: published.sort((left, right) => left.id.localeCompare(right.id)),
 }
 
@@ -559,11 +680,13 @@ else {
   console.log(`Length averages: ${JSON.stringify(result.lengthAnalysis)}`)
   console.log(`Structural errors: ${structuralErrors.length}`)
   console.log(`Editorial candidates: ${candidates.length}`)
+  console.log(`Automatic triage only: ${JSON.stringify(result.automaticTriage.flagCounts)} (${result.automaticTriage.questionsWithFlags} Questions)`)
   console.log(`Portuguese issue occurrences: ${result.portugueseIssueOccurrences}`)
-  console.log(`A/B/C/D: ${JSON.stringify(classification)}`)
+  console.log(`Legacy eligibility heuristic (not semantic A/B/C/D): ${JSON.stringify(classification)}`)
   console.log(`Domain metrics: ${JSON.stringify(domainMetrics)}`)
   console.log(`Mock metrics: ${JSON.stringify(result.pools.mockEligible)}`)
   if (changed) console.log(`Changed: ${JSON.stringify(changed)}`)
+  if (remediationChanged) console.log(`Remediation changed: ${JSON.stringify(remediationChanged)}`)
   if (process.argv.includes('--details')) {
     for (const error of structuralErrors) console.log(`ERROR ${JSON.stringify(error)}`)
     for (const item of mockIneligible) console.log(`STUDY_ONLY ${JSON.stringify(item)}`)
@@ -576,6 +699,9 @@ else {
   }
   if (process.argv.includes('--mapping-details')) {
     for (const question of published.filter((item) => !item.domain)) console.log(`UNMAPPED ${question.id} ${question.lessonSlug} ${question.source}`)
+  }
+  if (process.argv.includes('--portuguese-details')) {
+    for (const issue of portugueseIssueDetails) console.log(`PORTUGUESE ${JSON.stringify(issue)}`)
   }
   if (process.argv.includes('--weak-details')) {
     const weakPattern = /(cor do|logotipo|editor de imagens|mensagens instant|streaming de v[ií]deo|design gr[aá]fico|videoconfer[eê]ncia|escolher aleatori|prefer[eê]ncia pessoal|nome de exibi[cç][aã]o|n[uú]mero de administradores|contratar uma equipe para verificar manualmente)/iu
