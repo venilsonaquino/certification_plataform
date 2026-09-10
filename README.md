@@ -28,6 +28,7 @@ Preencha `.env.local` antes de iniciar:
 ```env
 VITE_SUPABASE_URL=https://SEU_PROJECT_REF.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=SUA_CHAVE_PUBLICA
+VITE_APP_URL=https://app.seu-dominio.com
 ```
 
 Use apenas a chave pública/publishable (ou a chave `anon` legada) no frontend. Nunca use `service_role` ou uma chave secreta. O Vite exibirá o endereço local no terminal, normalmente `http://localhost:5173`.
@@ -81,8 +82,8 @@ No painel do projeto:
 
 1. Em **Authentication > Providers > Email**, mantenha o provedor de email habilitado.
 2. Decida se **Confirm email** ficará habilitado. A interface suporta os dois fluxos.
-3. Em **Authentication > URL Configuration**, defina como Site URL o endereço exibido pelo Vite (normalmente `http://localhost:5173`) e inclua esse mesmo endereço entre as Redirect URLs. Se o Vite usar outra porta ou `127.0.0.1`, cadastre também a origem exata em uso.
-4. Em produção, substitua o endereço local pelo domínio real e use URLs de redirecionamento exatas.
+3. Em **Authentication > URL Configuration**, configure o endereço público canônico em **Site URL** e cadastre `https://app.seu-dominio.com/dashboard` em **Redirect URLs**. A URL deve ser a mesma definida em `VITE_APP_URL` no ambiente de produção. Sem essa permissão, o Supabase descarta o redirecionamento solicitado e usa o Site URL — o que pode enviar usuários para `localhost`.
+4. Para desenvolvimento local, use `http://localhost:5173` como Site URL ou mantenha-o adicionalmente em **Redirect URLs**, e defina `VITE_APP_URL=http://localhost:5173` somente no arquivo `.env.local` de desenvolvimento. Não publique `localhost` como Site URL de produção.
 
 Depois de alterar as variáveis de ambiente, reinicie o servidor Vite.
 

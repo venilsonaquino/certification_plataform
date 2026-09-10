@@ -9,6 +9,23 @@ interface AuthProviderProps {
   children: ReactNode
 }
 
+function getEmailConfirmationRedirectUrl() {
+  const configuredAppUrl = import.meta.env.VITE_APP_URL?.trim()
+  const fallbackUrl = window.location.origin
+  const baseUrl = configuredAppUrl || fallbackUrl
+
+  try {
+    const url = new URL(baseUrl)
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') throw new Error('Unsupported URL protocol')
+    url.pathname = `${url.pathname.replace(/\/$/, '')}/dashboard`
+    url.search = ''
+    url.hash = ''
+    return url.toString()
+  } catch {
+    return `${fallbackUrl}/dashboard`
+  }
+}
+
 function clearUserScopedUiState() {
   if (typeof window === 'undefined') return
   for (let index = sessionStorage.length - 1; index >= 0; index -= 1) {
@@ -120,7 +137,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           password,
           options: {
             data: { name: name.trim() },
-            emailRedirectTo: `${window.location.origin}/dashboard`,
+            emailRedirectTo: getEmailConfirmationRedirectUrl(),
           },
         })
 
